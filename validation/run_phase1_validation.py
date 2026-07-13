@@ -13,7 +13,7 @@ import math
 from typing import Any, Dict, List, Tuple
 
 # Ensure workspace is in import path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from b1_scsv.scsv import SCSV, SCORE_ALLOW, SCORE_BLOCK
 from b1_scsv.models import ValidationFailureReason, safe_parse_cam, ValidationAssessment

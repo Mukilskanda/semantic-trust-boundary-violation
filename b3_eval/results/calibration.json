@@ -1,0 +1,91 @@
+{
+  "manifest": {
+    "experiment": "b3_calibration",
+    "timestamp_utc": "2026-07-13T10:03:50Z",
+    "checkpoint": {
+      "ok": true,
+      "path": "C:\\semantic-trust-boundary-violation\\b3\\solution_stb\\b3_semantic_gate\\model\\semantic_gate_v3\\pytorch_model.bin",
+      "size_bytes": 567622450,
+      "sha256_16": "9ee7475e08f76ce6"
+    },
+    "torch": {
+      "ok": true,
+      "version": "2.6.0+cu124",
+      "cuda": true,
+      "device_name": "NVIDIA GeForce RTX 3050 Laptop GPU"
+    },
+    "python": "3.12.10",
+    "platform": "Windows 11 AMD64"
+  },
+  "n": 85,
+  "before": {
+    "ece": 0.06186258270739682,
+    "brier": 0.06130163930545887,
+    "reliability": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "avg_conf": 0.5373056003148966,
+        "accuracy": 0.0,
+        "count": 1
+      },
+      null,
+      null,
+      null,
+      {
+        "avg_conf": 0.9966787372596885,
+        "accuracy": 0.9404761904761905,
+        "count": 84
+      }
+    ]
+  },
+  "temperature": 2.144598003491752,
+  "after": {
+    "ece": 0.027956219207289416,
+    "brier": 0.055293225619415846,
+    "reliability": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      {
+        "avg_conf": 0.5174204811598005,
+        "accuracy": 0.0,
+        "count": 1
+      },
+      null,
+      {
+        "avg_conf": 0.7797011837374404,
+        "accuracy": 1.0,
+        "count": 1
+      },
+      {
+        "avg_conf": 0.8709492618281369,
+        "accuracy": 0.6666666666666666,
+        "count": 6
+      },
+      {
+        "avg_conf": 0.9556770939710595,
+        "accuracy": 0.961038961038961,
+        "count": 77
+      }
+    ]
+  },
+  "confidence_histogram_10bin": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    84
+  ],
+  "recommendation": "Apply temperature T=2.145 in b3_bridge before risk banding if ECE improved materially (>0.01). This changes NO labels; it only rescales confidence, which B3RiskPolicy and the DS mass depend on."
+}

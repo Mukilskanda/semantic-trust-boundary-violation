@@ -37,7 +37,7 @@ import sys
 import time
 from typing import Dict, Any, List, Optional, Tuple
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from b2_csia.behavior_profile import BehaviorEvidence, AttackProfile, AttackProfileRegistry
 from b2_csia.behavior_reasoning import BehavioralReasoningEngine, AttackAssessment

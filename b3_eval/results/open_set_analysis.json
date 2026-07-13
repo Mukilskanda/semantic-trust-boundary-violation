@@ -1,0 +1,43 @@
+{
+  "manifest": {
+    "experiment": "b3_open_set_analysis",
+    "timestamp_utc": "2026-07-13T10:05:09Z",
+    "checkpoint": {
+      "ok": true,
+      "path": "C:\\semantic-trust-boundary-violation\\b3\\solution_stb\\b3_semantic_gate\\model\\semantic_gate_v3\\pytorch_model.bin",
+      "size_bytes": 567622450,
+      "sha256_16": "9ee7475e08f76ce6"
+    },
+    "torch": {
+      "ok": true,
+      "version": "2.6.0+cu124",
+      "cuda": true,
+      "device_name": "NVIDIA GeForce RTX 3050 Laptop GPU"
+    },
+    "python": "3.12.10",
+    "platform": "Windows 11 AMD64"
+  },
+  "temperature": 2.144598003491752,
+  "n_id": 85,
+  "n_ood": 25,
+  "miss_rate_ood": 0.0,
+  "silent_failure_rate": 0.0,
+  "dead_zone_occupancy": 0.0,
+  "auroc": {
+    "msp": 0.15407407407407409,
+    "energy": 0.09777777777777778,
+    "p_malicious": 0.9940740740740741
+  },
+  "selective": {
+    "aurc": 0.008235659465031195,
+    "coverage@risk<=0.01": 0.8,
+    "coverage@risk<=0.05": 0.9529411764705882,
+    "coverage@risk<=0.1": 1.0
+  },
+  "thresholds": {
+    "silent_failure": 0.2,
+    "dead_zone": 0.15,
+    "high_conf": 0.85
+  },
+  "decision": "NO ABSTAIN MECHANISM NEEDED. Binary classification + calibrated confidence is SUFFICIENT: silent-failure rate on unseen families is only 0.0% and dead-zone occupancy only 0.0%, i.e. B3 fails LOUDLY (low confidence), and the existing Theta-mass path already routes those to CAUTION. Report these numbers as the evidence. Implement nothing."
+}

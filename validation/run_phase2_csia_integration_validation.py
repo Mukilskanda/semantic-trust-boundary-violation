@@ -15,7 +15,7 @@ import time
 import numpy as np
 from typing import Dict, Any, List, Optional, Tuple
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from b2_csia.csia import CSIA, _nested_get, _nested_get_any
 from b2_csia.observability_graph import ObservabilityGraphBuilder, ObservabilityEdge

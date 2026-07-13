@@ -75,6 +75,9 @@ b3_semantic_gate:
     classifier = SemanticGateClassifier(config_path=config_file)
     assert classifier.error_status is None
     
+    # Reset mock call history to clear the warmup calls
+    mock_predictor.predict.reset_mock()
+    
     res = classifier.classify("suspicious message")
     assert res["available"]
     assert res["label"] == "MALICIOUS"

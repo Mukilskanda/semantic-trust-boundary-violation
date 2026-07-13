@@ -12,7 +12,7 @@ import time
 from typing import Dict, Any, List, Tuple
 
 # Ensure workspace is in import path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from b2_csia.uncertainty import MassFunction, BeliefFusionEngine, Provenance
 
