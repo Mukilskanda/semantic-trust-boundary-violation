@@ -50,6 +50,26 @@ class TrustPolicy:
     cryptographic_reject_below: float = 0.40
     cryptographic_caution_below: float = 0.70
 
+    # --- Continuous semantic-belief interface (EXPERIMENTAL -- DO NOT ENABLE) ---
+    # EVIDENCE SAYS LEAVE THIS OFF. Kept only so the A/B comparison in
+    # evaluation/run_interface_comparison.py remains reproducible by a reviewer.
+    #
+    # An exhaustive sweep of the ENTIRE input domain (1020 grid points over
+    # B1 validation score x p_malicious -- not a sample, so the result holds for
+    # ANY dataset and ANY B3 output distribution) found:
+    #   * 0 decision differences when the other layers are clean -- i.e. under
+    #     the STBV premise, which is this system's core threat class, the two
+    #     interfaces are DECISION-EQUIVALENT. The continuous interface buys
+    #     nothing exactly where it was hypothesised to help.
+    #   * 74/1020 (7.3%) differ, ALL of them with B1 already degraded -- and
+    #     there the LEGACY interface is the more conservative (safer) one by
+    #     50 to 24, i.e. enabling this makes the system LESS cautious 2:1.
+    # See INTERFACE_COMPARISON.md and tests/test_interface_equivalence.py.
+    #
+    # False (default): consume B3's argmax label + max-prob confidence.
+    # True: consume `p_malicious` directly (see decision_engine._semantic_mass).
+    use_continuous_semantic_belief: bool = False
+
     def __post_init__(self) -> None:
         for name in (
             "semantic_high_confidence", "semantic_medium_confidence",
@@ -80,6 +100,7 @@ class TrustPolicy:
             semantic_medium_confidence=te_cfg.get("semantic_medium_confidence", 0.60),
             cryptographic_reject_below=te_cfg.get("cryptographic_reject_below", 0.40),
             cryptographic_caution_below=te_cfg.get("cryptographic_caution_below", 0.70),
+            use_continuous_semantic_belief=te_cfg.get("use_continuous_semantic_belief", False),
         )
 
     def classify_semantic_risk(self, b3_result: Dict[str, Any]) -> SemanticRisk:

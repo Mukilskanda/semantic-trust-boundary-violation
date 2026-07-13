@@ -3,7 +3,7 @@
 ##############################################################################
 # B3 real model detected: UNAVAILABLE (synthetic sub-tests will be used)
 ##############################################################################
-# Run started: 2026-07-11 11:31:20
+# Run started: 2026-07-12 17:03:26
 
 ==============================================================================
 SCENARIO: 1. Completely benign message
@@ -11,24 +11,24 @@ SCENARIO: 1. Completely benign message
     [PASS] Input: messages list is non-empty  -- 1 message(s)
     [PASS] Input msg[0]: is a dict with expected top-level shape
 
-  --- message 1/1 (window size=1, 59.7ms) ---
-  [PKI]    {'boundary': 'PKI', 'sender': 'station_1001', 'cert_id': '5186c957-6af9-4810-a359-8e73ce96e68f', 'cert_valid': True, 'sig_valid': True, 'pki_pass': True, 'revoked': False, 'compromised': False}
+  --- message 1/1 (window size=1, 56.6ms) ---
+  [PKI]    {'boundary': 'PKI', 'sender': 'station_1001', 'cert_id': 'c0c1954c-2a43-444b-8f1c-9989037b08c1', 'cert_valid': True, 'sig_valid': True, 'pki_pass': True, 'revoked': False, 'compromised': False}
     [PASS] PKI interface contract: has all required keys  -- keys present: ['boundary', 'cert_id', 'cert_valid', 'compromised', 'pki_pass', 'revoked', 'sender', 'sig_valid']
-  [B1]     valid=False fatal=False score=0.800 reasons=['Timestamp stale (age 700666324.3 ms)']
+  [B1]     valid=False fatal=False score=0.800 reasons=['Timestamp stale (age 806992549.0 ms)']
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
   [MBD]    passed=True anomaly_score=0.000 replay=0.00 sybil=0.00 collusion=0.00 kinematic=1.00
     [PASS] MBD (MBDResult) interface contract: has all required keys  -- keys present: ['anomaly_score', 'boundary', 'collusion_score', 'evidence', 'kinematic_score', 'passed', 'replay_score', 'sybil_score', 'temporal_consistency']
-  [B2]     valid=False score=0.818 confidence_calibration=0.449
+  [B2]     valid=False score=0.900 confidence_calibration=0.449
            explanation: Combined trust evidence from 2 upstream layer(s): B1_VALIDATION flagged an issue (score=0.80, confidence=0.70); MBD passed (score=1.00, confidence=0.2
     [PASS] B2 (ExplainabilityReport) interface contract: has all required keys  -- keys present: ['confidence_calibration', 'evidence', 'explanation_text', 'provenance', 'validation_score', 'validation_valid']
   [CP]     num_reports=1 senders=[1001] cp_confidence=0.818 cp_pass=True
     [PASS] CP (CPResult) interface contract: has all required keys  -- keys present: ['boundary', 'cp_confidence', 'cp_pass', 'diversity_score', 'event_label', 'fusion_confidence', 'heading_score', 'num_reports', 'reports', 'senders', 'spatial_score', 'speed_score']
   [B3]     available=False label=None confidence=None risk_level=unavailable status=Failed to initialize B3 predictor: No module named 'torch'
     [PASS] B3 (SemanticResult) interface contract: has all required keys  -- keys present: ['available', 'confidence', 'label', 'risk_level', 'status']
-  [TrustDecisionEngine] trust_level=CAUTION trust_score=0.643 semantic_risk=unavailable cryptographic_risk=low attack_detected=False contributors=['B1', 'B2', 'CP']
-           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.37 m_not_A=0.08 m_theta=0.55 (validation_score=0.82, cryptographic_risk=low). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.37 m_not_A=0.08 m_theta=0.55, pignistic trust_score=0.643. Final decision: CAUTION.
+  [TrustDecisionEngine] trust_level=CAUTION trust_score=0.679 semantic_risk=unavailable cryptographic_risk=low attack_detected=False contributors=['B1', 'B2', 'CP']
+           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.40 m_not_A=0.04 m_theta=0.55 (validation_score=0.90, cryptographic_risk=low). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.40 m_not_A=0.04 m_theta=0.55, pignistic trust_score=0.679. Final decision: CAUTION.
     [PASS] TrustDecisionEngine (FinalTrustDecision) interface contract: has all required keys  -- keys present: ['attack_detected', 'confidence', 'contributors', 'cryptographic_risk', 'details', 'reasoning', 'semantic_risk', 'trust_level', 'trust_score']
-  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.288412746875, 'm_not_A': 0.16033725312500005, 'm_Theta': 0.5512499999999999, 'origin_module': 'trust_engine'}
+  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.30492562500000003, 'm_not_A': 0.14382437500000003, 'm_Theta': 0.5512499999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
 ==============================================================================
@@ -37,24 +37,24 @@ SCENARIO: 2. Invalid certificate (tampered signature)
     [PASS] Input: messages list is non-empty  -- 1 message(s)
     [PASS] Input msg[0]: is a dict with expected top-level shape
 
-  --- message 1/1 (window size=1, 1.8ms) ---
-  [PKI]    {'boundary': 'PKI', 'sender': 'station_1001', 'cert_id': '5186c957-6af9-4810-a359-8e73ce96e68f', 'cert_valid': True, 'sig_valid': False, 'pki_pass': False, 'revoked': False, 'compromised': False}
+  --- message 1/1 (window size=1, 1.2ms) ---
+  [PKI]    {'boundary': 'PKI', 'sender': 'station_1001', 'cert_id': 'c0c1954c-2a43-444b-8f1c-9989037b08c1', 'cert_valid': True, 'sig_valid': False, 'pki_pass': False, 'revoked': False, 'compromised': False}
     [PASS] PKI interface contract: has all required keys  -- keys present: ['boundary', 'cert_id', 'cert_valid', 'compromised', 'pki_pass', 'revoked', 'sender', 'sig_valid']
-  [B1]     valid=False fatal=False score=0.800 reasons=['Timestamp stale (age 700666417.1 ms)']
+  [B1]     valid=False fatal=False score=0.800 reasons=['Timestamp stale (age 806992638.4 ms)']
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
   [MBD]    passed=True anomaly_score=0.000 replay=0.00 sybil=0.00 collusion=0.00 kinematic=1.00
     [PASS] MBD (MBDResult) interface contract: has all required keys  -- keys present: ['anomaly_score', 'boundary', 'collusion_score', 'evidence', 'kinematic_score', 'passed', 'replay_score', 'sybil_score', 'temporal_consistency']
-  [B2]     valid=False score=0.818 confidence_calibration=0.449
+  [B2]     valid=False score=0.900 confidence_calibration=0.449
            explanation: Combined trust evidence from 2 upstream layer(s): B1_VALIDATION flagged an issue (score=0.80, confidence=0.70); MBD passed (score=1.00, confidence=0.2
     [PASS] B2 (ExplainabilityReport) interface contract: has all required keys  -- keys present: ['confidence_calibration', 'evidence', 'explanation_text', 'provenance', 'validation_score', 'validation_valid']
   [CP]     num_reports=1 senders=[1001] cp_confidence=0.818 cp_pass=True
     [PASS] CP (CPResult) interface contract: has all required keys  -- keys present: ['boundary', 'cp_confidence', 'cp_pass', 'diversity_score', 'event_label', 'fusion_confidence', 'heading_score', 'num_reports', 'reports', 'senders', 'spatial_score', 'speed_score']
   [B3]     available=False label=None confidence=None risk_level=unavailable status=Failed to initialize B3 predictor: No module named 'torch'
     [PASS] B3 (SemanticResult) interface contract: has all required keys  -- keys present: ['available', 'confidence', 'label', 'risk_level', 'status']
-  [TrustDecisionEngine] trust_level=CAUTION trust_score=0.643 semantic_risk=unavailable cryptographic_risk=low attack_detected=False contributors=['B1', 'B2', 'CP']
-           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.37 m_not_A=0.08 m_theta=0.55 (validation_score=0.82, cryptographic_risk=low). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.37 m_not_A=0.08 m_theta=0.55, pignistic trust_score=0.643. Final decision: CAUTION.
+  [TrustDecisionEngine] trust_level=CAUTION trust_score=0.679 semantic_risk=unavailable cryptographic_risk=low attack_detected=False contributors=['B1', 'B2', 'CP']
+           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.40 m_not_A=0.04 m_theta=0.55 (validation_score=0.90, cryptographic_risk=low). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.40 m_not_A=0.04 m_theta=0.55, pignistic trust_score=0.679. Final decision: CAUTION.
     [PASS] TrustDecisionEngine (FinalTrustDecision) interface contract: has all required keys  -- keys present: ['attack_detected', 'confidence', 'contributors', 'cryptographic_risk', 'details', 'reasoning', 'semantic_risk', 'trust_level', 'trust_score']
-  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.288412746875, 'm_not_A': 0.16033725312500005, 'm_Theta': 0.5512499999999999, 'origin_module': 'trust_engine'}
+  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.30492562500000003, 'm_not_A': 0.14382437500000003, 'm_Theta': 0.5512499999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
 ==============================================================================
@@ -64,23 +64,23 @@ SCENARIO: 3. Expired certificate
     [PASS] Input msg[0]: is a dict with expected top-level shape
 
   --- message 1/1 (window size=1, 0.8ms) ---
-  [PKI]    {'boundary': 'PKI', 'sender': 'station_9001', 'cert_id': '36e047b2-f393-4a79-b7cd-bb5fda23eff2', 'cert_valid': False, 'sig_valid': True, 'pki_pass': False, 'revoked': False, 'compromised': False}
+  [PKI]    {'boundary': 'PKI', 'sender': 'station_9001', 'cert_id': '794a093f-494f-46a7-adc1-c18c673f7591', 'cert_valid': False, 'sig_valid': True, 'pki_pass': False, 'revoked': False, 'compromised': False}
     [PASS] PKI interface contract: has all required keys  -- keys present: ['boundary', 'cert_id', 'cert_valid', 'compromised', 'pki_pass', 'revoked', 'sender', 'sig_valid']
-  [B1]     valid=False fatal=False score=0.800 reasons=['Timestamp stale (age 700666448.7 ms)']
+  [B1]     valid=False fatal=False score=0.800 reasons=['Timestamp stale (age 806992671.6 ms)']
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
   [MBD]    passed=True anomaly_score=0.000 replay=0.00 sybil=0.00 collusion=0.00 kinematic=1.00
     [PASS] MBD (MBDResult) interface contract: has all required keys  -- keys present: ['anomaly_score', 'boundary', 'collusion_score', 'evidence', 'kinematic_score', 'passed', 'replay_score', 'sybil_score', 'temporal_consistency']
-  [B2]     valid=False score=0.818 confidence_calibration=0.449
+  [B2]     valid=False score=0.900 confidence_calibration=0.449
            explanation: Combined trust evidence from 2 upstream layer(s): B1_VALIDATION flagged an issue (score=0.80, confidence=0.70); MBD passed (score=1.00, confidence=0.2
     [PASS] B2 (ExplainabilityReport) interface contract: has all required keys  -- keys present: ['confidence_calibration', 'evidence', 'explanation_text', 'provenance', 'validation_score', 'validation_valid']
   [CP]     num_reports=1 senders=[1001] cp_confidence=0.818 cp_pass=True
     [PASS] CP (CPResult) interface contract: has all required keys  -- keys present: ['boundary', 'cp_confidence', 'cp_pass', 'diversity_score', 'event_label', 'fusion_confidence', 'heading_score', 'num_reports', 'reports', 'senders', 'spatial_score', 'speed_score']
   [B3]     available=False label=None confidence=None risk_level=unavailable status=Failed to initialize B3 predictor: No module named 'torch'
     [PASS] B3 (SemanticResult) interface contract: has all required keys  -- keys present: ['available', 'confidence', 'label', 'risk_level', 'status']
-  [TrustDecisionEngine] trust_level=CAUTION trust_score=0.643 semantic_risk=unavailable cryptographic_risk=low attack_detected=False contributors=['B1', 'B2', 'CP']
-           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.37 m_not_A=0.08 m_theta=0.55 (validation_score=0.82, cryptographic_risk=low). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.37 m_not_A=0.08 m_theta=0.55, pignistic trust_score=0.643. Final decision: CAUTION.
+  [TrustDecisionEngine] trust_level=CAUTION trust_score=0.679 semantic_risk=unavailable cryptographic_risk=low attack_detected=False contributors=['B1', 'B2', 'CP']
+           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.40 m_not_A=0.04 m_theta=0.55 (validation_score=0.90, cryptographic_risk=low). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.40 m_not_A=0.04 m_theta=0.55, pignistic trust_score=0.679. Final decision: CAUTION.
     [PASS] TrustDecisionEngine (FinalTrustDecision) interface contract: has all required keys  -- keys present: ['attack_detected', 'confidence', 'contributors', 'cryptographic_risk', 'details', 'reasoning', 'semantic_risk', 'trust_level', 'trust_score']
-  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.288412746875, 'm_not_A': 0.16033725312500005, 'm_Theta': 0.5512499999999999, 'origin_module': 'trust_engine'}
+  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.30492562500000003, 'm_not_A': 0.14382437500000003, 'm_Theta': 0.5512499999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
 ==============================================================================
@@ -93,41 +93,41 @@ SCENARIO: 4. Replay attack
   --- message 1/2 (window size=1, 0.7ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
-  [B1]     valid=False fatal=False score=0.800 reasons=['Timestamp stale (age 13769480700.0 ms)']
+  [B1]     valid=False fatal=False score=0.800 reasons=['Timestamp stale (age 13875806921.0 ms)']
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
   [MBD]    passed=True anomaly_score=0.000 replay=0.00 sybil=0.00 collusion=0.00 kinematic=1.00
     [PASS] MBD (MBDResult) interface contract: has all required keys  -- keys present: ['anomaly_score', 'boundary', 'collusion_score', 'evidence', 'kinematic_score', 'passed', 'replay_score', 'sybil_score', 'temporal_consistency']
-  [B2]     valid=False score=0.818 confidence_calibration=0.449
+  [B2]     valid=False score=0.900 confidence_calibration=0.449
            explanation: Combined trust evidence from 2 upstream layer(s): B1_VALIDATION flagged an issue (score=0.80, confidence=0.70); MBD passed (score=1.00, confidence=0.2
     [PASS] B2 (ExplainabilityReport) interface contract: has all required keys  -- keys present: ['confidence_calibration', 'evidence', 'explanation_text', 'provenance', 'validation_score', 'validation_valid']
   [CP]     num_reports=1 senders=[1001] cp_confidence=0.818 cp_pass=True
     [PASS] CP (CPResult) interface contract: has all required keys  -- keys present: ['boundary', 'cp_confidence', 'cp_pass', 'diversity_score', 'event_label', 'fusion_confidence', 'heading_score', 'num_reports', 'reports', 'senders', 'spatial_score', 'speed_score']
   [B3]     available=False label=None confidence=None risk_level=unavailable status=Failed to initialize B3 predictor: No module named 'torch'
     [PASS] B3 (SemanticResult) interface contract: has all required keys  -- keys present: ['available', 'confidence', 'label', 'risk_level', 'status']
-  [TrustDecisionEngine] trust_level=CAUTION trust_score=0.643 semantic_risk=unavailable cryptographic_risk=low attack_detected=False contributors=['B1', 'B2', 'CP']
-           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.37 m_not_A=0.08 m_theta=0.55 (validation_score=0.82, cryptographic_risk=low). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.37 m_not_A=0.08 m_theta=0.55, pignistic trust_score=0.643. Final decision: CAUTION.
+  [TrustDecisionEngine] trust_level=CAUTION trust_score=0.679 semantic_risk=unavailable cryptographic_risk=low attack_detected=False contributors=['B1', 'B2', 'CP']
+           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.40 m_not_A=0.04 m_theta=0.55 (validation_score=0.90, cryptographic_risk=low). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.40 m_not_A=0.04 m_theta=0.55, pignistic trust_score=0.679. Final decision: CAUTION.
     [PASS] TrustDecisionEngine (FinalTrustDecision) interface contract: has all required keys  -- keys present: ['attack_detected', 'confidence', 'contributors', 'cryptographic_risk', 'details', 'reasoning', 'semantic_risk', 'trust_level', 'trust_score']
-  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.288412746875, 'm_not_A': 0.16033725312500005, 'm_Theta': 0.5512499999999999, 'origin_module': 'trust_engine'}
+  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.30492562500000003, 'm_not_A': 0.14382437500000003, 'm_Theta': 0.5512499999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 2/2 (window size=2, 0.7ms) ---
+  --- message 2/2 (window size=2, 0.5ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
-  [B1]     valid=False fatal=False score=0.500 reasons=['Replay detected', 'Timestamp stale (age 13769480700.9 ms)']
+  [B1]     valid=False fatal=False score=0.500 reasons=['Replay detected', 'Timestamp stale (age 13875806921.7 ms)']
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
   [MBD]    passed=False anomaly_score=0.800 replay=1.00 sybil=0.00 collusion=0.00 kinematic=1.00
     [PASS] MBD (MBDResult) interface contract: has all required keys  -- keys present: ['anomaly_score', 'boundary', 'collusion_score', 'evidence', 'kinematic_score', 'passed', 'replay_score', 'sybil_score', 'temporal_consistency']
-  [B2]     valid=False score=0.350 confidence_calibration=0.680
+  [B2]     valid=False score=0.350 confidence_calibration=0.136
            explanation: Combined trust evidence from 2 upstream layer(s): B1_VALIDATION flagged an issue (score=0.50, confidence=1.00); MBD flagged an issue (score=0.20, conf
     [PASS] B2 (ExplainabilityReport) interface contract: has all required keys  -- keys present: ['confidence_calibration', 'evidence', 'explanation_text', 'provenance', 'validation_score', 'validation_valid']
   [CP]     num_reports=2 senders=[1001] cp_confidence=0.827 cp_pass=True
     [PASS] CP (CPResult) interface contract: has all required keys  -- keys present: ['boundary', 'cp_confidence', 'cp_pass', 'diversity_score', 'event_label', 'fusion_confidence', 'heading_score', 'num_reports', 'reports', 'senders', 'spatial_score', 'speed_score']
   [B3]     available=False label=None confidence=None risk_level=unavailable status=Failed to initialize B3 predictor: No module named 'torch'
     [PASS] B3 (SemanticResult) interface contract: has all required keys  -- keys present: ['available', 'confidence', 'label', 'risk_level', 'status']
-  [TrustDecisionEngine] trust_level=REJECT trust_score=0.398 semantic_risk=unavailable cryptographic_risk=high attack_detected=True contributors=['B1', 'B2', 'CP']
-           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.24 m_not_A=0.44 m_theta=0.32 (validation_score=0.35, cryptographic_risk=high). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.24 m_not_A=0.44 m_theta=0.32, pignistic trust_score=0.398. Final decision: REJECT.
+  [TrustDecisionEngine] trust_level=REJECT trust_score=0.480 semantic_risk=unavailable cryptographic_risk=high attack_detected=True contributors=['B1', 'B2', 'CP']
+           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.05 m_not_A=0.09 m_theta=0.86 (validation_score=0.35, cryptographic_risk=high). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.05 m_not_A=0.09 m_theta=0.86, pignistic trust_score=0.480. Final decision: REJECT.
     [PASS] TrustDecisionEngine (FinalTrustDecision) interface contract: has all required keys  -- keys present: ['attack_detected', 'confidence', 'contributors', 'cryptographic_risk', 'details', 'reasoning', 'semantic_risk', 'trust_level', 'trust_score']
-  [Adapters] log=REJECT api.status=REJECT ds_mass={'m_A': 0.27064, 'm_not_A': 0.40935999999999995, 'm_Theta': 0.32000000000000006, 'origin_module': 'trust_engine'}
+  [Adapters] log=REJECT api.status=REJECT ds_mass={'m_A': 0.06522559999999998, 'm_not_A': 0.07077439999999999, 'm_Theta': 0.864, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
     [PASS] Final decision matches expected outcome (REJECT)  -- got=REJECT
 
@@ -183,7 +183,7 @@ SCENARIO: 5. Sybil attack
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
   [MBD]    passed=False anomaly_score=1.000 replay=0.00 sybil=1.00 collusion=0.00 kinematic=1.00
     [PASS] MBD (MBDResult) interface contract: has all required keys  -- keys present: ['anomaly_score', 'boundary', 'collusion_score', 'evidence', 'kinematic_score', 'passed', 'replay_score', 'sybil_score', 'temporal_consistency']
-  [B2]     valid=False score=0.500 confidence_calibration=0.445
+  [B2]     valid=False score=0.500 confidence_calibration=0.289
            explanation: Combined trust evidence from 2 upstream layer(s): B1_VALIDATION passed (score=1.00, confidence=0.69); MBD flagged an issue (score=0.00, confidence=0.2
     [PASS] B2 (ExplainabilityReport) interface contract: has all required keys  -- keys present: ['confidence_calibration', 'evidence', 'explanation_text', 'provenance', 'validation_score', 'validation_valid']
   [CP]     num_reports=2 senders=[1000, 9000] cp_confidence=0.838 cp_pass=True
@@ -191,19 +191,19 @@ SCENARIO: 5. Sybil attack
   [B3]     available=False label=None confidence=None risk_level=unavailable status=Failed to initialize B3 predictor: No module named 'torch'
     [PASS] B3 (SemanticResult) interface contract: has all required keys  -- keys present: ['available', 'confidence', 'label', 'risk_level', 'status']
   [TrustDecisionEngine] trust_level=CAUTION trust_score=0.500 semantic_risk=unavailable cryptographic_risk=elevated attack_detected=False contributors=['B1', 'B2', 'CP']
-           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.22 m_not_A=0.22 m_theta=0.55 (validation_score=0.50, cryptographic_risk=elevated). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.22 m_not_A=0.22 m_theta=0.55, pignistic trust_score=0.500. Final decision: CAUTION.
+           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.14 m_not_A=0.14 m_theta=0.71 (validation_score=0.50, cryptographic_risk=elevated). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.14 m_not_A=0.14 m_theta=0.71, pignistic trust_score=0.500. Final decision: CAUTION.
     [PASS] TrustDecisionEngine (FinalTrustDecision) interface contract: has all required keys  -- keys present: ['attack_detected', 'confidence', 'contributors', 'cryptographic_risk', 'details', 'reasoning', 'semantic_risk', 'trust_level', 'trust_score']
-  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
+  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.14450000000000002, 'm_not_A': 0.14450000000000002, 'm_Theta': 0.711, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 3/20 (window size=3, 0.6ms) ---
+  --- message 3/20 (window size=3, 0.5ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
   [MBD]    passed=False anomaly_score=1.000 replay=0.90 sybil=0.00 collusion=0.00 kinematic=1.00
     [PASS] MBD (MBDResult) interface contract: has all required keys  -- keys present: ['anomaly_score', 'boundary', 'collusion_score', 'evidence', 'kinematic_score', 'passed', 'replay_score', 'sybil_score', 'temporal_consistency']
-  [B2]     valid=False score=0.500 confidence_calibration=0.550
+  [B2]     valid=False score=0.500 confidence_calibration=0.310
            explanation: Combined trust evidence from 2 upstream layer(s): B1_VALIDATION passed (score=1.00, confidence=0.74); MBD flagged an issue (score=0.00, confidence=0.3
     [PASS] B2 (ExplainabilityReport) interface contract: has all required keys  -- keys present: ['confidence_calibration', 'evidence', 'explanation_text', 'provenance', 'validation_score', 'validation_valid']
   [CP]     num_reports=3 senders=[1000, 9000] cp_confidence=0.841 cp_pass=True
@@ -211,19 +211,19 @@ SCENARIO: 5. Sybil attack
   [B3]     available=False label=None confidence=None risk_level=unavailable status=Failed to initialize B3 predictor: No module named 'torch'
     [PASS] B3 (SemanticResult) interface contract: has all required keys  -- keys present: ['available', 'confidence', 'label', 'risk_level', 'status']
   [TrustDecisionEngine] trust_level=CAUTION trust_score=0.500 semantic_risk=unavailable cryptographic_risk=elevated attack_detected=False contributors=['B1', 'B2', 'CP']
-           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.27 m_not_A=0.27 m_theta=0.45 (validation_score=0.50, cryptographic_risk=elevated). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.27 m_not_A=0.27 m_theta=0.45, pignistic trust_score=0.500. Final decision: CAUTION.
+           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.15 m_not_A=0.15 m_theta=0.69 (validation_score=0.50, cryptographic_risk=elevated). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.15 m_not_A=0.15 m_theta=0.69, pignistic trust_score=0.500. Final decision: CAUTION.
     [PASS] TrustDecisionEngine (FinalTrustDecision) interface contract: has all required keys  -- keys present: ['attack_detected', 'confidence', 'contributors', 'cryptographic_risk', 'details', 'reasoning', 'semantic_risk', 'trust_level', 'trust_score']
-  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.27484040040722174, 'm_not_A': 0.27484040040722174, 'm_Theta': 0.4503191991855565, 'origin_module': 'trust_engine'}
+  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.15496808008144436, 'm_not_A': 0.15496808008144436, 'm_Theta': 0.6900638398371113, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 4/20 (window size=4, 0.4ms) ---
+  --- message 4/20 (window size=4, 0.5ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
   [MBD]    passed=False anomaly_score=1.000 replay=0.90 sybil=0.00 collusion=0.00 kinematic=1.00
     [PASS] MBD (MBDResult) interface contract: has all required keys  -- keys present: ['anomaly_score', 'boundary', 'collusion_score', 'evidence', 'kinematic_score', 'passed', 'replay_score', 'sybil_score', 'temporal_consistency']
-  [B2]     valid=False score=0.500 confidence_calibration=0.644
+  [B2]     valid=False score=0.500 confidence_calibration=0.329
            explanation: Combined trust evidence from 2 upstream layer(s): B1_VALIDATION passed (score=1.00, confidence=0.77); MBD flagged an issue (score=0.00, confidence=0.5
     [PASS] B2 (ExplainabilityReport) interface contract: has all required keys  -- keys present: ['confidence_calibration', 'evidence', 'explanation_text', 'provenance', 'validation_score', 'validation_valid']
   [CP]     num_reports=4 senders=[1000, 9000] cp_confidence=0.845 cp_pass=True
@@ -231,12 +231,12 @@ SCENARIO: 5. Sybil attack
   [B3]     available=False label=None confidence=None risk_level=unavailable status=Failed to initialize B3 predictor: No module named 'torch'
     [PASS] B3 (SemanticResult) interface contract: has all required keys  -- keys present: ['available', 'confidence', 'label', 'risk_level', 'status']
   [TrustDecisionEngine] trust_level=CAUTION trust_score=0.500 semantic_risk=unavailable cryptographic_risk=elevated attack_detected=False contributors=['B1', 'B2', 'CP']
-           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.32 m_not_A=0.32 m_theta=0.36 (validation_score=0.50, cryptographic_risk=elevated). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.32 m_not_A=0.32 m_theta=0.36, pignistic trust_score=0.500. Final decision: CAUTION.
+           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.16 m_not_A=0.16 m_theta=0.67 (validation_score=0.50, cryptographic_risk=elevated). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.16 m_not_A=0.16 m_theta=0.67, pignistic trust_score=0.500. Final decision: CAUTION.
     [PASS] TrustDecisionEngine (FinalTrustDecision) interface contract: has all required keys  -- keys present: ['attack_detected', 'confidence', 'contributors', 'cryptographic_risk', 'details', 'reasoning', 'semantic_risk', 'trust_level', 'trust_score']
-  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.3220590718893306, 'm_not_A': 0.3220590718893306, 'm_Theta': 0.35588185622133883, 'origin_module': 'trust_engine'}
+  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.16441181437786612, 'm_not_A': 0.16441181437786612, 'm_Theta': 0.6711763712442678, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 5/20 (window size=5, 0.6ms) ---
+  --- message 5/20 (window size=5, 0.5ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -276,7 +276,7 @@ SCENARIO: 5. Sybil attack
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 7/20 (window size=7, 0.6ms) ---
+  --- message 7/20 (window size=7, 0.5ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -336,7 +336,7 @@ SCENARIO: 5. Sybil attack
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 10/20 (window size=10, 0.7ms) ---
+  --- message 10/20 (window size=10, 0.6ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -396,7 +396,7 @@ SCENARIO: 5. Sybil attack
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 13/20 (window size=13, 0.8ms) ---
+  --- message 13/20 (window size=13, 0.7ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -516,7 +516,7 @@ SCENARIO: 5. Sybil attack
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 19/20 (window size=19, 0.7ms) ---
+  --- message 19/20 (window size=19, 0.8ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -562,7 +562,7 @@ SCENARIO: 6. Impossible kinematics (impossible speed)
     [PASS] Input: messages list is non-empty  -- 1 message(s)
     [PASS] Input msg[0]: is a dict with expected top-level shape
 
-  --- message 1/1 (window size=1, 0.5ms) ---
+  --- message 1/1 (window size=1, 0.6ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=False fatal=True score=0.000 reasons=['speed 9000.0 outside valid range [0, 8330.0] (ETSI 0.01 m/s units)']
@@ -608,7 +608,7 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
     [PASS] Input msg[18]: is a dict with expected top-level shape
     [PASS] Input msg[19]: is a dict with expected top-level shape
 
-  --- message 1/20 (window size=1, 0.6ms) ---
+  --- message 1/20 (window size=1, 0.7ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -635,7 +635,7 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
   [MBD]    passed=False anomaly_score=1.000 replay=0.00 sybil=1.00 collusion=0.00 kinematic=1.00
     [PASS] MBD (MBDResult) interface contract: has all required keys  -- keys present: ['anomaly_score', 'boundary', 'collusion_score', 'evidence', 'kinematic_score', 'passed', 'replay_score', 'sybil_score', 'temporal_consistency']
-  [B2]     valid=False score=0.500 confidence_calibration=0.445
+  [B2]     valid=False score=0.500 confidence_calibration=0.289
            explanation: Combined trust evidence from 2 upstream layer(s): B1_VALIDATION passed (score=1.00, confidence=0.69); MBD flagged an issue (score=0.00, confidence=0.2
     [PASS] B2 (ExplainabilityReport) interface contract: has all required keys  -- keys present: ['confidence_calibration', 'evidence', 'explanation_text', 'provenance', 'validation_score', 'validation_valid']
   [CP]     num_reports=2 senders=[1000, 7000] cp_confidence=0.800 cp_pass=True
@@ -643,12 +643,12 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
   [B3]     available=False label=None confidence=None risk_level=unavailable status=Failed to initialize B3 predictor: No module named 'torch'
     [PASS] B3 (SemanticResult) interface contract: has all required keys  -- keys present: ['available', 'confidence', 'label', 'risk_level', 'status']
   [TrustDecisionEngine] trust_level=CAUTION trust_score=0.500 semantic_risk=unavailable cryptographic_risk=elevated attack_detected=False contributors=['B1', 'B2', 'CP']
-           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.22 m_not_A=0.22 m_theta=0.55 (validation_score=0.50, cryptographic_risk=elevated). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.22 m_not_A=0.22 m_theta=0.55, pignistic trust_score=0.500. Final decision: CAUTION.
+           reasoning: B1(+MBD/CP) crypto/structural mass: m_A=0.14 m_not_A=0.14 m_theta=0.71 (validation_score=0.50, cryptographic_risk=elevated). B3 unavailable (vacuous mass, does not affect fusion). Dempster combination: conflict K=0.000, fused mass m_A=0.14 m_not_A=0.14 m_theta=0.71, pignistic trust_score=0.500. Final decision: CAUTION.
     [PASS] TrustDecisionEngine (FinalTrustDecision) interface contract: has all required keys  -- keys present: ['attack_detected', 'confidence', 'contributors', 'cryptographic_risk', 'details', 'reasoning', 'semantic_risk', 'trust_level', 'trust_score']
-  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
+  [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.14450000000000002, 'm_not_A': 0.14450000000000002, 'm_Theta': 0.711, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 3/20 (window size=3, 0.4ms) ---
+  --- message 3/20 (window size=3, 0.5ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -688,7 +688,7 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 5/20 (window size=5, 0.4ms) ---
+  --- message 5/20 (window size=5, 0.5ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -748,7 +748,7 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 8/20 (window size=8, 0.5ms) ---
+  --- message 8/20 (window size=8, 0.6ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -788,7 +788,7 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 10/20 (window size=10, 0.5ms) ---
+  --- message 10/20 (window size=10, 0.6ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -848,7 +848,7 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 13/20 (window size=13, 0.7ms) ---
+  --- message 13/20 (window size=13, 0.6ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -868,7 +868,7 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 14/20 (window size=14, 0.7ms) ---
+  --- message 14/20 (window size=14, 0.6ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -888,7 +888,7 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 15/20 (window size=15, 0.9ms) ---
+  --- message 15/20 (window size=15, 0.7ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -908,7 +908,7 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 16/20 (window size=16, 0.6ms) ---
+  --- message 16/20 (window size=16, 0.8ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -928,7 +928,7 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 17/20 (window size=17, 0.8ms) ---
+  --- message 17/20 (window size=17, 0.7ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -948,7 +948,7 @@ SCENARIO: 7. Cooperative perception poisoning (collusion)
   [Adapters] log=CAUTION api.status=CAUTION ds_mass={'m_A': 0.22250000000000003, 'm_not_A': 0.22250000000000003, 'm_Theta': 0.5549999999999999, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 18/20 (window size=18, 0.9ms) ---
+  --- message 18/20 (window size=18, 0.7ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -1014,7 +1014,7 @@ SCENARIO: 8. Semantic manipulation (real B3 attempt -- expect unavailable)
     [PASS] Input: messages list is non-empty  -- 1 message(s)
     [PASS] Input msg[0]: is a dict with expected top-level shape
 
-  --- message 1/1 (window size=1, 0.7ms) ---
+  --- message 1/1 (window size=1, 0.6ms) ---
   [PKI]    None
     [SKIP] PKI contract check -- layer did not run this scenario (None)
   [B1]     valid=True fatal=False score=1.000 reasons=[]
@@ -1103,7 +1103,7 @@ SCENARIO: 12. Degraded confidence (sparse evidence)
 --- MBD disabled ---
   Replay attack: decision=CAUTION  (mbd=None)
     *** ATTACK BECOMES SUCCESSFUL WITHOUT MBD: expected REJECT, got CAUTION ***
-  Sybil attack: decision=CAUTION  (mbd=None)
+  Sybil attack: decision=ACCEPT  (mbd=None)
   Impossible kinematics: decision=REJECT  (mbd=None)
 
 --- B2 disabled (neutered to no-op passthrough) ---
@@ -1213,8 +1213,8 @@ SCENARIO: FLAGSHIP Stage 1: Coordinated STBV execution
     [PASS] Input msg[2]: is a dict with expected top-level shape
     [PASS] Input msg[3]: is a dict with expected top-level shape
 
-  --- message 1/4 (window size=1, 0.8ms) ---
-  [PKI]    {'boundary': 'PKI', 'sender': 'station_9000', 'cert_id': '575fdebe-f1cc-43b4-b545-707e0241f46c', 'cert_valid': True, 'sig_valid': True, 'pki_pass': True, 'revoked': False, 'compromised': False}
+  --- message 1/4 (window size=1, 0.7ms) ---
+  [PKI]    {'boundary': 'PKI', 'sender': 'station_9000', 'cert_id': '0bd83b06-c97c-46b4-a76b-01668e1247c4', 'cert_valid': True, 'sig_valid': True, 'pki_pass': True, 'revoked': False, 'compromised': False}
     [PASS] PKI interface contract: has all required keys  -- keys present: ['boundary', 'cert_id', 'cert_valid', 'compromised', 'pki_pass', 'revoked', 'sender', 'sig_valid']
   [B1]     valid=False fatal=True score=0.000 reasons=['Missing mandatory fields: station_id', "header.station_id: cannot convert 'str' to int"]
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
@@ -1234,13 +1234,13 @@ SCENARIO: FLAGSHIP Stage 1: Coordinated STBV execution
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
   --- message 2/4 (window size=2, 0.6ms) ---
-  [PKI]    {'boundary': 'PKI', 'sender': 'station_9000', 'cert_id': '575fdebe-f1cc-43b4-b545-707e0241f46c', 'cert_valid': True, 'sig_valid': True, 'pki_pass': True, 'revoked': False, 'compromised': False}
+  [PKI]    {'boundary': 'PKI', 'sender': 'station_9000', 'cert_id': '0bd83b06-c97c-46b4-a76b-01668e1247c4', 'cert_valid': True, 'sig_valid': True, 'pki_pass': True, 'revoked': False, 'compromised': False}
     [PASS] PKI interface contract: has all required keys  -- keys present: ['boundary', 'cert_id', 'cert_valid', 'compromised', 'pki_pass', 'revoked', 'sender', 'sig_valid']
   [B1]     valid=False fatal=True score=0.000 reasons=['Missing mandatory fields: station_id', "header.station_id: cannot convert 'str' to int"]
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
   [MBD]    passed=True anomaly_score=0.800 replay=0.90 sybil=1.00 collusion=0.00 kinematic=1.00
     [PASS] MBD (MBDResult) interface contract: has all required keys  -- keys present: ['anomaly_score', 'boundary', 'collusion_score', 'evidence', 'kinematic_score', 'passed', 'replay_score', 'sybil_score', 'temporal_consistency']
-  [B2]     valid=False score=0.100 confidence_calibration=0.600
+  [B2]     valid=False score=0.100 confidence_calibration=0.320
            explanation: Combined trust evidence from 2 upstream layer(s): B1_VALIDATION flagged an issue (score=0.00, confidence=1.00); MBD passed (score=0.20, confidence=0.2
     [PASS] B2 (ExplainabilityReport) interface contract: has all required keys  -- keys present: ['confidence_calibration', 'evidence', 'explanation_text', 'provenance', 'validation_score', 'validation_valid']
   [CP]     num_reports=2 senders=['colluder_station_9000', 'colluder_station_9001'] cp_confidence=0.864 cp_pass=True
@@ -1254,13 +1254,13 @@ SCENARIO: FLAGSHIP Stage 1: Coordinated STBV execution
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
   --- message 3/4 (window size=3, 0.6ms) ---
-  [PKI]    {'boundary': 'PKI', 'sender': 'station_9000', 'cert_id': '575fdebe-f1cc-43b4-b545-707e0241f46c', 'cert_valid': True, 'sig_valid': True, 'pki_pass': True, 'revoked': False, 'compromised': False}
+  [PKI]    {'boundary': 'PKI', 'sender': 'station_9000', 'cert_id': '0bd83b06-c97c-46b4-a76b-01668e1247c4', 'cert_valid': True, 'sig_valid': True, 'pki_pass': True, 'revoked': False, 'compromised': False}
     [PASS] PKI interface contract: has all required keys  -- keys present: ['boundary', 'cert_id', 'cert_valid', 'compromised', 'pki_pass', 'revoked', 'sender', 'sig_valid']
   [B1]     valid=False fatal=True score=0.000 reasons=['Missing mandatory fields: station_id', "header.station_id: cannot convert 'str' to int"]
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
   [MBD]    passed=True anomaly_score=0.800 replay=0.90 sybil=1.00 collusion=0.00 kinematic=1.00
     [PASS] MBD (MBDResult) interface contract: has all required keys  -- keys present: ['anomaly_score', 'boundary', 'collusion_score', 'evidence', 'kinematic_score', 'passed', 'replay_score', 'sybil_score', 'temporal_consistency']
-  [B2]     valid=False score=0.100 confidence_calibration=0.600
+  [B2]     valid=False score=0.100 confidence_calibration=0.520
            explanation: Combined trust evidence from 2 upstream layer(s): B1_VALIDATION flagged an issue (score=0.00, confidence=1.00); MBD passed (score=0.20, confidence=0.2
     [PASS] B2 (ExplainabilityReport) interface contract: has all required keys  -- keys present: ['confidence_calibration', 'evidence', 'explanation_text', 'provenance', 'validation_score', 'validation_valid']
   [CP]     num_reports=3 senders=['colluder_station_9000', 'colluder_station_9001', 'colluder_station_9002'] cp_confidence=0.904 cp_pass=True
@@ -1273,8 +1273,8 @@ SCENARIO: FLAGSHIP Stage 1: Coordinated STBV execution
   [Adapters] log=REJECT api.status=REJECT ds_mass={'m_A': 0.0, 'm_not_A': 1.0, 'm_Theta': 0.0, 'origin_module': 'trust_engine'}
     [PASS] DS MASS: masses sum to 1.0  -- sum=1.000000
 
-  --- message 4/4 (window size=4, 0.6ms) ---
-  [PKI]    {'boundary': 'PKI', 'sender': 'station_9000', 'cert_id': '575fdebe-f1cc-43b4-b545-707e0241f46c', 'cert_valid': True, 'sig_valid': True, 'pki_pass': True, 'revoked': False, 'compromised': False}
+  --- message 4/4 (window size=4, 0.5ms) ---
+  [PKI]    {'boundary': 'PKI', 'sender': 'station_9000', 'cert_id': '0bd83b06-c97c-46b4-a76b-01668e1247c4', 'cert_valid': True, 'sig_valid': True, 'pki_pass': True, 'revoked': False, 'compromised': False}
     [PASS] PKI interface contract: has all required keys  -- keys present: ['boundary', 'cert_id', 'cert_valid', 'compromised', 'pki_pass', 'revoked', 'sender', 'sig_valid']
   [B1]     valid=False fatal=True score=0.000 reasons=['Missing mandatory fields: station_id', "header.station_id: cannot convert 'str' to int"]
     [PASS] B1 (ValidationAssessment) interface contract: has all required keys  -- keys present: ['checks', 'confidence', 'details', 'fatal', 'reasons', 'score', 'valid']
@@ -1345,7 +1345,7 @@ SYNTHETIC SEMANTIC TEST: FLAGSHIP Stage 2: B3 Corroboration of STBV Attack
   B1 removed -> 'Replay attack': decision=REJECT (no attack success detected)
   B1 removed -> 'Sybil attack': decision=CAUTION (no attack success detected)
   B1 removed -> 'Impossible kinematics': decision=REJECT (no attack success detected)
-  MBD removed -> 'Sybil attack': decision=CAUTION (no attack success detected)
+  MBD removed -> 'Sybil attack': decision=ACCEPT (no attack success detected)
   MBD removed -> 'Impossible kinematics': decision=REJECT (no attack success detected)
   B2 removed -> 'Replay attack': decision=REJECT (no attack success detected)
   B2 removed -> 'Sybil attack': decision=CAUTION (no attack success detected)

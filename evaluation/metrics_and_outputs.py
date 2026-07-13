@@ -1,0 +1,205 @@
+"""
+evaluation/metrics_and_outputs.py
+====================================
+Part 8 metric definitions + Part 12 paper outputs (CSV, LaTeX tables,
+publication-quality figures: confusion matrices, ROC/PR curves where a
+continuous score exists, latency/throughput/ablation plots).
+
+Scoring conventions (documented once, applied everywhere):
+- Positive class = "attacker message" (truth: message['is_attacker']).
+- REJECT  => predicted positive.
+- CAUTION => NOT counted as predicted positive for precision/recall/F1
+  (confirmed design intent: caution-until-corroborated for unverified
+  senders is intended system behavior, not a detection claim). CAUTION is
+  reported as its own rate ("caution_rate") in every table.
+- ROC/PR curves use (1 - trust_score) as the continuous attack score, only
+  for configurations that produce a trust_score (baselines that emit only a
+  hard decision get no ROC -- no fake curves).
+"""
+from __future__ import annotations
+
+import csv
+import json
+import math
+import pathlib
+from typing import Any, Dict, List, Optional, Sequence
+
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+
+def confusion(rows: Sequence[Dict[str, Any]]) -> Dict[str, float]:
+    tp = sum(1 for r in rows if r["decision"] == "REJECT" and r["truth_attacker"])
+    fp = sum(1 for r in rows if r["decision"] == "REJECT" and not r["truth_attacker"])
+    fn = sum(1 for r in rows if r["decision"] != "REJECT" and r["truth_attacker"])
+    tn = sum(1 for r in rows if r["decision"] != "REJECT" and not r["truth_attacker"])
+    n = max(len(rows), 1)
+    caution = sum(1 for r in rows if r["decision"] == "CAUTION")
+    errors = sum(1 for r in rows if r["decision"] == "ERROR")
+    prec = tp / (tp + fp) if (tp + fp) else float("nan")
+    rec = tp / (tp + fn) if (tp + fn) else float("nan")
+    f1 = (2 * prec * rec / (prec + rec)) if (prec == prec and rec == rec and prec + rec > 0) else float("nan")
+    return {
+        "tp": tp, "fp": fp, "fn": fn, "tn": tn, "n": len(rows),
+        "accuracy": (tp + tn) / n,
+        "precision": prec, "recall": rec, "f1": f1,
+        "fpr": fp / (fp + tn) if (fp + tn) else float("nan"),
+        "fnr": fn / (fn + tp) if (fn + tp) else float("nan"),
+        "detection_rate": rec,  # synonym, kept explicit per mandate
+        "caution_rate": caution / n,
+        "error_rate": errors / n,
+    }
+
+
+def latency_summary(rows: Sequence[Dict[str, Any]]) -> Dict[str, Dict[str, float]]:
+    stages: Dict[str, List[float]] = {}
+    for r in rows:
+        for k, v in (r.get("latencies") or {}).items():
+            stages.setdefault(k, []).append(v)
+    def pctl(data, p):
+        if not data:
+            return float("nan")
+        s = sorted(data)
+        k = (len(s) - 1) * p
+        f = int(k); c = min(f + 1, len(s) - 1)
+        return s[f] if f == c else s[f] + (s[c] - s[f]) * (k - f)
+    return {stage: {"p50": pctl(v, .5), "p95": pctl(v, .95), "p99": pctl(v, .99),
+                     "mean": sum(v) / len(v), "max": max(v)}
+            for stage, v in stages.items() if v}
+
+
+# ---------------------------------------------------------------- outputs --
+
+def write_rows_csv(rows: Sequence[Dict[str, Any]], path: pathlib.Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    flat = []
+    for r in rows:
+        f = {k: v for k, v in r.items() if k not in ("latencies", "contract_violations", "traceback")}
+        f["total_ms"] = (r.get("latencies") or {}).get("total_ms")
+        f["n_contract_violations"] = len(r.get("contract_violations") or [])
+        flat.append(f)
+    keys = sorted({k for f in flat for k in f})
+    with path.open("w", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=keys)
+        w.writeheader()
+        w.writerows(flat)
+
+
+def write_metrics_csv(table: Dict[str, Dict[str, Dict[str, float]]], path: pathlib.Path) -> None:
+    """table[configuration][family] = metric dict"""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="") as fh:
+        w = None
+        for cfg, fams in table.items():
+            for fam, m in fams.items():
+                row = {"configuration": cfg, "family": fam, **m}
+                if w is None:
+                    w = csv.DictWriter(fh, fieldnames=list(row.keys()))
+                    w.writeheader()
+                w.writerow(row)
+
+
+def fmt_num(v: Any) -> str:
+    if isinstance(v, float):
+        return "--" if v != v else f"{v:.3f}"
+    return str(v)
+
+
+def write_latex_table(table: Dict[str, Dict[str, Dict[str, float]]], path: pathlib.Path,
+                       metrics=("accuracy", "precision", "recall", "f1", "fpr", "caution_rate"),
+                       caption: str = "Detection metrics per configuration and attack family.",
+                       label: str = "tab:ablation") -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    lines = [
+        "% Auto-generated by evaluation/metrics_and_outputs.py -- do not hand-edit.",
+        "\\begin{table*}[t]", "\\centering", "\\small",
+        f"\\caption{{{caption}}}", f"\\label{{{label}}}",
+        "\\begin{tabular}{ll" + "r" * len(metrics) + "}", "\\toprule",
+        "Config & Family & " + " & ".join(m.replace('_', '\\_') for m in metrics) + " \\\\",
+        "\\midrule",
+    ]
+    for cfg, fams in table.items():
+        for fam, m in fams.items():
+            lines.append(f"{cfg.replace('_', '\\_')} & {fam.replace('_', '\\_')} & "
+                          + " & ".join(fmt_num(m.get(k)) for k in metrics) + " \\\\")
+    lines += ["\\bottomrule", "\\end{tabular}", "\\end{table*}", ""]
+    path.write_text("\n".join(lines))
+
+
+def plot_confusion_matrix(m: Dict[str, float], title: str, path: pathlib.Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fig, ax = plt.subplots(figsize=(3.2, 3.0))
+    grid = [[m["tp"], m["fn"]], [m["fp"], m["tn"]]]
+    im = ax.imshow(grid, cmap="Blues")
+    for i in range(2):
+        for j in range(2):
+            ax.text(j, i, str(grid[i][j]), ha="center", va="center",
+                    color="black", fontsize=12)
+    ax.set_xticks([0, 1], ["Pred. attack", "Pred. benign"])
+    ax.set_yticks([0, 1], ["Attacker", "Benign"])
+    ax.set_title(title, fontsize=10)
+    fig.tight_layout()
+    fig.savefig(path, dpi=200)
+    plt.close(fig)
+
+
+def plot_roc_pr(rows: Sequence[Dict[str, Any]], title: str, out_dir: pathlib.Path) -> Optional[Dict[str, float]]:
+    """ROC + PR from (1 - trust_score). Returns AUCs, or None (with no files
+    written) when scores/classes are insufficient -- no fabricated curves."""
+    scored = [(1.0 - r["trust_score"], r["truth_attacker"]) for r in rows
+              if "trust_score" in r and r["decision"] != "ERROR"]
+    if len(scored) < 10 or len({t for _, t in scored}) < 2:
+        return None
+    scored.sort(key=lambda x: -x[0])
+    P = sum(1 for _, t in scored if t)
+    N = len(scored) - P
+    tpr, fpr, prec_pts = [0.0], [0.0], []
+    tp = fp = 0
+    for s, t in scored:
+        if t: tp += 1
+        else: fp += 1
+        tpr.append(tp / P)
+        fpr.append(fp / N)
+        prec_pts.append((tp / (tp + fp), tp / P))
+    auc_roc = sum((fpr[i+1] - fpr[i]) * (tpr[i+1] + tpr[i]) / 2 for i in range(len(fpr) - 1))
+    out_dir.mkdir(parents=True, exist_ok=True)
+    fig, ax = plt.subplots(figsize=(3.4, 3.2))
+    ax.plot(fpr, tpr, lw=1.6)
+    ax.plot([0, 1], [0, 1], "--", lw=0.8, color="gray")
+    ax.set_xlabel("FPR"); ax.set_ylabel("TPR")
+    ax.set_title(f"ROC — {title} (AUC={auc_roc:.3f})", fontsize=9)
+    fig.tight_layout(); fig.savefig(out_dir / "roc.png", dpi=200); plt.close(fig)
+    fig, ax = plt.subplots(figsize=(3.4, 3.2))
+    ax.plot([r for _, r in prec_pts], [p for p, _ in prec_pts], lw=1.6)
+    ax.set_xlabel("Recall"); ax.set_ylabel("Precision")
+    ax.set_title(f"PR — {title}", fontsize=9)
+    fig.tight_layout(); fig.savefig(out_dir / "pr.png", dpi=200); plt.close(fig)
+    return {"auc_roc": auc_roc}
+
+
+def plot_ablation_bars(table: Dict[str, Dict[str, Dict[str, float]]], metric: str,
+                        path: pathlib.Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    configs = list(table.keys())
+    families = sorted({f for fams in table.values() for f in fams})
+    width = 0.8 / max(len(configs), 1)
+    fig, ax = plt.subplots(figsize=(max(6, len(families) * 1.4), 3.4))
+    for ci, cfg in enumerate(configs):
+        xs = [fi + ci * width for fi in range(len(families))]
+        ys = [table[cfg].get(f, {}).get(metric, float("nan")) for f in families]
+        ax.bar(xs, [0 if y != y else y for y in ys], width=width, label=cfg)
+    ax.set_xticks([fi + 0.4 for fi in range(len(families))], families, rotation=20, fontsize=8)
+    ax.set_ylabel(metric)
+    ax.legend(fontsize=7, ncol=2)
+    fig.tight_layout(); fig.savefig(path, dpi=200); plt.close(fig)
+
+
+def plot_latency_bars(lat: Dict[str, Dict[str, float]], path: pathlib.Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    stages = [s for s in lat if s != "total_ms"]
+    fig, ax = plt.subplots(figsize=(6, 3.2))
+    ax.bar(range(len(stages)), [lat[s]["p95"] for s in stages])
+    ax.set_xticks(range(len(stages)), stages, rotation=30, fontsize=8)
+    ax.set_ylabel("p95 latency (ms)")
+    fig.tight_layout(); fig.savefig(path, dpi=200); plt.close(fig)

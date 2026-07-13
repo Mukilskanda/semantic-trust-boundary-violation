@@ -324,23 +324,89 @@ class ISCEPipeline:
         b3_result = classify_text(synthesized_message["text"], synthesized_message)
         bridge_ms = (time.perf_counter() - t_bridge_start) * 1000.0
 
-        # === PHASE A FIX: Fold CP evidence into the decision inputs ===
+        # === CP EVIDENCE FOLD (corrected semantics; see CHANGELOG.md) ===
+        # CP's cp_confidence conflates two distinct epistemic conditions:
+        #   (1) CONTRADICTION -- reports that exist actively disagree
+        #       (spatial/speed/heading inconsistency). This is genuine
+        #       negative evidence and must contribute DISBELIEF (m_not_A):
+        #       folded into validation_score, which decide() maps to the
+        #       crypto mass's score axis.
+        #   (2) CORROBORATION DEFICIT -- few/low-diversity independent
+        #       reports (sparse or spread-out traffic, fresh sender). This
+        #       is ABSENCE of evidence, not evidence of attack; per
+        #       Dempster-Shafer semantics (Shafer 1976, ch.1-2: ignorance
+        #       is mass on Theta, not on the complement) it must contribute
+        #       UNCERTAINTY (m_theta): folded into confidence_calibration,
+        #       which decide() maps to the crypto mass's confidence axis
+        #       (m_theta = 1 - confidence in
+        #       MassFunction.from_score_confidence).
+        # The previous fold routed BOTH through validation_score, so a
+        # merely-uncorroborated benign message acquired disbelief mass and
+        # could be REJECTed (measured FPR up to 0.93 on dense generated
+        # traffic -- see PAPER_READINESS_CRITIQUE.md). Yager's rule
+        # (Yager 1987) then correctly propagates Theta mass through
+        # combination instead of discarding it.
+        #
+        # Both sub-signals reuse CP's OWN existing component weights
+        # (cp/cp_layer.py: spatial 0.35, speed 0.25, heading 0.20,
+        # diversity 0.20) and its existing 0.7 pass threshold -- no new
+        # tuning, only a corrected routing of already-computed components.
         if cp_dict is not None:
-            
+
             cp_evidence = TrustEvidence.from_cp_result(cp_dict)
-            
-            # Use 'most-conservative-wins' (min) instead of averaging, 
-            # preventing high CP confidence from washing out B1/MBD penalties.
-            combined_score = min(b2_dict["validation_score"], cp_evidence.score)
-            combined_valid = b2_dict["validation_valid"] and cp_evidence.passed
-            
+
+            # Agreement among the reports that DO exist (contradiction
+            # channel). Normalized over the same weights cp_layer uses for
+            # these three components (0.35+0.25+0.20 = 0.80).
+            #
+            # GATE (faithful to cp_layer's own semantics): spatial/speed/
+            # heading consistency measures whether reports describing the
+            # SAME CLAIMED EVENT agree (cp_layer's spatial_consistency
+            # scores 0 for any honest traffic spread beyond ~20m std).
+            # When event_label is None -- a plain CAM window with no shared
+            # claimed observation -- spread across the window is expected
+            # heterogeneity, not contradiction; there is nothing for the
+            # reports to contradict. The contradiction channel therefore
+            # applies only when CP fused a claimed shared event.
+            cp_has_shared_event = cp_dict.get("event_label") is not None
+            cp_agreement = (
+                0.35 * float(cp_dict.get("spatial_score", 1.0))
+                + 0.25 * float(cp_dict.get("speed_score", 1.0))
+                + 0.20 * float(cp_dict.get("heading_score", 1.0))
+            ) / 0.80
+            # Independent-evidence quantity (corroboration channel).
+            cp_corroboration = float(cp_dict.get("diversity_score", 0.0))
+
+            if cp_has_shared_event:
+                # Contradiction -> disbelief: most-conservative-wins (min),
+                # driven ONLY by agreement about the shared event, never by
+                # sparsity. cp_layer's existing 0.7 threshold, applied to
+                # the contradiction channel it was meant to gate.
+                combined_score = min(b2_dict["validation_score"], cp_agreement)
+                combined_valid = b2_dict["validation_valid"] and (cp_agreement > 0.7)
+            else:
+                combined_score = b2_dict["validation_score"]
+                combined_valid = b2_dict["validation_valid"]
+
+            # Corroboration deficit -> uncertainty: lowers confidence
+            # (raising Theta mass downstream), never the score.
+            combined_confidence = min(b2_dict["confidence_calibration"], cp_corroboration) \
+                if cp_dict.get("num_reports", 0) > 1 else b2_dict["confidence_calibration"]
+            # num_reports <= 1: CP fused nothing beyond the target itself;
+            # it carries no corroboration signal either way -- leave
+            # confidence untouched rather than treating "no peers" as
+            # maximal ignorance about an otherwise-validated message.
+
             b2_dict = {
                 **b2_dict,
                 "validation_score": combined_score,
                 "validation_valid": combined_valid,
+                "confidence_calibration": combined_confidence,
                 "provenance": {
                     **b2_dict.get("provenance", {}),
                     "source_layers": list(b2_dict.get("provenance", {}).get("source_layers", [])) + ["CP"],
+                    "cp_agreement": cp_agreement,
+                    "cp_corroboration": cp_corroboration,
                 },
             }
         # ==============================================================

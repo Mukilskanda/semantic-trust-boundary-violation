@@ -54,6 +54,21 @@ class SemanticResult:
     confidence: Optional[float]
     risk_level: str
     status: str
+    p_malicious: Optional[float] = None
+    """Calibrated P(MALICIOUS) from the softmax, when available.
+
+    ADDITIVE, OPTIONAL field (default None) -- every existing consumer that
+    reads only available/label/confidence/risk_level/status is unaffected.
+    Consumed ONLY by TrustDecisionEngine when
+    TrustPolicy.use_continuous_semantic_belief is enabled (default OFF); see
+    trust_engine/decision_engine.py::_semantic_mass and INTERFACE_COMPARISON.md.
+
+    NOTE on coupling: this exposes B3's own probability, not its internals --
+    no caller may reach past SemanticResult into the predictor/model/
+    tokenizer, and the risk_level taxonomy remains B3's alone. The Trust
+    Decision Engine still consumes an opaque public field of B3's output; it
+    does not learn B3's label space.
+    """
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -62,6 +77,7 @@ class SemanticResult:
             "confidence": self.confidence,
             "risk_level": self.risk_level,
             "status": self.status,
+            "p_malicious": self.p_malicious,
         }
 
     @staticmethod
@@ -247,12 +263,18 @@ class SemanticGateClassifier:
             # Standardize label mapping (map MALICIOUS_SEMANTIC_MANIPULATION to MALICIOUS)
             label_name = "MALICIOUS" if res.label == "MALICIOUS_SEMANTIC_MANIPULATION" else res.label
             risk_level = self.risk_policy.classify(label_name, res.confidence)
+            # p(MALICIOUS) recovered from the argmax + max-prob pair the
+            # predictor returns. Exact for a 2-class softmax: if the argmax
+            # IS malicious, p = confidence; otherwise p = 1 - confidence.
+            p_malicious = (float(res.confidence) if label_name in self.risk_policy.malicious_labels
+                           else 1.0 - float(res.confidence))
             return SemanticResult(
                 available=True,
                 label=label_name,
                 confidence=res.confidence,
                 risk_level=risk_level,
                 status="ok",
+                p_malicious=p_malicious,
             ).to_dict()
         except Exception as e:
             return SemanticResult.unavailable(f"Inference execution error: {str(e)}").to_dict()

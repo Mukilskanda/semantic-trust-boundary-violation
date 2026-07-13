@@ -41,6 +41,63 @@ MAX_SOURCE_CONFIDENCE = 0.98
 
 class TrustDecisionEngine:
 
+    def _semantic_mass(self, semantic_result: Dict[str, Any],
+                        semantic_risk: SemanticRisk) -> MassFunction:
+        """Build B3's mass function over {trustworthy, suspicious}.
+
+        Two interfaces are supported. They agree exactly for
+        p_malicious >= 0.5 and differ only below it.
+
+        LEGACY (default; policy.use_continuous_semantic_belief == False)
+            Consumes B3's argmax label + max-probability confidence. As a
+            function of p = p(malicious), this yields:
+                p <  0.5 -> (m_A, m_notA, m_theta) = (1-p, 0,   p)
+                p >= 0.5 -> (m_A, m_notA, m_theta) = (0,   p, 1-p)
+            i.e. below the decision boundary, semantic suspicion is routed
+            into THETA (ignorance) rather than into DISBELIEF: the engine is
+            told "I do not know" when B3 actually means "49% chance this is
+            an attack". m_notA is discontinuous at p = 0.5 (jumps 0 -> 0.5).
+
+        CONTINUOUS (opt-in; requires `p_malicious` on the SemanticResult)
+            Consumes the calibrated probability directly:
+                (m_A, m_notA, m_theta) = ((1-p)*c, p*c, 1-c)
+            with c = MAX_SOURCE_CONFIDENCE, an explicit epistemic budget that
+            keeps the source non-dogmatic (m_theta > 0 always -- see
+            dempster_shafer.py on why a dogmatic source must never occur).
+            This is the standard probability-to-mass conversion (a Bayesian
+            mass function with a reserved ignorance budget). m_notA is
+            continuous and monotone in p; sub-0.5 suspicion becomes graded
+            disbelief instead of ignorance.
+
+        NOTE the semantic trade-off, which is exactly what the A/B experiment
+        measures: under CONTINUOUS, m_theta is CONSTANT (= 1-c), so B3's own
+        uncertainty no longer inflates ignorance mass -- it is expressed
+        entirely in p. Whether that is an improvement is an empirical
+        question, not an aesthetic one. See INTERFACE_COMPARISON.md.
+        """
+        p_mal = semantic_result.get("p_malicious")
+        if self.policy.use_continuous_semantic_belief and p_mal is not None:
+            p = min(max(float(p_mal), 0.0), 1.0)
+            c = MAX_SOURCE_CONFIDENCE
+            return MassFunction(m_A=(1.0 - p) * c, m_not_A=p * c, m_theta=1.0 - c)
+
+        raw_confidence = semantic_result.get("confidence")
+        if raw_confidence is None:
+            # No raw confidence on this SemanticResult (e.g. an older/
+            # external caller supplying only risk_level) -- fall back to a
+            # representative confidence per band so fusion still has
+            # something principled to combine, rather than silently
+            # treating it as vacuous.
+            raw_confidence = {"high": 0.90, "medium": 0.65,
+                              "low": 0.40, "none": 0.50}[semantic_risk.value]
+        semantic_confidence = min(float(raw_confidence), MAX_SOURCE_CONFIDENCE)
+        # NONE -> supports "trustworthy"; LOW/MEDIUM/HIGH -> supports
+        # "suspicious", with the actual model confidence (not a fixed
+        # per-band score) driving how much mass is committed.
+        semantic_score_for_mass = 1.0 if semantic_risk == SemanticRisk.NONE else 0.0
+        return MassFunction.from_score_confidence(score=semantic_score_for_mass,
+                                                   confidence=semantic_confidence)
+
     def __init__(self, policy: Optional[TrustPolicy] = None) -> None:
         self.policy = policy or TrustPolicy()
 
@@ -112,20 +169,7 @@ class TrustDecisionEngine:
         if semantic_risk == SemanticRisk.UNAVAILABLE:
             semantic_mass = MassFunction.vacuous()
         else:
-            raw_confidence = semantic_result.get("confidence")
-            if raw_confidence is None:
-                # No raw confidence on this SemanticResult (e.g. an older/
-                # external caller supplying only risk_level) -- fall back
-                # to a representative confidence per band so fusion still
-                # has something principled to combine, rather than
-                # silently treating it as vacuous.
-                raw_confidence = {"high": 0.90, "medium": 0.65, "low": 0.40, "none": 0.50}[semantic_risk.value]
-            semantic_confidence = min(float(raw_confidence), MAX_SOURCE_CONFIDENCE)
-            # NONE -> supports "trustworthy"; LOW/MEDIUM/HIGH -> supports
-            # "suspicious", with the actual model confidence (not a fixed
-            # per-band score) driving how much mass is committed.
-            semantic_score_for_mass = 1.0 if semantic_risk == SemanticRisk.NONE else 0.0
-            semantic_mass = MassFunction.from_score_confidence(score=semantic_score_for_mass, confidence=semantic_confidence)
+            semantic_mass = self._semantic_mass(semantic_result, semantic_risk)
 
         conflict_mass = crypto_mass.conflict_with(semantic_mass)
         fused_mass = combine(crypto_mass, semantic_mass)
