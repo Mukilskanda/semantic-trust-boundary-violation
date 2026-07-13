@@ -175,9 +175,10 @@ class TrustDecisionEngine:
         fused_mass = combine(crypto_mass, semantic_mass)
         trust_score = fused_mass.pignistic_trust_score()
 
-        if b1_score < self.policy.cryptographic_reject_below:
+        crypto_trust_score = crypto_mass.pignistic_trust_score()
+        if crypto_trust_score < self.policy.cryptographic_reject_below:
             crypto_level_alone = TrustLevel.REJECT
-        elif b1_score < self.policy.cryptographic_caution_below:
+        elif crypto_trust_score < self.policy.cryptographic_caution_below:
             crypto_level_alone = TrustLevel.CAUTION
         else:
             crypto_level_alone = TrustLevel.ACCEPT
