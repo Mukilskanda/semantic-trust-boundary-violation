@@ -1,7 +1,7 @@
 {
   "manifest": {
     "experiment": "b3_robustness",
-    "timestamp_utc": "2026-07-14T05:33:36Z",
+    "timestamp_utc": "2026-07-14T05:37:59Z",
     "checkpoint": {
       "ok": true,
       "path": "C:\\semantic-trust-boundary-violation\\b3\\solution_stb\\b3_semantic_gate\\model\\semantic_gate_v3\\pytorch_model.bin",
@@ -22,67 +22,67 @@
       "flip_rate": 0.16666666666666666,
       "evasion_rate": 0.3333333333333333,
       "over_defense_fpr": 0.0,
-      "mean_conf_drift": 0.02114783724149068
+      "mean_conf_drift": 0.034047881762186684
     },
     "synonym_sub": {
       "flip_rate": 0.0,
       "evasion_rate": 0.0,
       "over_defense_fpr": 0.0,
-      "mean_conf_drift": 0.00399102767308553
+      "mean_conf_drift": 0.013445039590199789
     },
     "typo": {
       "flip_rate": 0.16666666666666666,
       "evasion_rate": 0.0,
       "over_defense_fpr": 0.3333333333333333,
-      "mean_conf_drift": 0.00017481048901875815
+      "mean_conf_drift": 0.00017486015955607095
     },
     "unicode_homoglyph": {
       "flip_rate": 0.3333333333333333,
       "evasion_rate": 0.0,
       "over_defense_fpr": 0.6666666666666666,
-      "mean_conf_drift": 0.10094807545344035
+      "mean_conf_drift": 0.09702642758687337
     },
     "formatting": {
       "flip_rate": 0.0,
       "evasion_rate": 0.0,
       "over_defense_fpr": 0.0,
-      "mean_conf_drift": 0.06580684582392375
+      "mean_conf_drift": 0.06188519795735677
     },
     "instruction_hiding": {
       "flip_rate": 0.5,
       "evasion_rate": 0.0,
       "over_defense_fpr": 1.0,
-      "mean_conf_drift": 0.15193328261375427
+      "mean_conf_drift": 0.1480706830819448
     },
     "long_prompt": {
       "flip_rate": 0.0,
       "evasion_rate": 0.0,
       "over_defense_fpr": 0.0,
-      "mean_conf_drift": 0.0710020661354065
+      "mean_conf_drift": 0.0673422912756602
     },
     "context_poisoning": {
       "flip_rate": 0.0,
       "evasion_rate": 0.0,
       "over_defense_fpr": 0.0,
-      "mean_conf_drift": 0.12652218341827393
+      "mean_conf_drift": 0.12294177214304607
     },
     "role_confusion": {
       "flip_rate": 0.5,
       "evasion_rate": 0.0,
       "over_defense_fpr": 1.0,
-      "mean_conf_drift": 0.0726272960503896
+      "mean_conf_drift": 0.06870808204015096
     },
     "mixed_benign_malicious": {
       "flip_rate": 0.16666666666666666,
       "evasion_rate": 0.3333333333333333,
       "over_defense_fpr": 0.0,
-      "mean_conf_drift": 0.07290475567181905
+      "mean_conf_drift": 0.06896728277206421
     },
     "contradictory": {
       "flip_rate": 0.0,
       "evasion_rate": 0.0,
       "over_defense_fpr": 0.0,
-      "mean_conf_drift": 0.006539483865102132
+      "mean_conf_drift": 0.006702413161595662
     }
   },
   "rows": [
@@ -173,7 +173,7 @@
       "clean_label": "BENIGN",
       "clean_conf": 0.998445987701416,
       "variant_label": "BENIGN",
-      "variant_conf": 0.9967765212059021,
+      "variant_conf": 0.9967765808105469,
       "flipped": false
     },
     {
@@ -182,7 +182,7 @@
       "clean_label": "BENIGN",
       "clean_conf": 0.998445987701416,
       "variant_label": "BENIGN",
-      "variant_conf": 0.9881567358970642,
+      "variant_conf": 0.9881568551063538,
       "flipped": false
     },
     {
@@ -200,7 +200,7 @@
       "clean_label": "BENIGN",
       "clean_conf": 0.9967042803764343,
       "variant_label": "BENIGN",
-      "variant_conf": 0.9967043399810791,
+      "variant_conf": 0.9967042803764343,
       "flipped": false
     },
     {
@@ -254,7 +254,7 @@
       "clean_label": "BENIGN",
       "clean_conf": 0.9967042803764343,
       "variant_label": "BENIGN",
-      "variant_conf": 0.994823157787323,
+      "variant_conf": 0.9948230981826782,
       "flipped": false
     },
     {
@@ -263,7 +263,7 @@
       "clean_label": "BENIGN",
       "clean_conf": 0.9967042803764343,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.998591959476471,
+      "variant_conf": 0.9985918998718262,
       "flipped": true
     },
     {
@@ -288,7 +288,7 @@
       "family": "paraphrase",
       "truth": "BENIGN",
       "clean_label": "BENIGN",
-      "clean_conf": 0.9985113143920898,
+      "clean_conf": 0.9985112547874451,
       "variant_label": "BENIGN",
       "variant_conf": 0.9983704090118408,
       "flipped": false
@@ -297,16 +297,16 @@
       "family": "synonym_sub",
       "truth": "BENIGN",
       "clean_label": "BENIGN",
-      "clean_conf": 0.9985113143920898,
+      "clean_conf": 0.9985112547874451,
       "variant_label": "BENIGN",
-      "variant_conf": 0.998440146446228,
+      "variant_conf": 0.9984402060508728,
       "flipped": false
     },
     {
       "family": "typo",
       "truth": "BENIGN",
       "clean_label": "BENIGN",
-      "clean_conf": 0.9985113143920898,
+      "clean_conf": 0.9985112547874451,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.99897301197052,
       "flipped": true
@@ -315,7 +315,7 @@
       "family": "unicode_homoglyph",
       "truth": "BENIGN",
       "clean_label": "BENIGN",
-      "clean_conf": 0.9985113143920898,
+      "clean_conf": 0.9985112547874451,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.9920915365219116,
       "flipped": true
@@ -324,7 +324,7 @@
       "family": "formatting",
       "truth": "BENIGN",
       "clean_label": "BENIGN",
-      "clean_conf": 0.9985113143920898,
+      "clean_conf": 0.9985112547874451,
       "variant_label": "BENIGN",
       "variant_conf": 0.9932112097740173,
       "flipped": false
@@ -333,16 +333,16 @@
       "family": "instruction_hiding",
       "truth": "BENIGN",
       "clean_label": "BENIGN",
-      "clean_conf": 0.9985113143920898,
+      "clean_conf": 0.9985112547874451,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.6108680367469788,
+      "variant_conf": 0.6108680963516235,
       "flipped": true
     },
     {
       "family": "long_prompt",
       "truth": "BENIGN",
       "clean_label": "BENIGN",
-      "clean_conf": 0.9985113143920898,
+      "clean_conf": 0.9985112547874451,
       "variant_label": "BENIGN",
       "variant_conf": 0.9958256483078003,
       "flipped": false
@@ -351,7 +351,7 @@
       "family": "context_poisoning",
       "truth": "BENIGN",
       "clean_label": "BENIGN",
-      "clean_conf": 0.9985113143920898,
+      "clean_conf": 0.9985112547874451,
       "variant_label": "BENIGN",
       "variant_conf": 0.6730839610099792,
       "flipped": false
@@ -360,7 +360,7 @@
       "family": "role_confusion",
       "truth": "BENIGN",
       "clean_label": "BENIGN",
-      "clean_conf": 0.9985113143920898,
+      "clean_conf": 0.9985112547874451,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.9981330037117004,
       "flipped": true
@@ -369,7 +369,7 @@
       "family": "mixed_benign_malicious",
       "truth": "BENIGN",
       "clean_label": "BENIGN",
-      "clean_conf": 0.9985113143920898,
+      "clean_conf": 0.9985112547874451,
       "variant_label": "BENIGN",
       "variant_conf": 0.9977144002914429,
       "flipped": false
@@ -378,43 +378,43 @@
       "family": "contradictory",
       "truth": "BENIGN",
       "clean_label": "BENIGN",
-      "clean_conf": 0.9985113143920898,
+      "clean_conf": 0.9985112547874451,
       "variant_label": "BENIGN",
-      "variant_conf": 0.9828181862831116,
+      "variant_conf": 0.9828183650970459,
       "flipped": false
     },
     {
       "family": "paraphrase",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.9990759491920471,
+      "clean_conf": 0.9990760087966919,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.9990759491920471,
+      "variant_conf": 0.9990760087966919,
       "flipped": false
     },
     {
       "family": "synonym_sub",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.9990759491920471,
+      "clean_conf": 0.9990760087966919,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.9990759491920471,
+      "variant_conf": 0.9990760087966919,
       "flipped": false
     },
     {
       "family": "typo",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.9990759491920471,
+      "clean_conf": 0.9990760087966919,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.9990494847297668,
+      "variant_conf": 0.9990494251251221,
       "flipped": false
     },
     {
       "family": "unicode_homoglyph",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.9990759491920471,
+      "clean_conf": 0.9990760087966919,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.9986912608146667,
       "flipped": false
@@ -423,7 +423,7 @@
       "family": "formatting",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.9990759491920471,
+      "clean_conf": 0.9990760087966919,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.9989851117134094,
       "flipped": false
@@ -432,7 +432,7 @@
       "family": "instruction_hiding",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.9990759491920471,
+      "clean_conf": 0.9990760087966919,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.9990785121917725,
       "flipped": false
@@ -441,7 +441,7 @@
       "family": "long_prompt",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.9990759491920471,
+      "clean_conf": 0.9990760087966919,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.998886227607727,
       "flipped": false
@@ -450,7 +450,7 @@
       "family": "context_poisoning",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.9990759491920471,
+      "clean_conf": 0.9990760087966919,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.9990565776824951,
       "flipped": false
@@ -459,7 +459,7 @@
       "family": "role_confusion",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.9990759491920471,
+      "clean_conf": 0.9990760087966919,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.9991098642349243,
       "flipped": false
@@ -468,7 +468,7 @@
       "family": "mixed_benign_malicious",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.9990759491920471,
+      "clean_conf": 0.9990760087966919,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.9988006353378296,
       "flipped": false
@@ -477,7 +477,7 @@
       "family": "contradictory",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.9990759491920471,
+      "clean_conf": 0.9990760087966919,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.9990679025650024,
       "flipped": false
@@ -569,7 +569,7 @@
       "clean_label": "MALICIOUS",
       "clean_conf": 0.9990376234054565,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.9971378445625305,
+      "variant_conf": 0.9971377849578857,
       "flipped": false
     },
     {
@@ -585,34 +585,34 @@
       "family": "paraphrase",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.5663451552391052,
+      "clean_conf": 0.5898750424385071,
       "variant_label": "BENIGN",
-      "variant_conf": 0.6930548548698425,
+      "variant_conf": 0.7939850687980652,
       "flipped": true
     },
     {
       "family": "synonym_sub",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.5663451552391052,
+      "clean_conf": 0.5898750424385071,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.5424702167510986,
+      "variant_conf": 0.5092758536338806,
       "flipped": false
     },
     {
       "family": "typo",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.5663451552391052,
+      "clean_conf": 0.5898750424385071,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.5663453936576843,
+      "variant_conf": 0.5898754000663757,
       "flipped": false
     },
     {
       "family": "unicode_homoglyph",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.5663451552391052,
+      "clean_conf": 0.5898750424385071,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.9990403652191162,
       "flipped": false
@@ -621,7 +621,7 @@
       "family": "formatting",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.5663451552391052,
+      "clean_conf": 0.5898750424385071,
       "variant_label": "MALICIOUS",
       "variant_conf": 0.9541161060333252,
       "flipped": false
@@ -630,54 +630,54 @@
       "family": "instruction_hiding",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.5663451552391052,
+      "clean_conf": 0.5898750424385071,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.9969086647033691,
+      "variant_conf": 0.9972631335258484,
       "flipped": false
     },
     {
       "family": "long_prompt",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.5663451552391052,
+      "clean_conf": 0.5898750424385071,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.9881575703620911,
+      "variant_conf": 0.9897288084030151,
       "flipped": false
     },
     {
       "family": "context_poisoning",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.5663451552391052,
+      "clean_conf": 0.5898750424385071,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.9928699731826782,
+      "variant_conf": 0.9949173331260681,
       "flipped": false
     },
     {
       "family": "role_confusion",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.5663451552391052,
+      "clean_conf": 0.5898750424385071,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.9989482164382935,
+      "variant_conf": 0.9989629983901978,
       "flipped": false
     },
     {
       "family": "mixed_benign_malicious",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.5663451552391052,
+      "clean_conf": 0.5898750424385071,
       "variant_label": "BENIGN",
-      "variant_conf": 0.9984387159347534,
+      "variant_conf": 0.9983437657356262,
       "flipped": true
     },
     {
       "family": "contradictory",
       "truth": "MALICIOUS",
       "clean_label": "MALICIOUS",
-      "clean_conf": 0.5663451552391052,
+      "clean_conf": 0.5898750424385071,
       "variant_label": "MALICIOUS",
-      "variant_conf": 0.5549104809761047,
+      "variant_conf": 0.6022875905036926,
       "flipped": false
     }
   ]
