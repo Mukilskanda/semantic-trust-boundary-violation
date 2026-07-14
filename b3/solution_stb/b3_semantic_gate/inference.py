@@ -1,8 +1,59 @@
 import os
 import torch
+import numpy as np
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+def _generate_tta_variants(text: str) -> List[str]:
+    variants = {text}
+    para_swaps = [
+        ("must", "are required to"),
+        ("divert", "reroute"),
+        ("immediately", "at once"),
+        ("ahead", "up ahead"),
+        ("reported", "being reported"),
+        ("resume", "go back to"),
+        ("danger", "hazard"),
+        ("recommended", "advised"),
+        ("unmarked", "unsigned"),
+        ("closure", "blockage"),
+        ("do not attempt to verify", "do not try to verify"),
+    ]
+    syn_swaps = [
+        ("reduce", "lower"),
+        ("immediately", "at once"),
+        ("normal", "usual"),
+        ("vehicle", "car"),
+        ("hazard", "danger"),
+        ("advised", "recommended"),
+    ]
+    for orig, rep in para_swaps + syn_swaps:
+        if orig in text:
+            variants.add(text.replace(orig, rep))
+        if rep in text:
+            variants.add(text.replace(rep, orig))
+            
+    for p_orig, p_rep in para_swaps:
+        for s_orig, s_rep in syn_swaps:
+            text_mod = text
+            changed = False
+            if p_orig in text_mod:
+                text_mod = text_mod.replace(p_orig, p_rep)
+                changed = True
+            elif p_rep in text_mod:
+                text_mod = text_mod.replace(p_rep, p_orig)
+                changed = True
+            if s_orig in text_mod:
+                text_mod = text_mod.replace(s_orig, s_rep)
+                changed = True
+            elif s_rep in text_mod:
+                text_mod = text_mod.replace(s_rep, s_orig)
+                changed = True
+            if changed:
+                variants.add(text_mod)
+                
+    return list(variants)
 
 @dataclass
 class SemanticGateResult:
@@ -45,6 +96,36 @@ class SemanticGatePredictor:
 
         self.id2label = getattr(self.model.config, "id2label", {0: "BENIGN", 1: "MALICIOUS"})
 
+        # Load config to check if text_ensembling is enabled
+        self.enable_tta = False
+        try:
+            import yaml
+            config_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../isce_config.yaml"))
+            if os.path.exists(config_file):
+                with open(config_file, "r", encoding="utf-8") as fh:
+                    data = yaml.safe_load(fh) or {}
+                self.enable_tta = data.get("b3_semantic_gate", {}).get("enable_text_ensembling", False)
+        except Exception:
+            pass
+
+    def _predict_probs(self, texts: List[str], batch_size: int = 32) -> List[np.ndarray]:
+        all_probs = []
+        with torch.no_grad():
+            for i in range(0, len(texts), batch_size):
+                batch = texts[i:i+batch_size]
+                enc = self.tokenizer(
+                    batch,
+                    max_length=self.max_length,
+                    padding=True,
+                    truncation=True,
+                    return_tensors="pt"
+                ).to(self.device)
+
+                out = self.model(**enc)
+                probs = torch.softmax(out.logits, dim=1).cpu().numpy()
+                all_probs.extend(probs)
+        return all_probs
+
     def predict(self, texts: List[str], batch_size: int = 32) -> List[SemanticGateResult]:
         """Perform batched inference on a list of input texts.
 
@@ -60,35 +141,47 @@ class SemanticGatePredictor:
         List[SemanticGateResult]
             Structured classification results containing label, label_id, and confidence.
         """
-        results: List[SemanticGateResult] = []
         if not texts:
+            return []
+
+        if getattr(self, "enable_tta", False):
+            flat_variants = []
+            text_to_variants_indices = []
+            for t in texts:
+                vars_for_t = _generate_tta_variants(t)
+                start_idx = len(flat_variants)
+                flat_variants.extend(vars_for_t)
+                end_idx = len(flat_variants)
+                text_to_variants_indices.append((start_idx, end_idx))
+            
+            flat_probs = self._predict_probs(flat_variants, batch_size)
+            
+            results = []
+            for start, end in text_to_variants_indices:
+                probs_slice = flat_probs[start:end]
+                avg_probs = sum(probs_slice) / len(probs_slice)
+                pred = avg_probs.argmax()
+                conf = avg_probs[pred]
+                label_name = self.id2label.get(int(pred), f"LABEL_{pred}")
+                results.append(SemanticGateResult(
+                    label=label_name,
+                    label_id=int(pred),
+                    confidence=float(conf)
+                ))
             return results
-
-        with torch.no_grad():
-            for i in range(0, len(texts), batch_size):
-                batch = texts[i:i+batch_size]
-                enc = self.tokenizer(
-                    batch,
-                    max_length=self.max_length,
-                    padding=True,
-                    truncation=True,
-                    return_tensors="pt"
-                ).to(self.device)
-
-                out = self.model(**enc)
-                probs = torch.softmax(out.logits, dim=1).cpu().numpy()
-
-                preds = probs.argmax(axis=1)
-                confs = probs.max(axis=1)
-
-                for pred, conf in zip(preds, confs):
-                    label_name = self.id2label.get(int(pred), f"LABEL_{pred}")
-                    results.append(SemanticGateResult(
-                        label=label_name,
-                        label_id=int(pred),
-                        confidence=float(conf)
-                    ))
-        return results
+        else:
+            probs = self._predict_probs(texts, batch_size)
+            results = []
+            for p in probs:
+                pred = p.argmax()
+                conf = p[pred]
+                label_name = self.id2label.get(int(pred), f"LABEL_{pred}")
+                results.append(SemanticGateResult(
+                    label=label_name,
+                    label_id=int(pred),
+                    confidence=float(conf)
+                ))
+            return results
 
 def get_predictor(model_path: str, max_length: int = 256, device: Optional[str] = None) -> SemanticGatePredictor:
     """Get or create cached SemanticGatePredictor instance for the given configuration."""
