@@ -181,7 +181,11 @@ def train_and_eval_candidate(name, train, test, epochs, batch_size, lr):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     try:
         tok = AutoTokenizer.from_pretrained(name)
-        model = AutoModelForSequenceClassification.from_pretrained(name, num_labels=2).to(device)
+        model = AutoModelForSequenceClassification.from_pretrained(
+            name, num_labels=2, torch_dtype=torch.float32
+        ).to(device)
+        model = model.float()  # safety net: guarantee fp32 params even if a checkpoint's
+                                # config.json declares a different torch_dtype
     except Exception as e:
         return {"skipped": True, "reason": f"{type(e).__name__}: {e}"}
 
