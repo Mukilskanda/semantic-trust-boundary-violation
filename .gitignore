@@ -46,10 +46,29 @@ build/
 # Scratch
 scratch/
 
+<<<<<<< HEAD
 data/
+<<<<<<< HEAD
 results/lolo.json
 results/fusion_divergence.json
 results/decision_trust.json
 results/trust_evolution.json
 tests/system_integration_trace_output.txt
 b3/solution_stb/b3_semantic_gate/model/semantic_gate_v3/onnx/
+=======
+results/
+=======
+data/# Generated evaluation results
+results/oracle_eval/
+results/semantic/
+results/large_scale/
+results/extended/
+
+# Generated decision traces
+decision_traces.json
+decision_traces.md
+
+# Generated latency results
+validation/latency_throughput_results.json
+>>>>>>> 163f2ae0 (vyas)
+>>>>>>> 24f16ab1 (vyas)
