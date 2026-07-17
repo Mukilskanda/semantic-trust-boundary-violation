@@ -47,4 +47,4 @@ build/
 scratch/
 
 data/
-results/
+results/tests/system_integration_trace_output.txt
