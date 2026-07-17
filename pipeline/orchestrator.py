@@ -115,26 +115,7 @@ class ISCEPipeline:
         enable_cp: bool = True,
         pki_ca: Optional[Any] = None,
     ) -> None:
-        """
-        Parameters
-        ----------
-        enable_mbd:
-            Opt-in. When True, MBD runs between B1 and B2, and B2 uses
-            explain_evidence([B1, MBD]) instead of explain(B1). When
-            False (default), behavior is EXACTLY the pre-MBD-integration
-            pipeline -- zero difference.
-        enable_cp:
-            Opt-in. When True, CP runs between B2 and B3, fusing the
-            full message window (weighted by B2's evidence for the
-            target sender -- see module docstring's scoping limitation).
-            When False (default), behavior is unchanged.
-        pki_ca:
-            Optional pki.CertificateAuthority instance. If a message
-            carries `_pki_signature`/`_pki_certificate`/`_pki_public_key`
-            keys, PKI runs and its result is folded into B1's checks. If
-            absent, PKI is skipped for that message (not faked as
-            passing) -- see module docstring.
-        """
+
         self.scsv = scsv or SCSV()
         self.b2 = explainability_engine or ExplainabilityEngine()
         self.trust_engine = TrustDecisionEngine(policy=trust_policy)

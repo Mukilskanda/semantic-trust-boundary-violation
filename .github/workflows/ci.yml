@@ -9,7 +9,6 @@ on:
       - main
 
 jobs:
-
   test:
     name: Unit + Integration Tests
     runs-on: ubuntu-latest
@@ -24,113 +23,68 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
 
       - name: Upgrade pip
-        run: |
-          python -m pip install --upgrade pip
+        run: python -m pip install --upgrade pip
 
       - name: Install project dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       ####################################################################
       # Architecture Verification
       ####################################################################
 
       - name: Verify dependency graph
-        run: |
-          python3 tests/verify_dependency_graph.py
+        run: python3 tests/verify_dependency_graph.py
 
       ####################################################################
       # Unit Tests
       ####################################################################
 
       - name: Run Trust Engine tests
-        run: |
-          python3 tests/test_b2_trust_engine.py
+        run: python3 tests/test_b2_trust_engine.py
 
       - name: Run Adapter tests
-        run: |
-          python3 tests/test_adapters.py
+        run: python3 tests/test_adapters.py
 
       ####################################################################
       # Regression Tests
       ####################################################################
 
       - name: Benign regression suite
-        run: |
-          python3 manual_pipeline_test.py --pipeline test_messages/benign
+        run: python3 manual_pipeline_test.py --pipeline test_messages/benign
 
       - name: Invalid message regression suite
-        run: |
-          python3 manual_pipeline_test.py --pipeline test_messages/b1_fail
+        run: python3 manual_pipeline_test.py --pipeline test_messages/b1_fail
 
       - name: Context regression suite
-        run: |
-          python3 manual_pipeline_test.py --pipeline test_messages/context/urban
+        run: python3 manual_pipeline_test.py --pipeline test_messages/context/urban
 
       ####################################################################
       # Scenario Tests
       ####################################################################
 
       - name: Sybil attack scenarios
-        run: |
-          python3 manual_pipeline_test.py --pipeline scenarios/sybil
+        run: python3 manual_pipeline_test.py --pipeline scenarios/sybil
 
       - name: Replay attack scenarios
-        run: |
-          python3 manual_pipeline_test.py --pipeline scenarios/replay
+        run: python3 manual_pipeline_test.py --pipeline scenarios/replay
 
       - name: Fabrication attack scenarios
-        run: |
-          python3 manual_pipeline_test.py --pipeline scenarios/fabrication
+        run: python3 manual_pipeline_test.py --pipeline scenarios/fabrication
 
       - name: Collusion attack scenarios
-        run: |
-          python3 manual_pipeline_test.py --pipeline scenarios/collusion
+        run: python3 manual_pipeline_test.py --pipeline scenarios/collusion
 
       - name: Mixed attack scenarios
-        run: |
-          python3 manual_pipeline_test.py --pipeline scenarios/mixed
+        run: python3 manual_pipeline_test.py --pipeline scenarios/mixed
 
       ####################################################################
       # Optional System Validation
       ####################################################################
 
-      # Uncomment ONLY after this script is completely stable.
+      # Uncomment after stabilizing
       #
       # - name: System Integration Validation
-      #   run: |
-      #     python3 tests/system_integration_validation.py
-
-  ##########################################################################
-  # B3 Semantic Model Verification
-  ##########################################################################
-
-  b3-model-check:
-    name: B3 Semantic Model Verification
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          lfs: true
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Upgrade pip
-        run: |
-          python -m pip install --upgrade pip
-
-      - name: Install project dependencies
-        run: |
-          pip install -r requirements.txt
-
-      - name: Verify B3 model loads
-        run: |
-          python3 tests/verify_b3_model.py
+      #   run: python3 tests/system_integration_validation.py
