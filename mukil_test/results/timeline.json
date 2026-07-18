@@ -1,7 +1,7 @@
 {
   "demo": false,
-  "total_p95_ms": 9.0,
+  "total_p95_ms": 22.9,
   "deadline_ms": 100.0,
-  "headroom_ms": 91.0,
+  "headroom_ms": 77.1,
   "meets_deadline": true
 }
