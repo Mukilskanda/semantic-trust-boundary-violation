@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Trust Engine value beyond the B3 classifier: decisions changed by Dempster--Shafer fusion, by cause, with net effect on F1 and unsafe acceptances.}
+\label{tab:fusion}
+\begin{tabular}{lc}
+\toprule
+Quantity & Value \\
+\midrule
+Decisions changed by fusion & 103 / 104 \\
+\ \ inter-source conflict & 77 \\
+\ \ low B3 confidence & 0 \\
+\ \ corroboration shift & 26 \\
+F1 (B3-only $\to$ fused) & nan $\to$ 0.975 \\
+Unsafe acceptances (B3 $\to$ fused) & 100 $\to$ 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
