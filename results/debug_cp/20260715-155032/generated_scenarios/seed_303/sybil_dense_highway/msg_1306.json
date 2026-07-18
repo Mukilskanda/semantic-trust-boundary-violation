@@ -1,0 +1,41 @@
+{
+  "header": {
+    "station_id": 1033,
+    "message_id": 1
+  },
+  "cam": {
+    "generation_delta_time": 29032.55,
+    "cam_parameters": {
+      "basic_container": {
+        "station_type": 8,
+        "reference_position": {
+          "latitude": 485675508,
+          "longitude": 96383039
+        }
+      },
+      "high_frequency_container": {
+        "basic_vehicle_container_high_frequency": {
+          "speed": 2764,
+          "heading": 1890,
+          "yaw_rate": 46,
+          "steering_wheel_angle": 0,
+          "lateral_acceleration": 0,
+          "longitudinal_acceleration": 0
+        }
+      }
+    }
+  },
+  "certificate_id": "CERT_SYBIL_SHARED",
+  "cert_id": "CERT_SYBIL_SHARED",
+  "is_attacker": true,
+  "expected_label": "MALICIOUS",
+  "local_perception": {
+    "camera": "CLEAR",
+    "radar": "CLEAR",
+    "lidar": "CLEAR"
+  },
+  "scene_context": {
+    "peer_reports": [],
+    "rsu_messages": []
+  }
+}

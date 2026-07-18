@@ -1,0 +1,41 @@
+{
+  "header": {
+    "station_id": 1026,
+    "message_id": 1
+  },
+  "cam": {
+    "generation_delta_time": 92390.17,
+    "cam_parameters": {
+      "basic_container": {
+        "station_type": 8,
+        "reference_position": {
+          "latitude": 485596386,
+          "longitude": 96227216
+        }
+      },
+      "high_frequency_container": {
+        "basic_vehicle_container_high_frequency": {
+          "speed": 1748,
+          "heading": 2248,
+          "yaw_rate": -42,
+          "steering_wheel_angle": 0,
+          "lateral_acceleration": 0,
+          "longitudinal_acceleration": 0
+        }
+      }
+    }
+  },
+  "certificate_id": "CERT_8_1026",
+  "cert_id": "CERT_8_1026",
+  "is_attacker": false,
+  "expected_label": "MALICIOUS",
+  "local_perception": {
+    "camera": "CLEAR",
+    "radar": "CLEAR",
+    "lidar": "CLEAR"
+  },
+  "scene_context": {
+    "peer_reports": [],
+    "rsu_messages": []
+  }
+}

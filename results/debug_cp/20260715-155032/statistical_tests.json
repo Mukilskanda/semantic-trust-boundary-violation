@@ -1,0 +1,6 @@
+{
+  "bootstrap_full_accuracy_per_scenario": {
+    "applicable": false,
+    "reason": "need >=2 samples, got 0"
+  }
+}

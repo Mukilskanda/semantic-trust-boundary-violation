@@ -1,0 +1,14 @@
+{
+  "scenario_id": "replay_dense_highway",
+  "scenario_family": "replay",
+  "attack_type": "replay",
+  "traffic_density": "dense",
+  "road_context": "highway",
+  "vehicle_count": 30,
+  "attacker_count": 4,
+  "seed": 311,
+  "expected_label": "MALICIOUS",
+  "message_count": 200,
+  "generated_message_count": 6000,
+  "generated_attacker_messages": 800
+}

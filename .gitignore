@@ -47,5 +47,8 @@ build/
 scratch/
 
 data/
-results/
+results/lolo.json
+results/fusion_divergence.json
+results/decision_trust.json
+results/trust_evolution.json
 tests/system_integration_trace_output.txt
