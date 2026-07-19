@@ -534,3 +534,4 @@ b3_semantic_gate:
   enable_ensembling: true
   confidence_aware_benign: true
   enable_text_ensembling: true
+  temperature_scaling: 2.1446   # fitted via b3_eval/run_calibration.py; ECE 0.062->0.028

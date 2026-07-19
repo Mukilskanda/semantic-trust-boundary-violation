@@ -66,6 +66,24 @@ def project_to_local_meters(
     return x, y
 
 
+def _extract_denm_event(msg: Dict[str, Any]) -> Optional[str]:
+    """Derive a coarse event label from DENM cause-code if present."""
+    cause = (
+        msg.get("denm", {})
+           .get("management", {})
+           .get("event_type", {})
+           .get("cause_code")
+    )
+    if cause is None:
+        return None
+    _CAUSE_MAP = {
+        1: "traffic_condition", 2: "accident", 3: "road_works",
+        6: "adverse_weather", 9: "hazardous_location", 14: "wrong_way_driving",
+        97: "obstacle_on_road", 98: "animal_on_road", 99: "person_on_road",
+    }
+    return _CAUSE_MAP.get(int(cause), f"denm_cause_{cause}")
+
+
 def _extract_field(msg: Dict[str, Any], *candidates: str, default: Any = None) -> Any:
     """Tries several possible key paths (this repo's CAM messages have
     varied slightly across test fixtures -- some nest under 'cam', some
@@ -166,6 +184,12 @@ def to_flat_report(
     # to 0-360. Values already in range are passed through unchanged.
     heading_deg = (heading_raw / 10.0) if abs(heading_raw) > 360 else float(heading_raw)
 
+    event_str = (
+        event
+        or cam_message.get("event")
+        or _extract_denm_event(cam_message)
+    )
+
     return {
         "sender": sender,
         "x": x,
@@ -173,6 +197,6 @@ def to_flat_report(
         "speed": speed_kmh,
         "heading": heading_deg % 360.0,
         "timestamp": float(timestamp),
-        "event": event,
+        "event": event_str,
         "source": cam_message.get("source"),
     }

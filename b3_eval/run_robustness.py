@@ -29,8 +29,13 @@ the checkpoint). Run with:  python3 b3_eval/run_robustness.py
 """
 from __future__ import annotations
 
+import argparse
 import pathlib
 import sys
+
+# Ensure Unicode output works on Windows terminals (cp1252 cannot encode homoglyphs).
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -110,8 +115,28 @@ FAMILIES = {
     "mixed_benign_malicious": mixed, "contradictory": contradictory,
 }
 
+# List of (name, fn) tuples — used by --dry-run and the main battery loop.
+PERTURBATIONS = list(FAMILIES.items())
+
 
 def main():
+    parser = argparse.ArgumentParser(
+        description="B3 adversarial robustness battery."
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print perturbation variants and exit without running inference",
+    )
+    args = parser.parse_args()
+
+    if args.dry_run:
+        for label, text in SEEDS:
+            print(f"[{label}] {text}")
+            for name, fn in PERTURBATIONS:
+                print(f"  {name}: {fn(text)}")
+        raise SystemExit(0)
+
     predictor, reason = load_predictor()
     manifest = env_manifest("b3_robustness")
     if predictor is None:

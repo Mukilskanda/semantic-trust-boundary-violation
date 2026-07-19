@@ -165,9 +165,9 @@ class ISCEPipeline:
         canonical_msg = {k: v for k, v in target_msg.items() if not k.startswith("_pki_")}
         return pki_layer(canonical_msg, sig, cert, pub, self.pki_ca)
 
-    def _run_mbd(self, target_msg: Dict[str, Any]) -> Dict[str, Any]:
+    def _run_mbd(self, target_msg: Dict[str, Any], peer_messages=None) -> Dict[str, Any]:
         from mbd import mbd_layer
-        from bridges.message_adapter import to_flat_report, ProjectionOrigin
+        from bridges.message_adapter import to_flat_report, ProjectionOrigin, _extract_denm_event
 
         lat = target_msg.get("cam", {}).get("cam_parameters", {}).get(
             "basic_container", {}).get("reference_position", {}).get("latitude")
@@ -177,18 +177,44 @@ class ISCEPipeline:
             lat * 1e-7 if lat and abs(lat) > 1000 else (lat or 0.0),
             lon * 1e-7 if lon and abs(lon) > 1000 else (lon or 0.0),
         )
-        flat = to_flat_report(target_msg, origin)
+
+        event_str = (
+            target_msg.get("event")
+            or _extract_denm_event(target_msg)
+        )
+        flat = to_flat_report(target_msg, origin, event=event_str)
+        target_sender = flat["sender"]
+
+        # Pre-populate history with peers so cross-sender checks (Sybil, collusion)
+        # can see them when the target message is evaluated.
+        if peer_messages and self._mbd_history is not None:
+            for peer in peer_messages:
+                try:
+                    peer_flat = to_flat_report(peer, origin)
+                except (ValueError, KeyError):
+                    continue
+                if peer_flat["sender"] == target_sender:
+                    continue
+                # Only add if not already in history (avoid double-counting)
+                existing = list(self._mbd_history.get(peer_flat["sender"]))
+                if not any(e.get("timestamp") == peer_flat["timestamp"] for e in existing):
+                    self._mbd_history.push(peer_flat["sender"], peer_flat)
 
         station_id = flat["sender"]
         cert_rotation_anomaly = None
         if self.scsv._cert_rotation_owner == "mbd":
             ts = flat.get("timestamp", 0)
             if self._mbd_history is not None:
-                max_hist_ts = max((h[-1]["timestamp"] for h in self._mbd_history._history.values() if h), default=ts)
+                max_hist_ts = max(
+                    (h[-1]["timestamp"] for h in self._mbd_history._history.values() if h),
+                    default=ts,
+                )
                 ref_ts = max(max_hist_ts, ts)
             else:
                 ref_ts = ts
-            cert_rotation_anomaly = self.scsv.check_cert_rotation_for_station(station_id, current_time_sec=ref_ts / 1000.0)
+            cert_rotation_anomaly = self.scsv.check_cert_rotation_for_station(
+                station_id, current_time_sec=ref_ts / 1000.0
+            )
 
         return dict(mbd_layer(flat, self._mbd_history, cert_rotation_anomaly=cert_rotation_anomaly))
 
@@ -369,7 +395,8 @@ class ISCEPipeline:
         t_mbd_start = time.perf_counter()
         mbd_dict: Optional[Dict[str, Any]] = None
         if self.enable_mbd:
-            mbd_dict = self._run_mbd(target_msg)
+            peer_msgs = [m for m in messages[:-1]]   # all except target
+            mbd_dict = self._run_mbd(target_msg, peer_messages=peer_msgs)
         mbd_ms = (time.perf_counter() - t_mbd_start) * 1000.0
 
         # 3. Run B2 (Explainability) — ALWAYS runs, including on B1-fatal

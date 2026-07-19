@@ -108,6 +108,20 @@ class SemanticGatePredictor:
         except Exception:
             pass
 
+        self.temperature: float = 1.0
+        try:
+            import yaml
+            config_file = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), "../../../isce_config.yaml")
+            )
+            if os.path.exists(config_file):
+                with open(config_file, "r", encoding="utf-8") as fh:
+                    _cfg = yaml.safe_load(fh) or {}
+                t = _cfg.get("b3_semantic_gate", {}).get("temperature_scaling", 1.0)
+                self.temperature = float(t) if t and float(t) > 0 else 1.0
+        except Exception:
+            pass
+
     def _predict_probs(self, texts: List[str], batch_size: int = 32) -> List[np.ndarray]:
         all_probs = []
         with torch.no_grad():
@@ -122,7 +136,7 @@ class SemanticGatePredictor:
                 ).to(self.device)
 
                 out = self.model(**enc)
-                probs = torch.softmax(out.logits, dim=1).cpu().numpy()
+                probs = torch.softmax(out.logits / self.temperature, dim=1).cpu().numpy()
                 all_probs.extend(probs)
         return all_probs
 

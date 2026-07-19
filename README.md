@@ -376,3 +376,18 @@ This project builds upon concepts from:
 - Cooperative Intelligent Transportation Systems (C-ITS)
 - Transformer-based Semantic Analysis
 - Dempster–Shafer Evidence Theory
+
+---
+
+## Model Weights
+
+The B3 checkpoint is stored in Git LFS. After cloning, run:
+
+    git lfs pull
+
+Expected file: `b3/solution_stb/b3_semantic_gate/model/semantic_gate_v3/pytorch_model.bin`
+Expected size: 567,622,450 bytes
+Expected sha256 (first 16 hex): `9ee7475e08f76ce6`
+
+All `b3_eval/` harnesses degrade gracefully to "checkpoint unavailable" if
+the weights are absent — they will not fabricate results.

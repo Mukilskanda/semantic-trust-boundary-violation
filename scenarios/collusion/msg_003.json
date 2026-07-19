@@ -25,5 +25,6 @@
       }
     }
   },
-  "is_attacker": true
+  "is_attacker": true,
+  "event": "traffic_condition"
 }
