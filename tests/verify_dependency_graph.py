@@ -26,7 +26,7 @@ def check(name, condition):
 
 
 def imports_of(pyfile: pathlib.Path):
-    tree = ast.parse(pyfile.read_text())
+    tree = ast.parse(pyfile.read_text(encoding="utf-8"))
     mods = []
     for node in ast.walk(tree):
         if isinstance(node, ast.ImportFrom) and node.module:
