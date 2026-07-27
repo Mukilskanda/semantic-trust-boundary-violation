@@ -17,7 +17,7 @@ import os
 import pathlib
 import sys
 from dataclasses import dataclass, field
-from typing import Any, Dict, FrozenSet, Optional
+from typing import Any, Dict, FrozenSet, List, Optional
 import yaml
 
 _DEFAULT_CONFIG_PATH = pathlib.Path(__file__).resolve().parent.parent / "isce_config.yaml"
@@ -333,3 +333,93 @@ def classify_text(message: str, metadata: Optional[Dict[str, Any]] = None) -> Di
     if _CLASSIFIER_INSTANCE is None:
         _CLASSIFIER_INSTANCE = SemanticGateClassifier()
     return _CLASSIFIER_INSTANCE.classify(message, metadata)
+
+
+def classify_texts_batch(
+    messages: List[str],
+    metadata: Optional[List[Optional[Dict[str, Any]]]] = None,
+) -> List[Dict[str, Any]]:
+    """Step 5 — Batch B3 classification: submit all messages in one forward pass.
+
+    Equivalent to calling classify_text() for each message, but routes all
+    texts through a single predictor.predict() call so the tokenizer pads
+    them together and the model processes one batched tensor instead of N
+    serial tensors.  This amortises CUDA kernel-launch overhead and maximises
+    GPU utilisation.
+
+    The per-instance LRU cache (Step 4) applies inside predict(): texts that
+    were already classified (e.g. from a previous batch or the TTA ensembling
+    path) are served from cache at ~0 µs cost.
+
+    Parameters
+    ----------
+    messages : List[str]
+        Synthesized message texts to classify.
+    metadata : List[Optional[Dict]] or None
+        Per-message metadata (passed through for logging; not used in
+        classification).  If None or shorter than messages, missing entries
+        are treated as None.
+
+    Returns
+    -------
+    List[Dict[str, Any]]
+        One SemanticResult.to_dict() dict per input message, in the same order.
+    """
+    global _CLASSIFIER_INSTANCE
+    if _CLASSIFIER_INSTANCE is None:
+        _CLASSIFIER_INSTANCE = SemanticGateClassifier()
+    return _CLASSIFIER_INSTANCE.classify_batch(messages, metadata)
+
+
+# Patch classify_batch onto SemanticGateClassifier at module level so the
+# method is available on the singleton without modifying the class definition
+# above (keeping the change minimal and easily auditable).
+def _sgc_classify_batch(
+    self,
+    messages: List[str],
+    metadata: Optional[List[Optional[Dict[str, Any]]]] = None,
+) -> List[Dict[str, Any]]:
+    """Batch inference: classify all messages in one predictor.predict() call.
+
+    Semantics are identical to calling SemanticGateClassifier.classify() N
+    times, but at a fraction of the cost when N > 1.
+    """
+    if self.error_status or self.predictor is None:
+        unavailable = SemanticResult.unavailable(
+            self.error_status or "B3 predictor uninitialized"
+        ).to_dict()
+        return [unavailable] * len(messages)
+
+    if not messages:
+        return []
+
+    try:
+        results = self.predictor.predict(messages)
+        output = []
+        for res in results:
+            label_name = (
+                "MALICIOUS" if res.label == "MALICIOUS_SEMANTIC_MANIPULATION"
+                else res.label
+            )
+            risk_level = self.risk_policy.classify(label_name, res.confidence)
+            p_malicious = (
+                float(res.confidence)
+                if label_name in self.risk_policy.malicious_labels
+                else 1.0 - float(res.confidence)
+            )
+            output.append(SemanticResult(
+                available=True,
+                label=label_name,
+                confidence=res.confidence,
+                risk_level=risk_level,
+                status="ok",
+                p_malicious=p_malicious,
+            ).to_dict())
+        return output
+    except Exception as e:
+        err = SemanticResult.unavailable(f"Batch inference error: {str(e)}").to_dict()
+        return [err] * len(messages)
+
+
+# Bind the method onto the class.
+SemanticGateClassifier.classify_batch = _sgc_classify_batch
