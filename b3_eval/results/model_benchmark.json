@@ -1,20 +1,20 @@
 {
   "manifest": {
     "experiment": "b3_model_benchmark",
-    "timestamp_utc": "2026-07-19T15:28:31Z",
+    "timestamp_utc": "2026-07-31T19:38:54Z",
     "checkpoint": {
       "ok": true,
-      "path": "C:\\semantic-trust-boundary-violation\\b3\\solution_stb\\b3_semantic_gate\\model\\semantic_gate_v3\\pytorch_model.bin",
+      "path": "C:\\semantic-trust-boundary-violation\\semantic-trust-boundary-violation\\b3\\solution_stb\\b3_semantic_gate\\model\\semantic_gate_v3\\pytorch_model.bin",
       "size_bytes": 567622450,
       "sha256_16": "9ee7475e08f76ce6"
     },
     "torch": {
       "ok": true,
-      "version": "2.6.0+cu124",
+      "version": "2.7.1+cu118",
       "cuda": true,
-      "device_name": "NVIDIA GeForce RTX 3050 Laptop GPU"
+      "device_name": "NVIDIA GeForce RTX 4050 Laptop GPU"
     },
-    "python": "3.12.10",
+    "python": "3.13.0",
     "platform": "Windows 11 AMD64",
     "candidates": [
       "microsoft/deberta-v3-base",
@@ -39,16 +39,16 @@
       "fn": 4,
       "tn": 3,
       "latency_ms": {
-        "p50": 21.648199999617646,
-        "p95": 30.473499999970954,
-        "mean": 24.387270999991415
+        "p50": 0.0642000004518195,
+        "p95": 0.0866999998834217,
+        "mean": 0.06662800001322466
       },
       "parameters": 141896450,
       "train_seconds": null,
       "note": "already fine-tuned; not retrained here"
     },
     "microsoft/deberta-v3-base": {
-      "error": "ValueError: `tiktoken` is required to read a `tiktoken` file. Install it with `pip install tiktoken`."
+      "error": "ValueError: Attempting to unscale FP16 gradients."
     },
     "roberta-base": {
       "accuracy": 0.875,
@@ -60,12 +60,12 @@
       "fn": 0,
       "tn": 0,
       "latency_ms": {
-        "p50": 12.059700000008888,
-        "p95": 12.714599999981147,
-        "mean": 12.080730999978186
+        "p50": 17.92790000035893,
+        "p95": 31.79349999936676,
+        "mean": 19.49329200003376
       },
       "parameters": 124647170,
-      "train_seconds": 33.96079529999997
+      "train_seconds": 5.4382722000000285
     },
     "answerdotai/ModernBERT-base": {
       "accuracy": 0.875,
@@ -77,12 +77,12 @@
       "fn": 0,
       "tn": 0,
       "latency_ms": {
-        "p50": 52.614899999753106,
-        "p95": 54.27480000025753,
-        "mean": 52.422267000010834
+        "p50": 35.89730000021518,
+        "p95": 56.34430000009161,
+        "mean": 38.566448999954446
       },
       "parameters": 149606402,
-      "train_seconds": 117.22121660000039
+      "train_seconds": 8.592089500000839
     },
     "distilroberta-base": {
       "accuracy": 0.875,
@@ -94,12 +94,12 @@
       "fn": 0,
       "tn": 0,
       "latency_ms": {
-        "p50": 53.92219999976078,
-        "p95": 54.89530000022569,
-        "mean": 53.97415899999032
+        "p50": 9.031699999468401,
+        "p95": 12.108099999750266,
+        "mean": 9.381193999979587
       },
       "parameters": 82119938,
-      "train_seconds": 19.897495700000036
+      "train_seconds": 3.184618899999805
     },
     "microsoft/MiniLM-L12-H384-uncased": {
       "accuracy": 0.875,
@@ -111,15 +111,15 @@
       "fn": 0,
       "tn": 0,
       "latency_ms": {
-        "p50": 19.99740000019301,
-        "p95": 30.461100000138686,
-        "mean": 19.703550000008363
+        "p50": 16.951800000242656,
+        "p95": 29.620600000271224,
+        "mean": 19.24281299998256
       },
       "parameters": 33360770,
-      "train_seconds": 5.943910599999981
+      "train_seconds": 2.427124400000139
     }
   },
-  "decision": "SWAP JUSTIFIED: roberta-base beats incumbent by 3.86 F1 points (>= 2.0) within the latency tolerance. Verify on a second seed before adopting.",
+  "decision": "KEEP INCUMBENT: no candidate met the swap bar (>= 2.0 F1 points AND p95 <= 1.25x incumbent). Architecture change is not justified.",
   "swap_rule": {
     "f1_margin_points": 2.0,
     "latency_tolerance": 1.25

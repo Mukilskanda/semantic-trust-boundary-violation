@@ -129,12 +129,32 @@ class ISCEPipeline:
             from mbd import VehicleHistoryStore
             self._mbd_history = VehicleHistoryStore()
 
+        # Persistent projection origin (Phase 2 fix -- see PUBLICATION_PROGRESS.md
+        # "Sybil detection" entry). Set once from the first message this pipeline
+        # instance ever processes, then reused for its entire lifetime. Both
+        # _run_mbd and _run_cp must use this SAME origin on every call --
+        # previously each call recomputed a fresh ProjectionOrigin from the
+        # CURRENT target message's own position, which trivially places every
+        # message at local (0, 0) in its own call's frame. Since
+        # VehicleHistoryStore retains x/y computed under earlier calls'
+        # different origins, every history entry ends up stored as (0, 0) too
+        # (each vehicle was always the origin of its own frame when it was the
+        # target) -- making cross-message distance comparisons (exactly what
+        # Sybil co-location and collusion proximity detection require)
+        # meaningless by construction: every pair of vehicles appears
+        # co-located at distance 0, regardless of their real separation. This
+        # was verified directly this session (scratch/phase2_detector_audit.py):
+        # sybil_score=1.0 fired for every message with >=2 senders in history,
+        # attacker and benign alike, with each history entry's stored (x, y)
+        # confirmed to be exactly (0.0, 0.0).
+        self._projection_origin = None
+
         # Load B3's model NOW, at pipeline construction, not lazily on the
         # first classify_text() call inside run(). This keeps the ~150s
         # one-time model-load cost out of any single message's "bridge_ms"
         # (see pipeline/b3_bridge.py::preload_classifier docstring).
         self.b3_load_ms = preload_classifier()
-        
+
         b3_config = load_b3_config()
         self.enable_b3_ensembling = b3_config.get("enable_ensembling", False)
 
@@ -142,6 +162,20 @@ class ISCEPipeline:
             # Legacy compatibility shim only. b2_csia.CSIA is deprecated and
             # NOT used by the pipeline anymore -- B2 is now b2_explain.
             self._legacy_csia = csia
+
+    def _get_or_create_projection_origin(self, lat_raw: Optional[float], lon_raw: Optional[float]):
+        """Returns this pipeline instance's persistent ProjectionOrigin,
+        creating it from the first available (lat, lon) it is ever called
+        with. Subsequent calls (even with a different message's coordinates)
+        reuse the same origin, so every message's projected (x, y) is
+        comparable across the pipeline's entire lifetime."""
+        from bridges.message_adapter import ProjectionOrigin
+        if self._projection_origin is None:
+            self._projection_origin = ProjectionOrigin.from_degrees(
+                lat_raw * 1e-7 if lat_raw and abs(lat_raw) > 1000 else (lat_raw or 0.0),
+                lon_raw * 1e-7 if lon_raw and abs(lon_raw) > 1000 else (lon_raw or 0.0),
+            )
+        return self._projection_origin
 
     def _run_pki(self, target_msg: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Runs PKI if the message carries the required material and a
@@ -167,16 +201,16 @@ class ISCEPipeline:
 
     def _run_mbd(self, target_msg: Dict[str, Any], peer_messages=None) -> Dict[str, Any]:
         from mbd import mbd_layer
-        from bridges.message_adapter import to_flat_report, ProjectionOrigin, _extract_denm_event
+        from bridges.message_adapter import to_flat_report, _extract_denm_event
 
         lat = target_msg.get("cam", {}).get("cam_parameters", {}).get(
             "basic_container", {}).get("reference_position", {}).get("latitude")
         lon = target_msg.get("cam", {}).get("cam_parameters", {}).get(
             "basic_container", {}).get("reference_position", {}).get("longitude")
-        origin = ProjectionOrigin.from_degrees(
-            lat * 1e-7 if lat and abs(lat) > 1000 else (lat or 0.0),
-            lon * 1e-7 if lon and abs(lon) > 1000 else (lon or 0.0),
-        )
+        # Persistent origin (Phase 2 fix): see _get_or_create_projection_origin's
+        # docstring / __init__'s comment for why this must NOT be recomputed
+        # fresh from target_msg on every call.
+        origin = self._get_or_create_projection_origin(lat, lon)
 
         event_str = (
             target_msg.get("event")
@@ -225,17 +259,16 @@ class ISCEPipeline:
         target_sender_id: Any,
     ) -> Dict[str, Any]:
         from cp import cp_layer
-        from bridges.message_adapter import to_flat_report, ProjectionOrigin
+        from bridges.message_adapter import to_flat_report
 
         target_msg = messages[-1]
         lat = target_msg.get("cam", {}).get("cam_parameters", {}).get(
             "basic_container", {}).get("reference_position", {}).get("latitude")
         lon = target_msg.get("cam", {}).get("cam_parameters", {}).get(
             "basic_container", {}).get("reference_position", {}).get("longitude")
-        origin = ProjectionOrigin.from_degrees(
-            lat * 1e-7 if lat and abs(lat) > 1000 else (lat or 0.0),
-            lon * 1e-7 if lon and abs(lon) > 1000 else (lon or 0.0),
-        )
+        # Persistent origin (Phase 2 fix, shared with _run_mbd) -- see
+        # _get_or_create_projection_origin's docstring.
+        origin = self._get_or_create_projection_origin(lat, lon)
 
         reports = []
         weights: Dict[Any, float] = {}

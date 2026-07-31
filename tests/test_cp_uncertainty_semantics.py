@@ -168,11 +168,32 @@ def main():
     #    ignorance.
     # ---------------------------------------------------------------------------
     print("\n--- 2. Inter-report contradiction -> disbelief (not_A), can reject ---")
+    # event_label must be set for the contradiction channel to apply at all
+    # (see CHANGELOG.md / pipeline/orchestrator.py's CP-fold comment: spread
+    # without a shared claimed event is heterogeneity, not contradiction).
+    # This call was previously missing event_label, making cp_has_shared_event
+    # False and silently no-op'ing this whole check (found during the Phase 2
+    # detector audit in PUBLICATION_PROGRESS.md while investigating an
+    # unrelated Sybil bug -- this is a pre-existing latent bug in this test's
+    # `main()` block, confirmed via `git stash` to predate that fix).
     r_conflict = make_pipe(cp_result(spatial=0.0, speed=0.0, heading=0.0,
-                                     diversity=1.0, num_reports=4)).run([BENIGN], context="urban")
+                                     diversity=1.0, num_reports=4,
+                                     event_label="obstacle")).run([BENIGN], context="urban")
     m_conflict = r_conflict["adapted"]["ds_mass"]
     check("Contradictory reports (scores=0, reports=4) -> REJECT",
           r_conflict["decision"] == "REJECT", f"got={r_conflict['decision']}")
+    # NOTE (found, not patched blind -- Phase 2 detector audit,
+    # PUBLICATION_PROGRESS.md): this threshold (0.40) appears calibrated for
+    # MBD-disabled isolation, matching the top-level module-level test's own
+    # comment that "MBD's intended fresh-sender confidence damping otherwise
+    # caps total committed mass" and its use of a separate enable_mbd=False
+    # variant for exactly this absolute-dominance check. This call uses
+    # make_pipe()'s default enable_mbd=True, so a single fresh BENIGN sender's
+    # MBD confidence damping legitimately caps m_not_A below 0.40 here
+    # (observed: ~0.12) even though the decision correctly reaches REJECT.
+    # Determining the "right" threshold under MBD-enabled conditions is a
+    # test-calibration decision, not something to patch blindly -- left as an
+    # observed, evidenced, open item rather than silently loosening the bar.
     check("Contradictory reports commit significant disbelief (not_A) mass",
           m_conflict.m_not_A > 0.40, f"m_not_A={m_conflict.m_not_A:.4f}")
 
