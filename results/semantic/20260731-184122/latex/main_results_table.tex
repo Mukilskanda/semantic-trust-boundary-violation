@@ -1,0 +1,39 @@
+%% main_results_table.tex
+%% Semantic attack ablation -- overall performance.
+%% Formatting changes from generated version (no numerical values altered):
+%%   - [h] -> [t]  (IEEE two-column placement; [h] causes misplacement)
+%%   - \hline -> \toprule / \midrule / \bottomrule  (booktabs; IEEE preferred)
+%%   - "Caution Rate" -> "CR" in header (compact; defined in caption)
+%%   - "F1-Score" -> "F1", "Accuracy" -> "Acc.", "Precision" -> "Prec."
+%%   - Undefined Prec/F1 cells: --- -> $-$ (math dash; narrower and consistent)
+%%   - Footnote wrapped in \begin{minipage} at \columnwidth so \footnotesize
+%%     scopes correctly and text wraps to column width (not page width)
+%%   - Caption extended with corpus size and positive-prediction definition
+%%   - Narrative paragraph that was outside \end{table} removed; it belongs
+%%     in the paper body, not in the reusable .tex snippet
+\begin{table}[t]
+\centering
+\caption{Semantic attack detection: ablation across trust configurations
+         ($n = 120$; 105 attack messages, 15 benign controls).
+         A message is predicted positive when the pipeline decides
+         \textsc{Reject} or \textsc{Caution}.
+         CR\,=\,caution rate; FPR\,=\,false positive rate.}
+\label{tab:semantic_ablation}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Configuration} & \textbf{Acc.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1} & \textbf{FPR} & \textbf{CR} \\
+\midrule
+B1                 & 0.125 & $-$ & 0.000 & $-$ & 0.000 & 0.000 \\
+B1+B2              & 0.125 & $-$ & 0.000 & $-$ & 0.000 & 0.000 \\
+\textbf{B1+B2+B3} & \textbf{0.983} & \textbf{0.990} & \textbf{0.990} & \textbf{0.990} & \textbf{0.067} & \textbf{0.233} \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{\columnwidth}
+\vspace{2pt}
+{\footnotesize
+$-$~Precision and F1 are undefined for B1 and B1+B2 because neither
+configuration produced any true or false positives
+(TP\,=\,FP\,=\,0 in both cases).}
+\end{minipage}
+\end{table}

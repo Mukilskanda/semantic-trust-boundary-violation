@@ -1,0 +1,949 @@
+{
+  "configurations": {
+    "b1_b2": {
+      "confusion_matrix": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 105,
+        "tn": 15,
+        "n": 120,
+        "accuracy": 0.125,
+        "precision": NaN,
+        "recall": 0.0,
+        "f1": NaN,
+        "fpr": 0.0,
+        "fnr": 1.0,
+        "detection_rate": 0.0,
+        "caution_rate": 0.0,
+        "caution_on_attacks": 0,
+        "error_rate": 0.0
+      },
+      "detection_with_caution": {
+        "detection_rate_relaxed": 0.0,
+        "false_alarm_rate_relaxed": 0.0
+      },
+      "roc": {
+        "auroc": 0.9523809523809523,
+        "applicable": true
+      },
+      "pr": {
+        "aupr": 1.0,
+        "applicable": true
+      },
+      "calibration": {
+        "applicable": false,
+        "reason": "only 0 B3-available rows"
+      },
+      "confidence_distribution": {
+        "n_attack": 0,
+        "n_benign": 0,
+        "mean_attack_p_mal": null,
+        "mean_benign_p_mal": null
+      },
+      "latency": {
+        "pki_ms": {
+          "p50": 0.00020000015865662135,
+          "p95": 0.0003999998625658918,
+          "p99": 0.0007809997532604032,
+          "mean": 0.00021583333970435584,
+          "max": 0.001100000190490391
+        },
+        "b1_ms": {
+          "p50": 0.00020000015865662135,
+          "p95": 0.0004999997372578946,
+          "p99": 0.0006000000212225132,
+          "mean": 0.000250833329573652,
+          "max": 0.0008000001798791345
+        },
+        "mbd_ms": {
+          "p50": 9.999985195463523e-05,
+          "p95": 0.00020000015865662135,
+          "p99": 0.00020000015865662135,
+          "mean": 0.00012833329492423218,
+          "max": 0.0004000003173132427
+        },
+        "b2_ms": {
+          "p50": 0.019600000086938962,
+          "p95": 0.031899999771667346,
+          "p99": 0.03626200025792059,
+          "mean": 0.018189166655702138,
+          "max": 0.049700000090524554
+        },
+        "cp_ms": {
+          "p50": 9.999985195463523e-05,
+          "p95": 0.00020000015865662135,
+          "p99": 0.00020000015865662135,
+          "mean": 0.00011833332109745243,
+          "max": 0.0003000000106112566
+        },
+        "synthesizer_ms": {
+          "p50": 0.05545000021811575,
+          "p95": 0.07863000005272625,
+          "p99": 0.1624230003881168,
+          "mean": 0.05439166667429163,
+          "max": 0.23409999994328246
+        },
+        "bridge_ms": {
+          "p50": 0.0012999998943996616,
+          "p95": 0.0017100006289183505,
+          "p99": 0.002262000116388663,
+          "mean": 0.0012816666147349072,
+          "max": 0.002499999482097337
+        },
+        "fusion_ms": {
+          "p50": 0.02009999980145949,
+          "p95": 0.03196000020579958,
+          "p99": 0.08144700015236596,
+          "mean": 0.020736666677597288,
+          "max": 0.13610000041808235
+        },
+        "total_ms": {
+          "p50": 0.10610000003907771,
+          "p95": 0.16456999990168697,
+          "p99": 0.2519710001479327,
+          "mean": 0.10379999998046212,
+          "max": 0.4038000001855835
+        }
+      },
+      "per_category": {
+        "benign_controls": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 15,
+          "n": 15,
+          "accuracy": 1.0,
+          "precision": NaN,
+          "recall": NaN,
+          "f1": NaN,
+          "fpr": 0.0,
+          "fnr": NaN,
+          "detection_rate": NaN,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": NaN,
+          "false_alarm_rate_relaxed": 0.0
+        },
+        "context_poisoning": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 20,
+          "tn": 0,
+          "n": 20,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "instruction_override": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 15,
+          "tn": 0,
+          "n": 15,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "mixed_attacks": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 10,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "multi_message": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 10,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "prompt_injection": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 15,
+          "tn": 0,
+          "n": 15,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "retrieval_poisoning": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 10,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "role_manipulation": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 15,
+          "tn": 0,
+          "n": 15,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "tool_manipulation": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 10,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        }
+      }
+    },
+    "b1_only": {
+      "confusion_matrix": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 105,
+        "tn": 15,
+        "n": 120,
+        "accuracy": 0.125,
+        "precision": NaN,
+        "recall": 0.0,
+        "f1": NaN,
+        "fpr": 0.0,
+        "fnr": 1.0,
+        "detection_rate": 0.0,
+        "caution_rate": 0.0,
+        "caution_on_attacks": 0,
+        "error_rate": 0.0
+      },
+      "detection_with_caution": {
+        "detection_rate_relaxed": 0.0,
+        "false_alarm_rate_relaxed": 0.0
+      },
+      "roc": {
+        "auroc": 0.9523809523809523,
+        "applicable": true
+      },
+      "pr": {
+        "aupr": 1.0,
+        "applicable": true
+      },
+      "calibration": {
+        "applicable": false,
+        "reason": "only 0 B3-available rows"
+      },
+      "confidence_distribution": {
+        "n_attack": 0,
+        "n_benign": 0,
+        "mean_attack_p_mal": null,
+        "mean_benign_p_mal": null
+      },
+      "latency": {
+        "pki_ms": {
+          "p50": 0.00020000015865662135,
+          "p95": 0.0004000003173132427,
+          "p99": 0.0005810000493511327,
+          "mean": 0.00022916664571918469,
+          "max": 0.001500000053056283
+        },
+        "b1_ms": {
+          "p50": 0.04134999994676036,
+          "p95": 0.09852000000591941,
+          "p99": 0.13024600023982205,
+          "mean": 0.05342333334586632,
+          "max": 0.8797000000413391
+        },
+        "mbd_ms": {
+          "p50": 0.00010000030670198612,
+          "p95": 0.00020000015865662135,
+          "p99": 0.0002810000387398761,
+          "mean": 0.0001508333411948115,
+          "max": 0.000499999714520527
+        },
+        "b2_ms": {
+          "p50": 0.0028999997994105797,
+          "p95": 0.004820000162908399,
+          "p99": 0.052588999787985855,
+          "mean": 0.013155833323708066,
+          "max": 1.1356999998497486
+        },
+        "cp_ms": {
+          "p50": 9.999985195463523e-05,
+          "p95": 0.00020000015865662135,
+          "p99": 0.0003000000106112566,
+          "mean": 0.00010416666782475659,
+          "max": 0.0004000003173132427
+        },
+        "synthesizer_ms": {
+          "p50": 0.057250000281783286,
+          "p95": 0.08841499961818043,
+          "p99": 0.12056799986112313,
+          "mean": 0.06182250004182303,
+          "max": 0.6722999996782164
+        },
+        "bridge_ms": {
+          "p50": 0.0013999997463542968,
+          "p95": 0.0019049999309572738,
+          "p99": 0.002580999730525946,
+          "mean": 0.001364166678285983,
+          "max": 0.0028000004022032954
+        },
+        "fusion_ms": {
+          "p50": 0.020699999822682003,
+          "p95": 0.03387499998552811,
+          "p99": 0.04320500006997463,
+          "mean": 0.021617499987769406,
+          "max": 0.10999999994965037
+        },
+        "total_ms": {
+          "p50": 0.13375000003179593,
+          "p95": 0.22984499978520032,
+          "p99": 0.9150800001543774,
+          "mean": 0.16070333335467998,
+          "max": 1.9117000001642737
+        }
+      },
+      "per_category": {
+        "benign_controls": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "tn": 15,
+          "n": 15,
+          "accuracy": 1.0,
+          "precision": NaN,
+          "recall": NaN,
+          "f1": NaN,
+          "fpr": 0.0,
+          "fnr": NaN,
+          "detection_rate": NaN,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": NaN,
+          "false_alarm_rate_relaxed": 0.0
+        },
+        "context_poisoning": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 20,
+          "tn": 0,
+          "n": 20,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "instruction_override": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 15,
+          "tn": 0,
+          "n": 15,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "mixed_attacks": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 10,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "multi_message": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 10,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "prompt_injection": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 15,
+          "tn": 0,
+          "n": 15,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "retrieval_poisoning": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 10,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "role_manipulation": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 15,
+          "tn": 0,
+          "n": 15,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "tool_manipulation": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 10,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 0.0,
+          "precision": NaN,
+          "recall": 0.0,
+          "f1": NaN,
+          "fpr": NaN,
+          "fnr": 1.0,
+          "detection_rate": 0.0,
+          "caution_rate": 0.0,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.0,
+          "false_alarm_rate_relaxed": NaN
+        }
+      }
+    },
+    "full": {
+      "confusion_matrix": {
+        "tp": 104,
+        "fp": 1,
+        "fn": 1,
+        "tn": 14,
+        "n": 120,
+        "accuracy": 0.9833333333333333,
+        "precision": 0.9904761904761905,
+        "recall": 0.9904761904761905,
+        "f1": 0.9904761904761905,
+        "fpr": 0.06666666666666667,
+        "fnr": 0.009523809523809525,
+        "detection_rate": 0.9904761904761905,
+        "caution_rate": 0.23333333333333334,
+        "caution_on_attacks": 27,
+        "error_rate": 0.0
+      },
+      "detection_with_caution": {
+        "detection_rate_relaxed": 0.9904761904761905,
+        "false_alarm_rate_relaxed": 0.06666666666666667
+      },
+      "roc": {
+        "auroc": 0.9942857142857143,
+        "applicable": true
+      },
+      "pr": {
+        "aupr": 0.9991549566122675,
+        "applicable": true
+      },
+      "calibration": {
+        "applicable": true,
+        "ece": 0.132341478102737,
+        "bins": [
+          {
+            "lo": 0.0,
+            "hi": 0.1,
+            "n": 12,
+            "avg_conf": 0.07566001183456846,
+            "avg_acc": 0.0
+          },
+          {
+            "lo": 0.1,
+            "hi": 0.2,
+            "n": 3,
+            "avg_conf": 0.11736022101508246,
+            "avg_acc": 0.3333333333333333
+          },
+          {
+            "lo": 0.2,
+            "hi": 0.3,
+            "n": 2,
+            "avg_conf": 0.26201534271240234,
+            "avg_acc": 0.5
+          },
+          {
+            "lo": 0.3,
+            "hi": 0.4,
+            "n": 3,
+            "avg_conf": 0.35458394553926254,
+            "avg_acc": 1.0
+          },
+          {
+            "lo": 0.4,
+            "hi": 0.5,
+            "n": 1,
+            "avg_conf": 0.42181771993637085,
+            "avg_acc": 1.0
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.6,
+            "n": 2,
+            "avg_conf": 0.5434509913126627,
+            "avg_acc": 1.0
+          },
+          {
+            "lo": 0.6,
+            "hi": 0.7,
+            "n": 6,
+            "avg_conf": 0.6537912686665853,
+            "avg_acc": 1.0
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.8,
+            "n": 8,
+            "avg_conf": 0.7425907974441845,
+            "avg_acc": 1.0
+          },
+          {
+            "lo": 0.8,
+            "hi": 0.9,
+            "n": 17,
+            "avg_conf": 0.8618589592914955,
+            "avg_acc": 1.0
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.0,
+            "n": 66,
+            "avg_conf": 0.9403527815534611,
+            "avg_acc": 1.0
+          }
+        ],
+        "n": 120
+      },
+      "confidence_distribution": {
+        "n_attack": 105,
+        "n_benign": 15,
+        "mean_attack_p_mal": 0.8525999016231961,
+        "mean_benign_p_mal": 0.09412488275104099
+      },
+      "latency": {
+        "pki_ms": {
+          "p50": 0.0006000000212225132,
+          "p95": 0.000999999883788405,
+          "p99": 0.0012999998943996616,
+          "mean": 0.0006516666720320549,
+          "max": 0.0013000003491470125
+        },
+        "b1_ms": {
+          "p50": 0.0003000000106112566,
+          "p95": 0.0004999997372578946,
+          "p99": 0.0006000000212225132,
+          "mean": 0.00027916666643553373,
+          "max": 0.0006999998731771484
+        },
+        "mbd_ms": {
+          "p50": 9.999985195463523e-05,
+          "p95": 0.00020000015865662135,
+          "p99": 0.0002810000387398761,
+          "mean": 0.00012666663451454951,
+          "max": 0.0003999998625658918
+        },
+        "b2_ms": {
+          "p50": 0.024699999812582973,
+          "p95": 0.03620000006776536,
+          "p99": 0.05400700002610396,
+          "mean": 0.026375833310036494,
+          "max": 0.05710000004910398
+        },
+        "cp_ms": {
+          "p50": 0.00019999970390927047,
+          "p95": 0.0003000000106112566,
+          "p99": 0.0005000001692678779,
+          "mean": 0.00017416667787983897,
+          "max": 0.0006000000212225132
+        },
+        "synthesizer_ms": {
+          "p50": 0.11164999955326493,
+          "p95": 0.14285999986896056,
+          "p99": 0.17767399978765752,
+          "mean": 0.11502333330023855,
+          "max": 0.1947999999174499
+        },
+        "bridge_ms": {
+          "p50": 66.03289999975459,
+          "p95": 102.90986499969677,
+          "p99": 124.09410700007811,
+          "mean": 74.92630833332139,
+          "max": 131.5895000002456
+        },
+        "fusion_ms": {
+          "p50": 0.047750000021551386,
+          "p95": 0.058814999829337467,
+          "p99": 0.061423999927683326,
+          "mean": 0.048926666674257525,
+          "max": 0.0660000000607397
+        },
+        "total_ms": {
+          "p50": 66.22975000004772,
+          "p95": 103.12187999988964,
+          "p99": 124.31729700002506,
+          "mean": 75.1433766666537,
+          "max": 131.80229999989024
+        }
+      },
+      "per_category": {
+        "benign_controls": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "tn": 14,
+          "n": 15,
+          "accuracy": 0.9333333333333333,
+          "precision": 0.0,
+          "recall": NaN,
+          "f1": NaN,
+          "fpr": 0.06666666666666667,
+          "fnr": NaN,
+          "detection_rate": NaN,
+          "caution_rate": 0.06666666666666667,
+          "caution_on_attacks": 0,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": NaN,
+          "false_alarm_rate_relaxed": 0.06666666666666667
+        },
+        "context_poisoning": {
+          "tp": 20,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "n": 20,
+          "accuracy": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "fpr": NaN,
+          "fnr": 0.0,
+          "detection_rate": 1.0,
+          "caution_rate": 0.15,
+          "caution_on_attacks": 3,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 1.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "instruction_override": {
+          "tp": 15,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "n": 15,
+          "accuracy": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "fpr": NaN,
+          "fnr": 0.0,
+          "detection_rate": 1.0,
+          "caution_rate": 0.4,
+          "caution_on_attacks": 6,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 1.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "mixed_attacks": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "fpr": NaN,
+          "fnr": 0.0,
+          "detection_rate": 1.0,
+          "caution_rate": 0.1,
+          "caution_on_attacks": 1,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 1.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "multi_message": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "fpr": NaN,
+          "fnr": 0.0,
+          "detection_rate": 1.0,
+          "caution_rate": 0.6,
+          "caution_on_attacks": 6,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 1.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "prompt_injection": {
+          "tp": 15,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "n": 15,
+          "accuracy": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "fpr": NaN,
+          "fnr": 0.0,
+          "detection_rate": 1.0,
+          "caution_rate": 0.4666666666666667,
+          "caution_on_attacks": 7,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 1.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "retrieval_poisoning": {
+          "tp": 9,
+          "fp": 0,
+          "fn": 1,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 0.9,
+          "precision": 1.0,
+          "recall": 0.9,
+          "f1": 0.9473684210526316,
+          "fpr": NaN,
+          "fnr": 0.1,
+          "detection_rate": 0.9,
+          "caution_rate": 0.2,
+          "caution_on_attacks": 2,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 0.9,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "role_manipulation": {
+          "tp": 15,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "n": 15,
+          "accuracy": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "fpr": NaN,
+          "fnr": 0.0,
+          "detection_rate": 1.0,
+          "caution_rate": 0.06666666666666667,
+          "caution_on_attacks": 1,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 1.0,
+          "false_alarm_rate_relaxed": NaN
+        },
+        "tool_manipulation": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 0,
+          "tn": 0,
+          "n": 10,
+          "accuracy": 1.0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "fpr": NaN,
+          "fnr": 0.0,
+          "detection_rate": 1.0,
+          "caution_rate": 0.1,
+          "caution_on_attacks": 1,
+          "error_rate": 0.0,
+          "detection_rate_relaxed": 1.0,
+          "false_alarm_rate_relaxed": NaN
+        }
+      }
+    }
+  },
+  "statistical_comparison": {
+    "mcnemar": {
+      "applicable": true,
+      "b_only_A_correct": 1,
+      "c_only_B_correct": 104,
+      "p_value": 0.0,
+      "form": "chi-square with continuity correction",
+      "warning": null
+    },
+    "detection_rate_b1_b2": 0.0,
+    "detection_rate_full": 0.9904761904761905,
+    "detection_rate_delta": 0.9904761904761905,
+    "cohens_h": 2.946101494121831,
+    "cohens_h_interpretation": "large",
+    "bootstrap_ci_b1_b2": {
+      "applicable": true,
+      "mean": 0.125,
+      "ci_low": 0.075,
+      "ci_high": 0.18333333333333332,
+      "alpha": 0.05,
+      "n": 120,
+      "n_boot": 10000,
+      "warning": null
+    },
+    "bootstrap_ci_full": {
+      "applicable": true,
+      "mean": 0.9833333333333333,
+      "ci_low": 0.9583333333333334,
+      "ci_high": 1.0,
+      "alpha": 0.05,
+      "n": 120,
+      "n_boot": 10000,
+      "warning": null
+    }
+  }
+}

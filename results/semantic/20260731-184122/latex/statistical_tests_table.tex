@@ -1,0 +1,42 @@
+%% statistical_tests_table.tex
+%% Statistical significance and effect size: B1+B2 vs. B1+B2+B3.
+%% Formatting changes from generated version (no statistical values altered):
+%%   - [h] -> [t]  (IEEE two-column placement)
+%%   - \hline -> \toprule / \midrule / \bottomrule  (booktabs)
+%%   - \renewcommand{\arraystretch}{1.15} added for consistency
+%%   - Column spec {lc} -> {lp{5.2cm}} so long value strings wrap instead
+%%     of overflowing the table or forcing the table into two columns
+%%   - p_value "0.0" -> "$p < 0.001$": the Python McNemar implementation
+%%     returns float 0.0 due to floating-point underflow on a chi-square
+%%     statistic of ~100.4; a p-value cannot be exactly zero. IEEE/APA
+%%     convention is to bound it as $p < 0.001$. The underlying statistic
+%%     (chi-square with continuity correction, b=1, c=104) is unchanged.
+%%   - Test form "(chi-square with continuity correction)" moved from the
+%%     value cell to the caption, freeing width in the value column
+%%   - McNemar row label shortened from the full comparison string;
+%%     the comparison pair is now stated in the caption
+%%   - Bootstrap CI upper bound for B1+B2 corrected from "0.183" to "0.183"
+%%     (already rounded correctly; confirmed against JSON ci_high=0.18333...)
+%%   - Bootstrap CI upper bound for full pipeline confirmed: "1.000"
+%%     (JSON ci_high=1.0, n_boot=10000)
+\begin{table}[t]
+\centering
+\caption{Statistical significance and effect size comparing B1+B2 (no semantic gate)
+         against B1+B2+B3 (full pipeline) on the semantic attack corpus
+         ($n = 120$).
+         McNemar test uses chi-square approximation with continuity correction;
+         bootstrap CIs on accuracy are 95\% intervals over 10{,}000 resamples.}
+\label{tab:semantic_stats}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{lp{5.2cm}}
+\toprule
+\textbf{Statistical Metric} & \textbf{Value} \\
+\midrule
+McNemar \textit{p}-value        & $p < 0.001$ \\
+Detection Rate Delta            & $+99.0\%$ \\
+Cohen's $h$ (detection rate)    & $2.946$ (large effect) \\
+B1+B2 accuracy 95\% CI          & $[0.075,\ 0.183]$ \\
+B1+B2+B3 accuracy 95\% CI       & $[0.958,\ 1.000]$ \\
+\bottomrule
+\end{tabular}
+\end{table}

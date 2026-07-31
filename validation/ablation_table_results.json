@@ -3,39 +3,39 @@
   "results": {
     "Benign (negative control)": {
       "B1-only": {
-        "accuracy": 0.0,
+        "accuracy": 1.0,
+        "precision": NaN,
+        "recall": NaN,
+        "f1": NaN,
+        "n": 4,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 4
+      },
+      "B1+B2": {
+        "accuracy": 0.25,
         "precision": 0.0,
         "recall": NaN,
         "f1": NaN,
         "n": 4,
         "tp": 0,
-        "fp": 4,
+        "fp": 3,
         "fn": 0,
-        "tn": 0
-      },
-      "B1+B2": {
-        "accuracy": 1.0,
-        "precision": NaN,
-        "recall": NaN,
-        "f1": NaN,
-        "n": 4,
-        "tp": 0,
-        "fp": 0,
-        "fn": 0,
-        "tn": 4,
-        "caution_rate": 1.0
+        "tn": 1,
+        "caution_rate": 0.75
       },
       "B1+B2+B3 (full)": {
-        "accuracy": 1.0,
-        "precision": NaN,
+        "accuracy": 0.25,
+        "precision": 0.0,
         "recall": NaN,
         "f1": NaN,
         "n": 4,
         "tp": 0,
-        "fp": 0,
+        "fp": 3,
         "fn": 0,
-        "tn": 4,
-        "caution_rate": 1.0
+        "tn": 1,
+        "caution_rate": 0.75
       }
     },
     "Replay attack": {
@@ -51,28 +51,28 @@
         "tn": 17
       },
       "B1+B2": {
-        "accuracy": 1.0,
-        "precision": 1.0,
+        "accuracy": 0.2,
+        "precision": 0.15789473684210525,
         "recall": 1.0,
-        "f1": 1.0,
+        "f1": 0.2727272727272727,
         "n": 20,
         "tp": 3,
-        "fp": 0,
+        "fp": 16,
         "fn": 0,
-        "tn": 17,
-        "caution_rate": 0.85
+        "tn": 1,
+        "caution_rate": 0.8
       },
       "B1+B2+B3 (full)": {
-        "accuracy": 1.0,
-        "precision": 1.0,
+        "accuracy": 0.2,
+        "precision": 0.15789473684210525,
         "recall": 1.0,
-        "f1": 1.0,
+        "f1": 0.2727272727272727,
         "n": 20,
         "tp": 3,
-        "fp": 0,
+        "fp": 16,
         "fn": 0,
-        "tn": 17,
-        "caution_rate": 0.85
+        "tn": 1,
+        "caution_rate": 0.8
       }
     },
     "Sybil attack": {
@@ -88,28 +88,28 @@
         "tn": 17
       },
       "B1+B2": {
-        "accuracy": 0.85,
-        "precision": NaN,
-        "recall": 0.0,
-        "f1": NaN,
+        "accuracy": 0.2,
+        "precision": 0.15789473684210525,
+        "recall": 1.0,
+        "f1": 0.2727272727272727,
         "n": 20,
-        "tp": 0,
-        "fp": 0,
-        "fn": 3,
-        "tn": 17,
-        "caution_rate": 1.0
+        "tp": 3,
+        "fp": 16,
+        "fn": 0,
+        "tn": 1,
+        "caution_rate": 0.95
       },
       "B1+B2+B3 (full)": {
-        "accuracy": 0.85,
-        "precision": NaN,
-        "recall": 0.0,
-        "f1": NaN,
+        "accuracy": 0.2,
+        "precision": 0.15789473684210525,
+        "recall": 1.0,
+        "f1": 0.2727272727272727,
         "n": 20,
-        "tp": 0,
-        "fp": 0,
-        "fn": 3,
-        "tn": 17,
-        "caution_rate": 1.0
+        "tp": 3,
+        "fp": 16,
+        "fn": 0,
+        "tn": 1,
+        "caution_rate": 0.95
       }
     },
     "Position/content fabrication": {
@@ -125,28 +125,28 @@
         "tn": 17
       },
       "B1+B2": {
-        "accuracy": 0.85,
-        "precision": NaN,
-        "recall": 0.0,
-        "f1": NaN,
+        "accuracy": 0.2,
+        "precision": 0.15789473684210525,
+        "recall": 1.0,
+        "f1": 0.2727272727272727,
         "n": 20,
-        "tp": 0,
-        "fp": 0,
-        "fn": 3,
-        "tn": 17,
-        "caution_rate": 1.0
+        "tp": 3,
+        "fp": 16,
+        "fn": 0,
+        "tn": 1,
+        "caution_rate": 0.95
       },
       "B1+B2+B3 (full)": {
-        "accuracy": 0.85,
-        "precision": NaN,
-        "recall": 0.0,
-        "f1": NaN,
+        "accuracy": 0.2,
+        "precision": 0.15789473684210525,
+        "recall": 1.0,
+        "f1": 0.2727272727272727,
         "n": 20,
-        "tp": 0,
-        "fp": 0,
-        "fn": 3,
-        "tn": 17,
-        "caution_rate": 1.0
+        "tp": 3,
+        "fp": 16,
+        "fn": 0,
+        "tn": 1,
+        "caution_rate": 0.95
       }
     },
     "Coordinated collusion": {
@@ -162,28 +162,28 @@
         "tn": 17
       },
       "B1+B2": {
-        "accuracy": 0.85,
-        "precision": NaN,
-        "recall": 0.0,
-        "f1": NaN,
+        "accuracy": 0.2,
+        "precision": 0.15789473684210525,
+        "recall": 1.0,
+        "f1": 0.2727272727272727,
         "n": 20,
-        "tp": 0,
-        "fp": 0,
-        "fn": 3,
-        "tn": 17,
-        "caution_rate": 1.0
+        "tp": 3,
+        "fp": 16,
+        "fn": 0,
+        "tn": 1,
+        "caution_rate": 0.95
       },
       "B1+B2+B3 (full)": {
-        "accuracy": 0.85,
-        "precision": NaN,
-        "recall": 0.0,
-        "f1": NaN,
+        "accuracy": 0.2,
+        "precision": 0.15789473684210525,
+        "recall": 1.0,
+        "f1": 0.2727272727272727,
         "n": 20,
-        "tp": 0,
-        "fp": 0,
-        "fn": 3,
-        "tn": 17,
-        "caution_rate": 1.0
+        "tp": 3,
+        "fp": 16,
+        "fn": 0,
+        "tn": 1,
+        "caution_rate": 0.95
       }
     },
     "Mixed traffic": {
@@ -199,28 +199,28 @@
         "tn": 17
       },
       "B1+B2": {
-        "accuracy": 0.85,
-        "precision": NaN,
-        "recall": 0.0,
-        "f1": NaN,
+        "accuracy": 0.2,
+        "precision": 0.15789473684210525,
+        "recall": 1.0,
+        "f1": 0.2727272727272727,
         "n": 20,
-        "tp": 0,
-        "fp": 0,
-        "fn": 3,
-        "tn": 17,
-        "caution_rate": 1.0
+        "tp": 3,
+        "fp": 16,
+        "fn": 0,
+        "tn": 1,
+        "caution_rate": 0.95
       },
       "B1+B2+B3 (full)": {
-        "accuracy": 0.85,
-        "precision": NaN,
-        "recall": 0.0,
-        "f1": NaN,
+        "accuracy": 0.2,
+        "precision": 0.15789473684210525,
+        "recall": 1.0,
+        "f1": 0.2727272727272727,
         "n": 20,
-        "tp": 0,
-        "fp": 0,
-        "fn": 3,
-        "tn": 17,
-        "caution_rate": 1.0
+        "tp": 3,
+        "fp": 16,
+        "fn": 0,
+        "tn": 1,
+        "caution_rate": 0.95
       }
     }
   }

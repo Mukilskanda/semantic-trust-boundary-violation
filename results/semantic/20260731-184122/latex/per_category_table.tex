@@ -1,0 +1,39 @@
+%% per_category_table.tex
+%% Per-category recall across ablation configurations.
+%% Formatting changes from generated version (no numerical values altered):
+%%   - [h] -> [t]  (IEEE two-column placement)
+%%   - table -> table*  (full two-column width; category names + 3 recall
+%%     columns exceed a single IEEE column (~8.5 cm) with the original widths)
+%%   - Verbose column headers compacted using \multicolumn subheader row:
+%%     B1 Only (Recall) / B1 + B2 (Recall) / B1 + B2 + B3 (Recall) ->
+%%     three short labels with "(Recall)" factored into a single \multicolumn
+%%   - \renewcommand{\arraystretch}{1.15} added to match main_results_table
+%%   - \hline -> \toprule / \midrule / \bottomrule  (booktabs)
+%%   - "Multi Message" -> "Multi-Message"  (standard hyphenated English)
+%%   - Caption updated with n count and metric clarification
+%%   - Added sample size column ($n$) so readers can calibrate detection rates
+\begin{table*}[t]
+\centering
+\caption{Per-category detection recall across ablation configurations
+         (semantic attack corpus, $n = 105$ attack messages across 8 families;
+         15 benign controls excluded from recall computation).
+         Recall\,=\,TP\,/\,(TP\,+\,FN).}
+\label{tab:per_category_semantic}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{lc ccc}
+\toprule
+ & & \multicolumn{3}{c}{\textbf{Recall by Configuration}} \\
+\cmidrule(lr){3-5}
+\textbf{Attack Category} & $\bm{n}$ & \textbf{B1} & \textbf{B1+B2} & \textbf{B1+B2+B3} \\
+\midrule
+Prompt Injection     & 15 & 0.0\% & 0.0\% & 100.0\% \\
+Instruction Override & 15 & 0.0\% & 0.0\% & 100.0\% \\
+Role Manipulation    & 15 & 0.0\% & 0.0\% & 100.0\% \\
+Context Poisoning    & 20 & 0.0\% & 0.0\% & 100.0\% \\
+Multi-Message        & 10 & 0.0\% & 0.0\% & 100.0\% \\
+Tool Manipulation    & 10 & 0.0\% & 0.0\% & 100.0\% \\
+Retrieval Poisoning  & 10 & 0.0\% & 0.0\% &  90.0\% \\
+Mixed Attacks        & 10 & 0.0\% & 0.0\% & 100.0\% \\
+\bottomrule
+\end{tabular}
+\end{table*}

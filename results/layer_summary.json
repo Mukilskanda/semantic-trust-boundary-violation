@@ -5,78 +5,77 @@
     2,
     3
   ],
-  "full_stack": true,
+  "full_stack": false,
   "confusion": {
-    "tp": 1551,
-    "fp": 15,
-    "fn": 24,
-    "tn": 210
+    "tp": 1108,
+    "fp": 0,
+    "fn": 467,
+    "tn": 225
   },
   "metrics": {
-    "accuracy": 0.9783333333333334,
-    "precision": 0.9904214559386973,
-    "recall": 0.9847619047619047,
-    "f1": 0.9875835721107927,
-    "fpr": 0.06666666666666667
+    "accuracy": 0.7405555555555555,
+    "precision": 1.0,
+    "recall": 0.7034920634920635,
+    "f1": 0.8259411106969811,
+    "fpr": 0.0
   },
   "catch_layer_counts": {
-    "B3": 133,
-    "ACCEPT": 2,
-    "B2": 622,
+    "B3": 620,
+    "ACCEPT": 137,
     "B1": 1043
   },
   "per_family": {
     "prompt_injection": {
-      "correct": 225,
+      "correct": 91,
       "total": 225,
-      "acc": 1.0
+      "acc": 0.40444444444444444
     },
     "instruction_override": {
-      "correct": 225,
+      "correct": 135,
       "total": 225,
-      "acc": 1.0
+      "acc": 0.6
     },
     "role_manipulation": {
-      "correct": 225,
+      "correct": 210,
       "total": 225,
-      "acc": 1.0
+      "acc": 0.9333333333333333
     },
     "context_poisoning": {
-      "correct": 299,
+      "correct": 263,
       "total": 300,
-      "acc": 0.9966666666666667
+      "acc": 0.8766666666666667
     },
     "multi_message": {
+      "correct": 53,
+      "total": 150,
+      "acc": 0.35333333333333333
+    },
+    "tool_manipulation": {
+      "correct": 125,
+      "total": 150,
+      "acc": 0.8333333333333334
+    },
+    "retrieval_poisoning": {
+      "correct": 99,
+      "total": 150,
+      "acc": 0.66
+    },
+    "mixed_attacks": {
       "correct": 132,
       "total": 150,
       "acc": 0.88
     },
-    "tool_manipulation": {
-      "correct": 146,
-      "total": 150,
-      "acc": 0.9733333333333334
-    },
-    "retrieval_poisoning": {
-      "correct": 149,
-      "total": 150,
-      "acc": 0.9933333333333333
-    },
-    "mixed_attacks": {
-      "correct": 150,
-      "total": 150,
-      "acc": 1.0
-    },
     "benign_controls": {
-      "correct": 210,
+      "correct": 225,
       "total": 225,
-      "acc": 0.9333333333333333
+      "acc": 1.0
     }
   },
   "latency_ms": {
-    "p50": 70.10410000020784,
-    "p90": 103.38909999995849,
-    "p95": 111.57570000000305,
-    "p99": 136.27130000008947,
-    "mean": 78.95877527778049
+    "p50": 70.02280000006067,
+    "p90": 101.8667999999252,
+    "p95": 108.40659999985292,
+    "p99": 132.28830000002745,
+    "mean": 78.73585922222043
   }
 }
