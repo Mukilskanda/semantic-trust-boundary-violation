@@ -1,20 +1,20 @@
 {
   "manifest": {
     "experiment": "b3_open_set_analysis",
-    "timestamp_utc": "2026-07-13T10:05:09Z",
+    "timestamp_utc": "2026-07-31T19:25:14Z",
     "checkpoint": {
       "ok": true,
-      "path": "C:\\semantic-trust-boundary-violation\\b3\\solution_stb\\b3_semantic_gate\\model\\semantic_gate_v3\\pytorch_model.bin",
+      "path": "C:\\semantic-trust-boundary-violation\\semantic-trust-boundary-violation\\b3\\solution_stb\\b3_semantic_gate\\model\\semantic_gate_v3\\pytorch_model.bin",
       "size_bytes": 567622450,
       "sha256_16": "9ee7475e08f76ce6"
     },
     "torch": {
       "ok": true,
-      "version": "2.6.0+cu124",
+      "version": "2.7.1+cu118",
       "cuda": true,
-      "device_name": "NVIDIA GeForce RTX 3050 Laptop GPU"
+      "device_name": "NVIDIA GeForce RTX 4050 Laptop GPU"
     },
-    "python": "3.12.10",
+    "python": "3.13.0",
     "platform": "Windows 11 AMD64"
   },
   "temperature": 2.144598003491752,

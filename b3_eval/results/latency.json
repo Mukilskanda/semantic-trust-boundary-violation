@@ -1,67 +1,67 @@
 {
   "manifest": {
     "experiment": "b3_latency",
-    "timestamp_utc": "2026-07-27T10:25:24Z",
+    "timestamp_utc": "2026-07-31T19:23:58Z",
     "checkpoint": {
       "ok": true,
-      "path": "C:\\semantic-trust-boundary-violation\\b3\\solution_stb\\b3_semantic_gate\\model\\semantic_gate_v3\\pytorch_model.bin",
+      "path": "C:\\semantic-trust-boundary-violation\\semantic-trust-boundary-violation\\b3\\solution_stb\\b3_semantic_gate\\model\\semantic_gate_v3\\pytorch_model.bin",
       "size_bytes": 567622450,
       "sha256_16": "9ee7475e08f76ce6"
     },
     "torch": {
       "ok": true,
-      "version": "2.11.0+cu128",
+      "version": "2.7.1+cu118",
       "cuda": true,
-      "device_name": "NVIDIA GeForce RTX 3050 Laptop GPU"
+      "device_name": "NVIDIA GeForce RTX 4050 Laptop GPU"
     },
-    "python": "3.12.10",
+    "python": "3.13.0",
     "platform": "Windows 11 AMD64"
   },
   "device": "cuda",
-  "cold_start_ms": 5116.458000000421,
-  "warm_start_ms": 511.7114999993646,
+  "cold_start_ms": 15933.191500000248,
+  "warm_start_ms": 811.6540000000896,
   "memory": {
     "parameters": 141896450,
-    "peak_vram_mb": 610.174976
+    "peak_vram_mb": 609.1264
   },
   "single_inference_ms": {
-    "p50": 0.02550000044720946,
-    "p90": 0.025910000658768695,
-    "p95": 0.02640000093379058,
-    "p99": 0.029128999667591388,
-    "mean": 0.025624500085541513,
-    "max": 0.036299999919719994
+    "p50": 0.06039999993845413,
+    "p90": 0.06523000001834588,
+    "p95": 0.09810500027924718,
+    "p99": 0.10963100008666513,
+    "mean": 0.06363250000958942,
+    "max": 0.15459999985978357
   },
   "batch": {
     "1": {
-      "batch_ms_mean": 0.03018000024894718,
-      "per_item_ms": 0.03018000024894718,
-      "throughput_items_per_s": 33134.525902957364
+      "batch_ms_mean": 0.07251499996527855,
+      "per_item_ms": 0.07251499996527855,
+      "throughput_items_per_s": 13790.250299645832
     },
     "2": {
-      "batch_ms_mean": 0.05245000011200318,
-      "per_item_ms": 0.02622500005600159,
-      "throughput_items_per_s": 38131.553779392656
+      "batch_ms_mean": 0.14335000000755826,
+      "per_item_ms": 0.07167500000377913,
+      "throughput_items_per_s": 13951.866061350178
     },
     "4": {
-      "batch_ms_mean": 0.13180499990994576,
-      "per_item_ms": 0.03295124997748644,
-      "throughput_items_per_s": 30347.862393178966
+      "batch_ms_mean": 0.21420000002763118,
+      "per_item_ms": 0.053550000006907794,
+      "throughput_items_per_s": 18674.136318786237
     },
     "8": {
-      "batch_ms_mean": 0.33153500016851467,
-      "per_item_ms": 0.041441875021064334,
-      "throughput_items_per_s": 24130.182321425218
+      "batch_ms_mean": 0.31466000000364147,
+      "per_item_ms": 0.039332500000455184,
+      "throughput_items_per_s": 25424.267462999487
     },
     "16": {
-      "batch_ms_mean": 0.6900299998960691,
-      "per_item_ms": 0.043126874993504316,
-      "throughput_items_per_s": 23187.397652870004
+      "batch_ms_mean": 0.7067000000233747,
+      "per_item_ms": 0.04416875000146092,
+      "throughput_items_per_s": 22640.441487860175
     },
     "32": {
-      "batch_ms_mean": 1.2163399999735702,
-      "per_item_ms": 0.03801062499917407,
-      "throughput_items_per_s": 26308.433497784605
+      "batch_ms_mean": 1.5453549999620009,
+      "per_item_ms": 0.04829234374881253,
+      "throughput_items_per_s": 20707.216141784156
     }
   }
 }
