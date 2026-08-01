@@ -85,11 +85,11 @@ variance (n=138 vs n=633) is the more likely explanation, but this was
 not conclusively ruled out and should not be asserted either way without
 a larger run.
 
-## Cooperative-perception-dependent families — blocked pending CP fix
+## Cooperative-perception-dependent families — CP wiring fixed, still blocked pending event-label generation
 
 | Attack family | Intended layer | Status |
 |---|---|---|
-| collaborative_semantic_agreement (true multi-source variant) | CP + B3 | ⏳ blocked — needs both the CP fix AND STBV-Bench v2's multi-source injection (implemented in the prototype, but CP itself still cannot score it) |
+| collaborative_semantic_agreement (true multi-source variant) | CP + B3 | ⏳ blocked — CP's wiring bug is fixed and verified working on real event-bearing traffic (`scenarios/collusion`), but STBV-Bench v2's multi-source injection strategy (implemented) still doesn't attach an `event` field to its generated messages, so CP still cannot score it. Needs a further, unscoped follow-up (event-label generation in the transformation engine) |
 | cross_source_contradiction (true multi-source variant) | CP + B3 | ⏳ blocked — same |
 | Sybil (co-location) | MBD | ✅ verified working — Phase 2 (`PUBLICATION_PROGRESS.md`): fixed a projection-origin bug this made possible to verify; sybil_score correctly discriminates attacker (0.87→CAUTION) from benign (0.0→ACCEPT) on `scenarios/sybil` |
 | Collusion | MBD | ⚠️ verified working, but only when an explicit `event`/DENM cause-code is present (Phase 2 finding) — a data-availability limitation on plain CAM-only traffic, not an algorithm defect |
@@ -97,18 +97,26 @@ a larger run.
 
 ## Root-caused negative findings (report honestly, do not omit)
 
-1. **CP is structurally non-functional in the current codebase, in every
-   evaluation harness tried this session** (STBV-Bench v1, the 120-message
-   empirical multi-vehicle check, STBV-Bench v2's prototype with real
-   cp_num_reports up to 42, and the kinematic companion bench). Root cause
-   (`VERIFICATION_ADDENDUM.md` §4, confirmed by direct code inspection):
-   `pipeline/orchestrator.py::_run_cp` never passes `event_label` to
-   `cp/cp_layer.py::cp_layer()`, so `observations_available` is always
-   `False` and CP always returns neutral values (`cp_confidence == 1.0`
-   exactly, on every message, in every harness). This is independent of
-   window size, sender count, or threat class. **Not fixed this session**
-   (explicit instruction not to alter/re-run existing numbers); precisely
-   scoped fix documented, pending its own follow-up commit + re-validation.
+1. **CP contributed zero to every benchmark number in this document**
+   (STBV-Bench v1, the 120-message empirical multi-vehicle check,
+   STBV-Bench v2's prototype with real cp_num_reports up to 42, and the
+   kinematic companion bench). Root cause (`VERIFICATION_ADDENDUM.md` §4,
+   confirmed by direct code inspection): `pipeline/orchestrator.py::_run_cp`
+   never passed `event_label` to `cp/cp_layer.py::cp_layer()`, so
+   `observations_available` was always `False` and CP always returned
+   neutral values (`cp_confidence == 1.0` exactly, on every message, in
+   every harness). **This wiring bug is now fixed** (commit `6dc7df80c`)
+   and verified working: re-running the same 120-message check shows
+   `scenarios/collusion` (real `event` field present) now producing
+   genuine varying `cp_confidence` and a real `trust_score` delta between
+   CP-on/CP-off. **None of the numbers in this document changed or needed
+   re-running** — verified before applying the fix that no benchmark
+   generator in this evaluation ever attaches an `event` field to its
+   messages, so `event_label` is still `None` for every one of them,
+   fix or no fix. CP's zero contribution to every number above is
+   therefore still accurate, now for the separate, independent reason
+   that this evaluation's own benchmark content carries no event data —
+   not because the detection logic is broken.
 2. **B3 and MBD have almost completely non-overlapping jurisdictions on
    the evidence gathered so far**: B3 detects text-only semantic attacks
    with zero kinematic signal; MBD detects kinematic attacks with zero
@@ -129,9 +137,11 @@ a larger run.
 
 ## What is still missing before this matrix is complete
 
-- Everything CP-dependent, until the CP fix lands and is independently
-  re-validated (explicitly out of scope for this session — see
-  `VERIFICATION_ADDENDUM.md` §4 for the precisely scoped fix).
+- Everything CP-dependent on this evaluation's own generated content:
+  the wiring fix landed and was verified on hand-authored fixtures, but
+  CP still needs event-label generation added to the semantic
+  transformation engine before it can be scored on STBV-Bench's own
+  multi-source families — that follow-up is unscoped and not started.
 - Narrative-evolution / progressive-poisoning injection strategies
   (STBV-Bench v2 design strategies 3-4, specified but not implemented).
 - The B3-training-distribution question flagged in `STBV_BENCH_V2_DESIGN.md`

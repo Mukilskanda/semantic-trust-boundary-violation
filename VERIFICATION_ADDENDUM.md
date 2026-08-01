@@ -194,30 +194,53 @@ in the window.
 
 **This is a genuine implementation bug** (per the mission's own standard:
 "Do NOT redesign or refactor the architecture unless you discover a
-verified implementation bug" — this qualifies), **not fixed in this
-session.** Per the explicit instruction not to alter or re-run the
-existing ablation numbers this session, no code change is made here; the
-fix is precisely scoped for a clearly separated follow-up: `_run_cp`
-should derive an `event_str` the same way `_run_mbd` already does
-(`target_msg.get("event") or _extract_denm_event(target_msg)`) and pass
+verified implementation bug" — this qualifies).
+
+**UPDATE (fixed in a later round of this session, commit `6dc7df80c`):**
+`_run_cp` now derives `event_str` the same way `_run_mbd` already does
+(`target_msg.get("event") or _extract_denm_event(target_msg)`) and passes
 it as `cp_layer(reports, event_label=event_str, observation_weights=weights)`.
-That follow-up should be done as its own commit, with its own
-before/after ablation re-run explicitly labeled as such (not blended into
-this session's already-reported numbers), so the "don't artificially
-improve existing numbers" instruction is honored precisely — the current
-ablation results stand as accurately describing the code as it existed
-when they were measured, with this bug now disclosed alongside them.
+Before applying the fix, its blast radius was checked explicitly: none of
+this session's benchmark generators (`canonical.py`, `generator.py`,
+`build_stbv_bench_v2.py`, `build_mixed_threat_bench.py`,
+`build_and_run_veremi_kinematic_bench.py`) ever set an `"event"` key or a
+`denm.management.event_type.cause_code` structure, so the fix produces
+**zero behavioral change** on the ablation numbers above, or on
+STBV-Bench v1/v2, the kinematic bench, or the mixed-threat bench — none
+of those were re-run, and none needed to be. Re-running
+`verify_cp_empirical.py` (the exact 120-message check this section
+describes) confirms the fix: `scenarios/collusion` (which DOES carry a
+real `event` field) now produces genuine, varying `cp_confidence`
+(0.8, 0.835, 0.879 — previously flatlined at 1.0 on every message in
+every scenario, every session) and a real `trust_score` delta between
+CP-on and CP-off. Decision-level flips on that specific small fixture
+set remain 0/120 because MBD's own `collusion_score` (a separate,
+already-working detection path) already drives the same CAUTION outcome
+independently — this is a fixture-specific ceiling effect, not evidence
+the fix failed. **The fix does NOT make CP contribute to any of this
+session's own generated benchmarks (STBV-Bench v1/v2, mixed-threat,
+kinematic)** — those never carry an `event` field to begin with, so this
+is a necessary-but-not-sufficient fix for CP to ever score STBV-Bench's
+own `collaborative_semantic_agreement`/`cross_source_contradiction`
+families; a further, separate, unscoped follow-up (adding event labels to
+the semantic transformation engine's own output) would be needed for
+that. See `MANUSCRIPT_FRAMING.md` for how this is reflected in the
+manuscript-facing claims.
 
 **Corrected framing:** CP's zero contribution in the original ablation
 was previously attributed entirely to STBV-Bench's single-message-window
-design. That framing understated the issue. The corrected framing is:
-**CP's event-based contradiction/corroboration channel is currently
-disconnected from ever activating, in any evaluation, regardless of
-window size, due to a wiring bug in `_run_cp`.** STBV-Bench's
-single-message design is a second, independent reason CP could not have
-contributed even if the bug were fixed (num_reports would still be 1),
-but it is not the primary or sole explanation, and the paper must not
-claim it is.
+design. That framing understated the issue. The corrected framing,
+current as of the fix above: **CP's event-based contradiction/
+corroboration channel's wiring bug is fixed and verified working on real
+event-bearing traffic, but CP still contributes zero to every benchmark
+in this repository's evaluation corpus (STBV-Bench v1/v2, the kinematic
+bench, the mixed-threat bench) for a second, independent, still-open
+reason — none of those benchmarks' generated messages carry an `event`
+field at all.** STBV-Bench's single-message-window design (v1) is a
+third, separate reason CP could not have contributed there specifically
+(num_reports would still be 1) even if event labels existed. All three
+reasons should be distinguished precisely in the manuscript; none should
+be used to imply the others don't matter.
 
 ---
 
