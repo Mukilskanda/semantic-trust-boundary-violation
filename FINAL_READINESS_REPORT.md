@@ -17,6 +17,18 @@ the work appear more finished than it is.
 | Reviewer-Response Matrix | `REVIEWER_RESPONSE_MATRIX.md` | Complete, provenance of criticisms stated honestly |
 | Updated manuscript LaTeX (Abstract, Sections I–V, References) | delivered in the prior conversation turn as a full code block, not re-pasted here | Complete as a standalone document; **not yet re-merged with this round's four new appendices into one final .tex** |
 
+## Continuation note
+
+One item from the list below (#6, parameter sensitivity) was closed in a
+follow-on continuation after this report was first written — see its
+entry, now marked `[Closed this continuation]`. The acceptance-probability
+table below is **not** revised upward for this: the actual blocking
+factors for the Transactions-tier venues (related-work depth, CP's
+zero-contribution status, manuscript assembly, no adaptive-attacker
+evaluation) are unaffected by closing this one, comparatively minor,
+already-disclosed gap. Revising the estimate upward on that basis would
+not be honest.
+
 ## What was NOT completed, and exactly why
 
 1. **Related Work is single-session depth, not exhaustive.** A
@@ -67,12 +79,16 @@ the work appear more finished than it is.
    published literature generally. This is a field-level gap, not
    something this paper can close alone.
 
-6. **Parameter sensitivity analysis has not been performed**
-   (Limitation L13) — every fusion threshold is a fixed design constant;
-   no sweep exists. This is achievable with existing repository code and
-   data (re-running the ablation harness at different threshold values)
-   and is the most tractable of the remaining gaps, but was not done
-   this round given the volume of other work completed.
+6. **[Closed this continuation] Parameter sensitivity analysis.** A real
+   sweep of $\tau_H$, $\tau_L$, and B3's risk bands was performed
+   (`stbv_bench/parameter_sensitivity_sweep.py`), disclosing its own
+   reconstruction fidelity (98.72% agreement with logged decisions) before
+   presenting results. Finding: the architecture is insensitive to
+   threshold choice across a wide range because semantic-risk floor rules,
+   not raw thresholds, drive most decisions — a genuine robustness
+   property. Still open: the CP consistency weights were not swept (moot
+   while CP is inert per L1), and only one parameter was varied at a time
+   (no joint/interaction sweep).
 
 ## Remaining weaknesses, stated plainly
 
