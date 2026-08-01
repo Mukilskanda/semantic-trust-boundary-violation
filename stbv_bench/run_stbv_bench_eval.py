@@ -66,12 +66,24 @@ def main() -> int:
     out_dir = pathlib.Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    pipeline = ISCEPipeline(scsv=SCSV(), enable_mbd=True, enable_cp=True)
-
     rows = []
     t_start = time.perf_counter()
     for i, s in enumerate(samples):
         msg = s["transformed_message"]
+        # Each STBV-Bench sample is an independent, unrelated single message
+        # (a different real VeReMi vehicle, at a different real time/place)
+        # -- NOT a continuous trajectory. A pipeline instance must not be
+        # reused across samples: ISCEPipeline's MBD/CP layers are stateful
+        # (VehicleHistoryStore, a fixed-at-first-message projection origin),
+        # and reusing one instance makes unrelated samples' positions look
+        # like implausible "teleports" of the same tracked vehicle, which
+        # was confirmed to spuriously inflate CAUTION on benign_control
+        # samples (verified: the same sample decides ACCEPT on a fresh
+        # pipeline instance vs. CAUTION when state leaks in from prior,
+        # unrelated samples). A fresh instance per sample matches how a
+        # real deployment would treat these as first-sighting messages
+        # from distinct, previously-unseen vehicles.
+        pipeline = ISCEPipeline(scsv=SCSV(), enable_mbd=True, enable_cp=True)
         res = pipeline.run([msg], context="urban")
         decision = res["decision"]
         contributors = res["fusion"].get("contributors", [])
