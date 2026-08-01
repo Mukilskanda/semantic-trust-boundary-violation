@@ -208,6 +208,67 @@ environment. This phase's original scope is complete.
 
 ---
 
+## Known Limitations / Future Work (consolidated — write these into the paper's Limitations section directly)
+
+**L1. CP's semantic transformation engine never emits an `event` field, so
+Cooperative Perception measurably contributes zero to every benchmark
+reported in this evaluation, despite its detection logic working
+correctly.** CP's own consistency-scoring code was verified broken (a
+wiring bug: `pipeline/orchestrator.py::_run_cp` never passed `event_label`
+to `cp_layer()`) and then fixed and verified working on real event-bearing
+traffic (`scenarios/collusion` — genuine, varying `cp_confidence`
+0.8/0.835/0.879 and a real `trust_score` delta between CP-on/CP-off,
+commit `6dc7df80c`). But `stbv_bench/canonical.py`, `generator.py`,
+`build_stbv_bench_v2.py`, and `build_mixed_threat_bench.py` — every
+message-generation path used in this paper's benchmarks — never attach an
+`event` key or a `denm.management.event_type.cause_code` structure to
+their output. So `event_label` is `None` for every message in STBV-Bench
+v1/v2, the kinematic bench, and the mixed-threat bench, `observations_
+available` stays `False`, and CP correctly scores zero contribution to
+every one of this paper's reported numbers — not because CP doesn't work,
+but because none of the paper's own generated traffic gives it anything
+to work with. **Fix required for future work**: add event-label
+generation to the semantic transformation engine (`stbv_bench/
+transformations.py`) — e.g. deriving an `event` string from each rule's
+`semantic_objective`, or from the multi-source strategies in
+`STBV_BENCH_V2_DESIGN.md` — so that STBV-Bench's own
+`collaborative_semantic_agreement`/`cross_source_contradiction` families
+can finally be scored by CP. This is unscoped and not started. See
+`VERIFICATION_ADDENDUM.md` §4 and `MANUSCRIPT_FRAMING.md` for the full
+before/after evidence.
+
+**L2. Collusion detection's real-world coverage is limited to traffic
+carrying an explicit event/DENM cause-code** (Phase 2 finding,
+`PUBLICATION_PROGRESS.md` §Phase 2 above) — a data-availability
+limitation shared with L1, not an algorithmic defect; deriving a coarse
+event label from cross-message reasoning for plain CAM traffic (rather
+than requiring one be present in the message already) would address both
+L1 and L2 at once and is the most direct path to a fix.
+
+**L3. STBV-Bench's B3 detection has a genuine, reproducible weak cluster**
+(6/20 attack families at ≤9% recall in v1: `goal_manipulation`,
+`traffic_efficiency_lure`, `indirect_prompt_injection`,
+`multi_message_context_poisoning`, `mixed_semantic_attacks`,
+`semantic_narrative_poisoning`) — a B3 model-capability limitation, not a
+fusion defect (`ABLATION_STUDY.md`, `PUBLICATION_PROGRESS.md` §Phase 3).
+STBV-Bench v2 substantially closes this gap in a multi-vehicle-context
+setting, but the explanation is only partially understood (context-volume
+sensitivity confirmed as a real, non-negligible factor; real-world
+representativeness not ruled out — `FOLLOWUP_VERIFICATION_2.md` §2).
+
+**L4. The mixed-threat benchmark's `mixed`-composition sample is small
+(14 raw windows out of 120)** and its family distribution is not
+stratified, which caused an observed recall gap traced to a sampling
+confound rather than a real effect (`FOLLOWUP_VERIFICATION_2.md` §3). A
+publication-quality mixed-threat number needs a larger, family-stratified
+run.
+
+**L5. Narrative-evolution and progressive multi-message poisoning
+injection strategies** (`STBV_BENCH_V2_DESIGN.md` strategies 3-4) are
+specified but not implemented in the STBV-Bench v2 prototype.
+
+---
+
 ## Environment notes (recorded once, referenced throughout)
 
 - Working directory: `c:\semantic-trust-boundary-violation\semantic-trust-boundary-violation`
