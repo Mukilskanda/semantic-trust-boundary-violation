@@ -174,9 +174,29 @@ see `ABLATION_STUDY.md` Step 1 for the full audit).
   McNemar/Cohen's h tables, and the anomaly-check reasoning are in
   `ABLATION_STUDY.md` (Steps 3-6).
 
+## Phase 3.5 — Verification, kinematic companion, STBV-Bench v2, mixed-threat, coverage matrix
+
+✅ Complete. Full detail in `VERIFICATION_ADDENDUM.md`, `STBV_BENCH_V2_DESIGN.md`,
+`THREAT_CLASS_COVERAGE_MATRIX.md`, `MANUSCRIPT_FRAMING.md`. Summary:
+
+| # | Task | Status | Headline |
+|---|---|---|---|
+| V1-V3 | Cohen's h, 3-way ACCEPT/CAUTION/REJECT flip breakdown, prevalence caveat | ✅ | Fusion causes 1,713 real decision changes (not 128 — binary F1 only sees the ACCEPT-crossing subset), 0 of which are direct ACCEPT↔REJECT reversals; 92.5% are CAUTION→REJECT escalations on real attacks. Cohen's h for fusion = -0.026 (negligible, binary scale) despite p=3.06e-29. STBV-Bench v1 prevalence stated explicitly: 70.07% malicious / 29.93% benign |
+| V4 | Empirical CP check on 120 real multi-vehicle messages | ✅ | **Found a real bug**: 0/120 flips despite num_reports up to 20; root-caused to `orchestrator.py::_run_cp` never passing `event_label` to `cp_layer()` (unlike `_run_mbd`, which does) — CP is structurally inert regardless of window size. Confirmed independently 2 more times (STBV-Bench v2, mixed-threat bench): `cp_confidence == 1.0` on every message across all three harnesses, all session. Not fixed this session (scoped for its own follow-up + re-validation) |
+| Task 2 | VeReMi kinematic companion benchmark (n=13,511 real messages, 360 vehicles, stateful per-vehicle replay) | ✅ | MBD per-message recall 77.5% (ConstPos 91.2% / DoS 80.3% / DataReplay 60.0%), FPR 52.4%; per-vehicle "ever flagged" recall 99.2% but FPR 99.4% (not a usable standalone policy). B3 confirmed contributing exactly 0 (config 3/4 byte-identical to config 2) — the required companion result before "complementary coverage" can be claimed |
+| Task 1 | STBV-Bench v2 design + prototype (150 real multi-vehicle windows, 5,062 messages) | ✅ | Every v1-weak family improved (up to +75pp), 0 regressions, 8 already-100% families stayed at 100%. Root cause confirmed by text inspection: v1's isolated-message phrasing ends "No other vehicles in cooperative cluster"; v2's real windows add genuine cluster-peer context that measurably helps B3. Two candidate explanations flagged, not resolved (real-world representativeness vs. B3 training-distribution match) |
+| Task 3 | Mixed-threat benchmark (120 windows, 4,123 messages, real kinematic + injected semantic attackers in the same scene) | ✅ | Both layers fire independently in a shared scene: 90.3% kinematic recall (MBD), 70.3% semantic recall (B3), 0/431 vehicles ever double-counted. ~16pp semantic-recall gap vs. semantic-only control reported as an open question (CP inert, so no mechanism for real interaction is currently confirmed) |
+| Task 4 | Threat-Class Coverage Matrix | ✅ | `THREAT_CLASS_COVERAGE_MATRIX.md` — every family mapped to its actual detecting layer with evidence citations |
+| Task 5 | Manuscript framing | ✅ | `MANUSCRIPT_FRAMING.md` — claim-by-claim evidence map + a ready-to-adapt paragraph for the architecture-evaluation section, with an explicit "do not cite without re-checking" note tied to the CP fix |
+
 ## Phase 4 — Standard benchmark integration (VeReMi)
 
-⬜ Not started. Requires network access to fetch VeReMi/VeReMi Extension — network availability not yet confirmed in this environment.
+✅ Superseded by Phase 3/3.5 — VeReMi Extension (`data/veremi_processed/`)
+has been used extensively and directly this session (STBV-Bench v1/v2,
+the kinematic companion bench, the mixed-threat bench all build on real
+VeReMi flat reports). The original "requires network access" blocker
+no longer applies; the data was already present locally in this
+environment. This phase's original scope is complete.
 
 ## Phase 5 — Publication metrics & figures
 

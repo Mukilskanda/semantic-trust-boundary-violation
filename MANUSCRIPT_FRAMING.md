@@ -1,0 +1,76 @@
+# Manuscript Framing: The Architecture's Actual Contribution
+
+This document states, precisely and with evidence citations, what can and
+cannot be claimed about the trust architecture based on everything
+measured this session. It supersedes the "narrower framing" note at the
+end of `ABLATION_STUDY.md` Step 6 — that note is still correct as far as
+it went, but it was written before the companion kinematic benchmark,
+STBV-Bench v2, and the mixed-threat benchmark existed. Every claim below
+has a specific evidence citation; do not state anything in the manuscript
+that isn't traceable to one of these.
+
+## The claim to make
+
+**The complete trust architecture is necessary because its layers cover
+complementary, largely non-overlapping threat classes — B3 (semantic) for
+attacks that manipulate meaning/narrative with clean kinematics, and MBD
+(behavioral/kinematic) for attacks that falsify position/motion/timing
+with no textual content — not because every layer contributes comparably
+to detecting any single attack.**
+
+## The claim NOT to make
+
+Do not claim "every layer contributes to every decision" or "the
+architecture's value is uniform across layers." The ablation study
+directly falsifies this for this architecture as currently implemented
+(`ABLATION_STUDY.md`): B2 adds no independent evidence of its own (it
+recombines what it's given), and CP is currently non-functional due to a
+confirmed implementation bug (`VERIFICATION_ADDENDUM.md` §4), not because
+cooperative perception is a bad idea.
+
+## Claim-by-claim evidence map
+
+| Claim | Evidence | Caveat to state alongside it |
+|---|---|---|
+| B3 is necessary and sufficient for detecting text-only semantic (STBV) attacks; MBD/CP contribute essentially nothing to this threat class | `ABLATION_STUDY.md` config 4 (B3 alone, no fusion): F1=0.715, precision=1.000, on n=10,000. Config 2→3 (MBD→MBD+CP) is byte-identical (0 flips) | B3's detection is uneven across families — 8/20 at 100% recall, 6/20 at ≤9% (v1); state both, not just the average |
+| MBD is necessary and sufficient for detecting real kinematic/behavioral attacks; B3 contributes essentially nothing to this threat class | `results/veremi_kinematic/analysis_summary.json`: MBD per-message recall 77.5% (ConstPos 91.2%, DoS 80.3%, DataReplay 60.0%), FPR 52.4%. Config 3/4 (CP, B3) byte-identical to config 2 (MBD alone) on all 13,511 messages — B3 confirmed contributing zero, exactly as expected on text-free messages | MBD's FPR (~52% per-message, ~99% per-vehicle "ever flagged") is high; state this precisely — MBD is a recall-oriented signal meant to feed fusion/CAUTION, not a standalone precise classifier |
+| B3 and MBD cover complementary, non-overlapping threat classes, verified in BOTH directions on real evidence | Semantic case: `ABLATION_STUDY.md`. Kinematic case: `results/veremi_kinematic/`. Both point the same way — each layer is strong exactly where the other has no signal | This is the core, well-supported claim — cite both benchmarks together, never one alone |
+| Complementary coverage holds even within a single shared multi-vehicle scene, not just across separate pure benchmarks | `results/mixed_threat/`: in windows containing BOTH a real kinematic attacker and an independently-injected semantic attacker on different vehicles, kinematic rows detected 90.3% (MBD), semantic rows detected 70.3% (B3), simultaneously, with 0/431 vehicles ever double-counted | The ~16pp semantic-recall gap vs. the semantic-only control (86.7%) is unresolved — do not claim cross-vehicle interaction is proven; CP (the only mechanism that could cause it) is confirmed inert, so sampling variance is the more likely explanation but was not conclusively confirmed |
+| Fusion (Trust Decision Engine) adds a small, real, statistically significant effect beyond B3 alone, structured around routing uncertainty through CAUTION | `VERIFICATION_ADDENDUM.md` §2: 1,713 real 3-way decision changes (config 4→5), 0 of which are direct ACCEPT↔REJECT reversals; 92.5% are CAUTION→REJECT escalations on genuine attacks. Cohen's h=-0.026 (negligible on the binary scale) but p=3.06e-29 (real, systematic, not noise) | State both the effect size (negligible, binary) and the transition-level finding (real, structural) together — neither alone is the full picture |
+| Realistic multi-vehicle context measurably improves B3's detection of previously-weak semantic attack families, with zero regressions | `STBV_BENCH_V2_DESIGN.md`: 12/20 families improved (up to +75pp), 8/20 already at ceiling stayed there, 0/20 regressed | The mechanism (why) is confirmed by text inspection (v1's isolated-message phrasing vs. v2's real cooperative-cluster context), but WHY that specific difference improves classification is not fully resolved — flag the open question (real-world representativeness vs. B3 training-distribution match) rather than asserting one cause |
+| Cooperative Perception (CP), as a *concept*, remains architecturally motivated for cross-source contradiction/corroboration attacks | `THREAT_CLASS_COVERAGE_MATRIX.md`'s "blocked pending CP fix" section — the multi-source injection strategy (STBV-Bench v2) is implemented and ready to evaluate CP the moment the fix lands | Do **not** claim CP currently works or currently contributes anything — it is confirmed inert (`VERIFICATION_ADDENDUM.md` §4, reconfirmed independently in 3 separate harnesses this session: the 120-message empirical check, STBV-Bench v2 at 5,062 messages, and the mixed-threat bench at 4,123 messages — `cp_confidence == 1.0` on literally every message evaluated all session) |
+
+## One-paragraph version for the manuscript's architecture-evaluation section
+
+*The trust architecture's contribution is best understood as complementary
+threat-class coverage rather than uniform per-layer participation in
+every decision. On a benchmark of purely semantic (STBV) attacks with
+real, unaltered kinematics, the semantic classifier (B3) alone accounts
+for nearly all detection capability (F1=0.715 without fusion, n=10,000),
+while the behavioral/kinematic layer (MBD) contributes negligibly — as
+expected, since these attacks carry no kinematic signal. The converse
+holds precisely on a companion benchmark of real VeReMi kinematic attacks
+(constant-position falsification, replay, DoS): MBD alone detects 60-91%
+of these attacks depending on attack type, while B3 contributes nothing,
+since these messages carry no text. A mixed-threat benchmark placing both
+attack types in the same shared multi-vehicle scene, on different
+vehicles, confirms both layers fire independently and simultaneously
+(90.3% kinematic recall via MBD, 70.3% semantic recall via B3). Fusion
+itself contributes a small but statistically significant effect on top of
+either layer alone, structured specifically around routing uncertain
+evidence through an intermediate CAUTION state rather than forcing binary
+calls (0 of 1,713 fusion-attributable decision changes were direct
+ACCEPT↔REJECT reversals). Cooperative Perception remains a motivated but
+currently non-functional component of the architecture, pending a
+precisely-scoped implementation fix identified during this evaluation;
+this is disclosed as an open limitation rather than a validated
+capability.*
+
+## Do not cite without checking currency
+
+If the CP fix referenced in `VERIFICATION_ADDENDUM.md` §4 lands in a
+future session, **re-run the affected benchmarks** (the empirical CP
+check, STBV-Bench v1/v2, the kinematic bench, the mixed-threat bench)
+before updating any claim that currently says "CP is inert" — do not
+assume the fix works without re-measuring, per this repo's established
+evidence standard.
