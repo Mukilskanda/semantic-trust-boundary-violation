@@ -2,13 +2,16 @@
 
 Every figure referenced in `stbv_paper.tex`, its purpose, what it proves,
 where it appears, its caption, and whether it exists or must still be
-designed. Ten are real, data-grounded plots already generated and
+designed. Eleven are real, data-grounded plots already generated and
 embedded (`figures_v2/*.pdf`). Four are conceptual/architectural diagrams
 that were **not** fabricated as placeholder art, per the standing rule
 against manufacturing figures — each is specified precisely enough for a
 diagram designer to produce without guessing at content.
 
-## Existing, embedded (10)
+A twelfth real, generated plot (`fig_latency_hist.pdf`) exists but is
+deliberately not embedded — see the note after the table below.
+
+## Existing, embedded (11)
 
 | # | File | Purpose | What it proves | Location in `stbv_paper.tex` | Caption (as used) |
 |---|---|---|---|---|---|
@@ -22,9 +25,28 @@ diagram designer to produce without guessing at content.
 | 8 | `figures_v2/fig_pr.pdf` | Precision-Recall curve | Same, at v1's actual corpus prevalence | Results §F, `\label{fig_pr}` | "Precision-Recall curve... prevalence baseline shown..." |
 | 9 | `figures_v2/fig_calibration.pdf` | Reliability diagram | Before/after temperature-scaling calibration improvement | Results §F, `\label{fig_calibration}` | "Calibration reliability diagram before/after temperature scaling..." |
 | 10 | `figures_v2/fig_latency.pdf` | Latency percentile chart | End-to-end latency vs. the 10 Hz CAM budget | Results §F, `\label{fig_latency}` | "End-to-end per-message decision latency percentiles..." |
+| 11 | `figures_v2/fig_latency_per_stage.pdf` | Per-stage mean latency (log scale) | Where end-to-end latency accumulates across PKI/B1/MBD/B2/CP/synthesizer/B3/fusion | Results §F, immediately after Fig.~\ref{fig_latency}, `\label{fig_latency_per_stage}` | "Per-stage mean latency..., measured on the 120-scenario diagnostic harness, log scale." |
 
-Generation code and exact source-file provenance for all ten:
-`figures_v2/generate_figures.py`.
+Generation code and exact source-file provenance for all eleven:
+`figures_v2/generate_figures.py`. Note that #11's source is explicitly
+the 120-scenario `semantic_evaluation` diagnostic harness, not
+STBV-Bench v1 — its per-message CSV logs only total latency, not a
+per-stage breakdown. That harness's *accuracy* numbers are separately
+flagged as leakage-compromised (Section~\ref{sec:limitations}), but its
+*stage timers* are unaffected by that concern and are reported as a
+diagnostic indicator, with the source explicitly disclosed in the
+caption and surrounding text rather than presented as a STBV-Bench v1
+result.
+
+## Real, generated, but not embedded
+
+`figures_v2/fig_latency_hist.pdf` — a histogram of full-stack per-message
+latency (STBV-Bench v1, same source as `fig_latency.pdf`). Generated but
+not embedded: it is redundant with the percentile chart already embedded
+as `fig_latency.pdf`, which conveys the same distribution more precisely
+(exact $p_{50}$/$p_{95}$/$p_{99}$ values vs. a binned histogram). Not
+embedding it avoids two near-duplicate latency figures in the same
+subsection.
 
 ## Not yet produced — specified, not fabricated (4)
 

@@ -415,6 +415,15 @@ End-to-end per-message latency averages 110~ms ($p_{50}=100$~ms, $p_{95}=189$~ms
 \label{fig_latency}
 \end{figure}
 
+STBV-Bench v1's per-message log records only total end-to-end latency, not a per-stage breakdown; the only artifact in this repository with per-stage timers is a smaller, 120-scenario diagnostic harness (\texttt{semantic\_evaluation}), whose \emph{accuracy} figures are separately flagged as leakage-compromised (Section~\ref{sec:limitations}) but whose \emph{stage timers} are unaffected by that concern, since timing does not depend on label vocabulary overlap. Fig.~\ref{fig_latency_per_stage} reports this breakdown, measured on that smaller harness, as a diagnostic indicator of where latency accumulates rather than as a STBV-Bench v1 headline number.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{figures_v2/fig_latency_per_stage.pdf}
+\caption{Per-stage mean latency (PKI, B1/SCSV, MBD, B2/CSIA, CP, semantic synthesizer, B3 bridge, fusion), measured on the 120-scenario diagnostic harness, log scale.}
+\label{fig_latency_per_stage}
+\end{figure}
+
 %======================================================================
 \section{Discussion}
 \label{sec:discussion}
