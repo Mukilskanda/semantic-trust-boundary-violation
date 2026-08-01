@@ -111,13 +111,47 @@ manuscript and is corrected here.
 | B3 tokenizer max length | 256 | `pipeline/b3_bridge.py:223` | Fixed operational constant. |
 | Semantic evidence floor rule | Medium/low confidence semantic risk floors decision at $\geq$ Caution; high confidence floors at Reject; semantic evidence never relaxes a crypto-derived Reject | `trust_engine/decision_engine.py` | Explicit, documented asymmetric policy layered on top of DS fusion (not a claimed property of Yager's rule itself — stated as such in-code). |
 
-**None of these thresholds have been subjected to a systematic
-sensitivity analysis (grid search, ablation over threshold values, or
-similar) in this evaluation effort.** This is stated here as an honest
-gap, per the task's explicit instruction, and is added to Limitations
-(Section VII) as future work: a sweep of $\tau_H$, $\tau_L$, and the B3
-risk bands against the STBV-Bench v1 fixed slice, reporting the resulting
-precision/recall/F1 tradeoff curve, has not been performed.
+**Update: a threshold sensitivity sweep has now been performed** (`stbv_bench/parameter_sensitivity_sweep.py`,
+output in `results/stbv_bench/v1/parameter_sensitivity_sweep.json`), closing
+this gap for $\tau_H$, $\tau_L$, and the B3 risk bands, reconstructed
+deterministically from the fixed STBV-Bench v1 slice's already-logged
+per-message `trust_score`, `b3_label`, and `b3_confidence` fields (no
+pipeline or model re-run). **Reconstruction fidelity, stated honestly
+before the results are trusted**: this reconstruction reproduces the
+actually-logged decision's binary (positive/negative) outcome for 98.72%
+of rows (128/10,000 disagree) at baseline parameters — the discrepancy is
+attributable to `decision_engine.py`'s "conservative-bias ceiling" step,
+which additionally depends on the raw B1 validation score, not logged
+per-message in the CSV this sweep reconstructs from. Sweep trends below
+are directionally valid, not bit-exact against a full pipeline re-run.
+
+**Finding: the architecture's output is markedly insensitive to
+threshold choice across a wide range, for a specific, mechanistic
+reason.** Sweeping $\tau_H \in [0.55, 0.80]$ (fixed $\tau_L=0.40$),
+$\tau_L \in [0.20, 0.55]$ (fixed $\tau_H=0.70$), the B3 high-confidence
+band $\in [0.70, 0.95]$, and the B3 medium-confidence band $\in [0.40, 0.70]$
+each produced **byte-identical** aggregate metrics
+(accuracy=0.6893, precision=1.0000, recall=0.5566, F1=0.7151, FPR=0.0000)
+to the baseline across their entire tested range. Sensitivity emerges
+only at the extreme end of the $\tau_H$ sweep: $\tau_H=0.85$ shifts F1 to
+0.7165 (FPR 0.0000→0.0020) and $\tau_H=0.90$ shifts F1 to 0.7175 (FPR
+0.0020→0.0231).
+
+**Why**: on this benchmark, `decision_engine.py`'s semantic-risk floor
+rules (Section II-E4 / Table in this appendix) — not the raw trust-score
+threshold cutoffs — are what actually determine most decisions. Any
+message where B3 reports MEDIUM/LOW/HIGH semantic risk is floored to (at
+least) CAUTION or REJECT *regardless* of where $\tau_H$/$\tau_L$/the risk
+bands are set within the tested range; the threshold values only start
+to matter for messages where B3 reports NONE risk (i.e., correctly-clean
+benign messages), and only once $\tau_H$ is raised high enough
+(≥0.85) that some of those clean messages' own `trust_score` — driven by
+crypto/behavioral evidence, not semantic risk — falls below the new,
+stricter Accept bar. This is a genuine robustness property worth stating
+plainly: the architecture is not fragile to a plausible range of
+threshold miscalibration, because its floor-rule design (not the
+threshold values themselves) carries the real decision weight for
+semantically-risky content.
 
 ## 3. STBV-Bench construction (dataset reproducibility)
 

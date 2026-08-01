@@ -213,12 +213,21 @@ different, independent processes with no shared taxonomy — but they are
 not validated against any external ground truth of what real-world
 semantic V2X deception looks like, since none is known to exist publicly.
 
-**L13 (new). Parameter sensitivity has not been studied.** Confirmed in
-`REPRODUCIBILITY_PARAMETER_APPENDIX.md` §2: none of $\tau_H$, $\tau_L$,
-the B3 risk bands (0.85/0.60), or the CP consistency weights
-(0.35/0.25/0.20/0.20) have been swept or ablated. All are fixed design
-constants. The reported results are therefore a single operating point,
-not a characterization of the achievable precision/recall frontier.
+**L13 (updated — partially closed this round).** A sensitivity sweep of
+$\tau_H$, $\tau_L$, and the B3 risk bands has now been performed
+(`REPRODUCIBILITY_PARAMETER_APPENDIX.md` §2, `stbv_bench/parameter_sensitivity_sweep.py`):
+the architecture's aggregate output is unchanged across a wide tested
+range of each, because the semantic-risk floor rules dominate the
+outcome rather than the raw threshold cutoffs — a genuine robustness
+finding, not merely an unstudied gap. What remains open: the CP
+consistency weights (0.35/0.25/0.20/0.20) have not been swept (CP
+contributes zero on every benchmark in this paper regardless — see L1 —
+so a sweep would currently be measuring an inert parameter); the sweep
+performed is a post-hoc reconstruction from logged per-message fields
+with a disclosed 1.28% fidelity gap against a full pipeline re-run, not
+a from-scratch re-run at each setting; and no joint/interaction sweep
+across multiple parameters simultaneously was performed, only one
+parameter varied at a time with the others held at their shipped values.
 
 **L14 (new). No adaptive-attacker evaluation.** Every attack in this
 paper (Section III-D) is a single-shot construction against a fixed,
