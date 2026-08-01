@@ -36,6 +36,71 @@ against the real, materialized checkpoint on an NVIDIA RTX 4050 (6GB VRAM).
 
 McNemar (full vs b1_b2): p ≈ 0.0 (chi-square, continuity-corrected); detection-rate delta +99.0pp; Cohen's h = 2.946 (large). Per-category recall: 100% on 7/8 categories, 90% on retrieval_poisoning (full config only — B1/B1+B2 are 0% on every category). **This is the first real (non-synthetic, non-stubbed) execution of this evaluation in the repository's history** — every previously-stored `results/semantic/*` run recorded `b3_available=false` or synthetic values.
 
+> ⚠️ **DATASET-LEAKAGE CAVEAT — READ BEFORE CITING THIS 0.990 FIGURE ANYWHERE.**
+> This benchmark's corpus (`semantic_evaluation/semantic_attack_dataset.py`)
+> is **not safe to cite as a disjoint external evaluation**, and must never
+> appear without this caveat attached. Investigated directly (not merely
+> flagged) in a later round of this session:
+>
+> - The corpus's own module docstring states its payload texts are
+>   "aligned to the phrasing styles of the model's actual training
+>   distribution (AF1-AF9 families, Case 1 - Case 4, and 30 new
+>   qualitative test messages), ensuring high-fidelity evaluation."
+> - Every one of its 120 scenarios carries a `rationale` field explicitly
+>   naming which of B3's own internal training-family templates it was
+>   built to instantiate — e.g. `"AF4 emergency preemption template asking
+>   to suppress braking"`, `"AF1 authority override template instructing
+>   to maintain speed"`, `"AF6 perception denial template: disputes
+>   vehicle's own sensor"` (verified by direct grep across the file, 18+
+>   such lines).
+> - This exact `AF1`–`AF9` / `Case 1`–`Case 5` taxonomy is independently
+>   confirmed as B3's own internal training/development vocabulary in
+>   `b3/solution_stb/b3_semantic_gate/error_analysis.py` (LOFO evaluation
+>   per attack family), `verify_cases_1_4.py` ("Case 1-4... regenerated
+>   from case1_perc.py's build_prompt()"), and `new_qualitative_test.py`
+>   (per-family LOFO F1 scores cited by name: "AF4 Emergency Override
+>   91.27%", "AF6 Perception Denial 89.23%", etc.) — the same category
+>   IDs, not a coincidental naming overlap.
+> - **What this establishes**: whoever authored this 120-scenario corpus
+>   had direct visibility into B3's training-family taxonomy and
+>   deliberately wrote each scenario to match a named training template,
+>   in the corpus's own stated words, "ensuring high-fidelity evaluation."
+>   This is a real, non-hypothetical train/test distribution-matching
+>   mechanism that would inflate F1 relative to a genuinely disjoint
+>   benchmark.
+> - **What this does NOT establish** (checked, not assumed): literal
+>   string-for-string duplication between this corpus and B3's actual
+>   training examples — that would require diffing against B3's raw
+>   training data file, which is not present in this repository checkout
+>   (only derived dev/analysis scripts referencing the category names are
+>   present). This could not be fully closed out this session.
+> - **STBV-Bench (`stbv_bench/`) does not share this risk** — verified by
+>   grep: zero references to `AF1`–`AF9`, `Case 1`–`Case 4`, or this
+>   corpus's category vocabulary anywhere in `stbv_bench/*.py`. STBV-Bench's
+>   own attack-family taxonomy (`authority_override`, `hazard_suppression`,
+>   etc.) was authored independently, and its kinematics come from real,
+>   external VeReMi Extension data with no relationship to B3's training
+>   corpus or to `semantic_evaluation/`'s hand-authored text.
+>
+> **Recommendation for the manuscript, per explicit review**: STBV-Bench
+> (`results/stbv_bench/v1/`, F1=0.718, n=10,000, real VeReMi-derived
+> kinematics, externally grounded, unchanged across multiple rounds of
+> bug-hunting this session) is the ONE headline "full architecture"
+> result. This 120-scenario harness's F1=0.990 should be reframed in the
+> manuscript as a **development smoke-test / sub-study platform**
+> (robustness — see below, calibration, open-set analysis — all of which
+> remain valid, since those measure B3's *own* behavior under
+> perturbation/uncertainty, not a comparative detection headline), not a
+> competing full-architecture number, and should never be cited without
+> this caveat attached in full.
+>
+> Two other "full architecture" figures (0.859, 98.8%) have been referenced
+> in this project's history; their exact source could not be located in
+> the current repository state (searched `.md`/`.py`/`.json` broadly,
+> found only unrelated numeric coincidences). Whatever their origin, this
+> recommendation supersedes all of them: **STBV-Bench's F1=0.718 is the
+> single headline number for this paper.**
+
 **2. `b3_eval/run_robustness.py`** — output: `b3_eval/results/robustness.json`
 | family | flip_rate | evasion | over_defense | mean Δconf |
 |---|---|---|---|---|
@@ -70,7 +135,30 @@ Genuine weakness surfaced: `instruction_hiding` and `role_confusion` both show 1
 - AURC=0.0082; coverage@risk≤0.01 = 0.800; coverage@risk≤0.05 = 0.953.
 - **Decision (per the encoded rule in `UNKNOWN_ABSTAIN_DETERMINATION.md`): "NO ABSTAIN MECHANISM NEEDED... B3 fails LOUDLY... Implement nothing."** This closes, with real evidence, the one open empirical question that document's own analysis said only a GPU run could answer.
 
-**6. `b3_eval/run_model_benchmark.py`** — long-running (fine-tunes DeBERTa-v3-base/RoBERTa/ModernBERT/DistilRoBERTa/MiniLM on the same 96-example train split, 3 epochs, seed 0). Launched in background this session (downloads pretrained weights from HF Hub — network access confirmed available). Status/result to be recorded in the next update to this document once it completes.
+**6. `b3_eval/run_model_benchmark.py`** — output: `b3_eval/results/model_benchmark.json`. Fine-tunes DeBERTa-v3-base/RoBERTa/ModernBERT/DistilRoBERTa/MiniLM on the same 96-example train split (3 epochs, seed 0), evaluated on a **24-sample test split**. This was left as "status to be recorded" in an earlier version of this document; the run had actually completed — recorded properly now, since it was never closed out:
+
+| Model | Accuracy | Precision | Recall | F1 | tp/fp/fn/tn |
+|---|---|---|---|---|---|
+| **INCUMBENT (semantic_gate_v3)** | 0.833 | 1.000 | 0.810 | **0.895** | 17/0/4/3 |
+| microsoft/deberta-v3-base | — | — | — | — | training error (`ValueError: Attempting to unscale FP16 gradients`) |
+| roberta-base | 0.875 | 0.875 | 1.000 | 0.933 | 21/3/0/**0** |
+| answerdotai/ModernBERT-base | 0.875 | 0.875 | 1.000 | 0.933 | 21/3/0/**0** |
+| distilroberta-base | 0.875 | 0.875 | 1.000 | 0.933 | 21/3/0/**0** |
+| microsoft/MiniLM-L12-H384-uncased | 0.875 | 0.875 | 1.000 | 0.933 | 21/3/0/**0** |
+
+⚠️ **Do not report the F1 column alone if this table goes in the paper.**
+Every one of the four higher-F1 candidates has **tn=0** — they correctly
+identified precisely zero of the 3 truly-benign samples in this 24-sample
+test split, i.e. each one is a **near-degenerate always-predict-MALICIOUS
+classifier** on this split (21/24 = 87.5% of the split is malicious, so
+predicting positive unconditionally already yields recall=1.0 and a
+deceptively high F1). Their higher F1 than the incumbent is an artifact
+of class imbalance on a tiny test split, not evidence of better semantic
+understanding. The incumbent (`semantic_gate_v3`, the model actually
+deployed as B3) is the only candidate with tn>0 and precision=1.000,
+i.e. the only one that discriminates at all on this split. State this
+explicitly alongside any citation of this table; the raw F1 ranking
+by itself would misrepresent which model is actually better.
 
 ---
 
@@ -266,6 +354,33 @@ run.
 **L5. Narrative-evolution and progressive multi-message poisoning
 injection strategies** (`STBV_BENCH_V2_DESIGN.md` strategies 3-4) are
 specified but not implemented in the STBV-Bench v2 prototype.
+
+**L6. B3 shows a 100% over-defense rate on `instruction_hiding` and
+`role_confusion` robustness perturbations, with a 50% label-flip rate on
+both** (`b3_eval/run_robustness.py` → `b3_eval/results/robustness.json`,
+Phase 1 results above). This means benign messages containing
+trigger-adjacent phrasing (e.g. discussing instructions or roles without
+actually attacking) are misclassified as malicious every single time
+this perturbation family was tested — a real, previously-unmeasured
+robustness gap that matches exactly the failure mode the 2024-2026
+literature review (`LITERATURE_AND_DATASETS.md`) predicted for generic
+injection classifiers. **This must remain a prominent, explicitly-named
+item in the manuscript's Limitations section** — it is easy for a single
+strong headline number (STBV-Bench's F1=0.718, or any other) to crowd out
+this kind of narrow-but-severe robustness failure, and a T-ITS reviewer
+evaluating deployability will look specifically for this class of result.
+
+**L7. The B3 model-architecture comparison (`b3_eval/results/model_benchmark.json`)
+must not be reported as a raw F1 ranking.** 4 of 5 candidate architectures
+(RoBERTa, ModernBERT, DistilRoBERTa, MiniLM) scored a higher F1 than the
+deployed incumbent (0.933 vs. 0.895) purely by predicting MALICIOUS
+unconditionally on a class-imbalanced 24-sample test split (tn=0 for all
+four — they correctly identified zero of the 3 truly-benign test
+samples). Only the incumbent has tn>0 and precision=1.000. If this
+comparison is cited in the paper, the near-degenerate behavior of the
+higher-F1 candidates must be stated in the same sentence as their F1
+score, every time — see the table above for the exact per-model
+confusion counts.
 
 ---
 
