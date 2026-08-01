@@ -96,7 +96,19 @@ script's output (reproducible by re-running it); summarized findings below.
 
 ## Phase 3 — Complete experimental pipeline
 
-⬜ Not started. Will reuse `evaluation/`, `large_scale/`, `semantic_evaluation/`, and `scenario_generation/` frameworks (extend, not rewrite). **Known pre-existing blocker found this session:** `tests/test_large_scale_framework.py` fails with `AttributeError: 'ScaledScenario' object has no attribute 'vehicle_count'` — confirmed via `git stash` to predate all changes in this session (a `large_scale/scaling.py` API-drift issue, unrelated to the Sybil fix). Will need to be resolved before Phase 3 can use `large_scale/` fully.
+🔄 In progress. STBV-Bench (`stbv_bench/`) built and running — see
+`DATASET_INTEGRATION.md` for the full, step-by-step pipeline
+documentation (VeReMi Extension -> canonical CAM -> semantic
+transformation engine -> validation -> injection -> validated benchmark).
+
+| # | Task | Status | Evidence / Notes |
+|---|---|---|---|
+| 1 | Build STBV-Bench generation engine (21 seeded transformation rules, 20 attack families + benign_control) | ✅ | `stbv_bench/{canonical,transformations,generator,build_stbv_bench}.py`, committed `943f7e70e`. Reuses real VeReMi kinematics; VeReMi's own kinematic-attacker ground truth is preserved separately (`_veremi_provenance`), never relabeled as an STBV attack. |
+| 2 | Build STBV-Bench v1 at scale | ✅ | `data/stbv_bench/v1/`: 100,000 samples, seed=7, drawn without replacement from a combined pool of 221,125 real VeReMi flat reports across `ConstPos_1416`, `DataReplay_1416_full`, `DoS_1416_full`. Built in 10.5s. `manifest.json` records exact build parameters and per-family counts (30,000 benign_control + 3,500 per attack family × 20 families). |
+| 3 | Evaluate real, frozen ISCEPipeline against STBV-Bench (Decision Trust, not just B3 label) | 🔄 | `stbv_bench/run_stbv_bench_eval.py`. **Bug found and fixed this session:** the script originally reused one `ISCEPipeline` instance across all samples; since MBD/CP are stateful and STBV-Bench samples are independent unrelated messages (not a trajectory), this made unrelated samples look like implausible position "teleports," inflating `benign_control` FPR to 92.7% in a 500-sample check. Fixed by constructing a fresh pipeline per sample (committed `824557109`); FPR dropped to 2.2% on a 300-sample follow-up check, `accuracy=0.700 precision=0.984 recall=0.583 f1=0.732`. Per-family recall now shows real, honest variation: 100% recall on `authority_override`, `hazard_suppression`, `false_clearance`, `instruction_injection`, `infrastructure_semantic_manipulation`, `priority_manipulation`, `cross_source_contradiction`, `collaborative_semantic_agreement`; **0% recall** on `indirect_prompt_injection`, `multi_message_context_poisoning`, `semantic_narrative_poisoning`, `traffic_efficiency_lure`, `mixed_semantic_attacks`, and near-0% (`goal_manipulation`, 9%). This 0%-recall cluster is a genuine, previously-unmeasured detection gap that must be reported honestly in the paper, not smoothed over — full per-family numbers and a larger (10,000-sample) run are being generated now; see `results/stbv_bench/v1/` once complete. |
+| 4 | Decide final benchmark evaluation size | 🔄 | Per-sample eval cost measured at ≈217ms/sample (fresh-pipeline-per-sample, GPU). A 10,000-sample full run (≈36 min) was launched this session to get stable per-family confidence intervals before deciding whether the mission's 100k–250k target is actually necessary, per the mission's own instruction to prefer justified stopping points over inflated dataset size. |
+
+**Known pre-existing blocker (unrelated to STBV-Bench, not yet resolved):** `tests/test_large_scale_framework.py` fails with `AttributeError: 'ScaledScenario' object has no attribute 'vehicle_count'` — confirmed via `git stash` to predate all changes in this session (a `large_scale/scaling.py` API-drift issue). STBV-Bench's own scale-up (`build_stbv_bench.py --n`) does not depend on `large_scale/` and is unaffected.
 
 ## Phase 4 — Standard benchmark integration (VeReMi)
 
