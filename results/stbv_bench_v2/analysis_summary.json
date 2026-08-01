@@ -1,0 +1,202 @@
+{
+  "n_messages_total": 5062,
+  "decision_distribution": {
+    "ACCEPT": 1707,
+    "CAUTION": 3174,
+    "REJECT": 181
+  },
+  "cp_num_reports_range": [
+    1,
+    212
+  ],
+  "cp_confidence_distinct_values": [
+    "1.0"
+  ],
+  "n_attacker_sender_rows": 1387,
+  "per_family_recall": {
+    "authority_override": {
+      "n": 76,
+      "detected": 76,
+      "recall": 1.0,
+      "decision_counts": {
+        "CAUTION": 36,
+        "REJECT": 40
+      }
+    },
+    "collaborative_semantic_agreement": {
+      "n": 349,
+      "detected": 349,
+      "recall": 1.0,
+      "decision_counts": {
+        "REJECT": 42,
+        "CAUTION": 307
+      }
+    },
+    "context_inversion": {
+      "n": 68,
+      "detected": 48,
+      "recall": 0.7058823529411765,
+      "decision_counts": {
+        "REJECT": 7,
+        "CAUTION": 41,
+        "ACCEPT": 20
+      }
+    },
+    "context_poisoning": {
+      "n": 26,
+      "detected": 24,
+      "recall": 0.9230769230769231,
+      "decision_counts": {
+        "CAUTION": 24,
+        "ACCEPT": 2
+      }
+    },
+    "cross_source_contradiction": {
+      "n": 361,
+      "detected": 361,
+      "recall": 1.0,
+      "decision_counts": {
+        "CAUTION": 322,
+        "REJECT": 39
+      }
+    },
+    "false_clearance": {
+      "n": 42,
+      "detected": 42,
+      "recall": 1.0,
+      "decision_counts": {
+        "CAUTION": 41,
+        "REJECT": 1
+      }
+    },
+    "goal_manipulation": {
+      "n": 33,
+      "detected": 25,
+      "recall": 0.7575757575757576,
+      "decision_counts": {
+        "ACCEPT": 8,
+        "CAUTION": 25
+      }
+    },
+    "hazard_amplification": {
+      "n": 41,
+      "detected": 22,
+      "recall": 0.5365853658536586,
+      "decision_counts": {
+        "ACCEPT": 19,
+        "CAUTION": 20,
+        "REJECT": 2
+      }
+    },
+    "hazard_suppression": {
+      "n": 26,
+      "detected": 26,
+      "recall": 1.0,
+      "decision_counts": {
+        "CAUTION": 12,
+        "REJECT": 14
+      }
+    },
+    "indirect_prompt_injection": {
+      "n": 32,
+      "detected": 20,
+      "recall": 0.625,
+      "decision_counts": {
+        "ACCEPT": 12,
+        "CAUTION": 20
+      }
+    },
+    "infrastructure_semantic_manipulation": {
+      "n": 53,
+      "detected": 53,
+      "recall": 1.0,
+      "decision_counts": {
+        "CAUTION": 53
+      }
+    },
+    "instruction_injection": {
+      "n": 11,
+      "detected": 11,
+      "recall": 1.0,
+      "decision_counts": {
+        "REJECT": 11
+      }
+    },
+    "mixed_semantic_attacks": {
+      "n": 45,
+      "detected": 11,
+      "recall": 0.24444444444444444,
+      "decision_counts": {
+        "ACCEPT": 34,
+        "CAUTION": 11
+      }
+    },
+    "multi_message_context_poisoning": {
+      "n": 13,
+      "detected": 7,
+      "recall": 0.5384615384615384,
+      "decision_counts": {
+        "ACCEPT": 6,
+        "CAUTION": 7
+      }
+    },
+    "planner_manipulation": {
+      "n": 33,
+      "detected": 29,
+      "recall": 0.8787878787878788,
+      "decision_counts": {
+        "ACCEPT": 4,
+        "REJECT": 3,
+        "CAUTION": 26
+      }
+    },
+    "priority_manipulation": {
+      "n": 17,
+      "detected": 17,
+      "recall": 1.0,
+      "decision_counts": {
+        "REJECT": 5,
+        "CAUTION": 12
+      }
+    },
+    "role_manipulation": {
+      "n": 25,
+      "detected": 22,
+      "recall": 0.88,
+      "decision_counts": {
+        "REJECT": 3,
+        "CAUTION": 19,
+        "ACCEPT": 3
+      }
+    },
+    "semantic_narrative_poisoning": {
+      "n": 53,
+      "detected": 33,
+      "recall": 0.6226415094339622,
+      "decision_counts": {
+        "ACCEPT": 20,
+        "CAUTION": 31,
+        "REJECT": 2
+      }
+    },
+    "temporal_context_drift": {
+      "n": 27,
+      "detected": 22,
+      "recall": 0.8148148148148148,
+      "decision_counts": {
+        "REJECT": 12,
+        "CAUTION": 10,
+        "ACCEPT": 5
+      }
+    },
+    "traffic_efficiency_lure": {
+      "n": 56,
+      "detected": 28,
+      "recall": 0.5,
+      "decision_counts": {
+        "ACCEPT": 28,
+        "CAUTION": 28
+      }
+    }
+  }
+}

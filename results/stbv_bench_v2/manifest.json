@@ -1,0 +1,33 @@
+{
+  "benchmark": "STBV-Bench-v2",
+  "version": "2.0.0-prototype",
+  "seed": 21,
+  "n_windows": 150,
+  "n_eligible_windows_found": 261,
+  "attack_family_counts": {
+    "context_inversion": 6,
+    "infrastructure_semantic_manipulation": 4,
+    "indirect_prompt_injection": 5,
+    "collaborative_semantic_agreement": 13,
+    "context_poisoning": 4,
+    "cross_source_contradiction": 18,
+    "temporal_context_drift": 4,
+    "multi_message_context_poisoning": 3,
+    "role_manipulation": 4,
+    "false_clearance": 2,
+    "traffic_efficiency_lure": 4,
+    "hazard_amplification": 4,
+    "hazard_suppression": 4,
+    "instruction_injection": 3,
+    "benign_control": 45,
+    "priority_manipulation": 4,
+    "goal_manipulation": 4,
+    "authority_override": 6,
+    "semantic_narrative_poisoning": 4,
+    "mixed_semantic_attacks": 4,
+    "planner_manipulation": 5
+  },
+  "radius_m": 100.0,
+  "min_cluster": 3,
+  "min_buckets": 2
+}
