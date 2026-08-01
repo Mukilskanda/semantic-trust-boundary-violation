@@ -1,0 +1,13 @@
+{
+  "n": 5062,
+  "tp": 1226,
+  "fp": 2129,
+  "fn": 161,
+  "tn": 1546,
+  "accuracy": 0.5476096404583168,
+  "precision": 0.365424739195231,
+  "recall": 0.8839221341023792,
+  "f1": 0.5170814002530577,
+  "fpr": 0.5793197278911565,
+  "methodology": "Same convention as STBV-Bench v1 (positive=REJECT/CAUTION, ground truth=is_attacker_sender). Computed over ALL 5,062 messages including real, unmodified bystander vehicles incidentally present in each multi-vehicle window (3,675 of 5,062 rows) -- NOT limited to attacker-sender rows."
+}
