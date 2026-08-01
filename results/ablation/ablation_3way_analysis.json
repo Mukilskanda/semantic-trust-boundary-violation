@@ -1,0 +1,49 @@
+{
+  "full_stack_decision_distribution": {
+    "ACCEPT": 5972,
+    "CAUTION": 1944,
+    "REJECT": 2084
+  },
+  "config4_to_config5_transitions": {
+    "CAUTION->REJECT": 1585,
+    "ACCEPT->CAUTION": 128
+  },
+  "hard_flips_accept_reject": 0,
+  "moved_into_caution": 128,
+  "moved_out_of_caution": 1585,
+  "total_flips": 1713,
+  "transition_by_family": {
+    "CAUTION->REJECT": {
+      "instruction_injection": 177,
+      "hazard_amplification": 143,
+      "context_inversion": 198,
+      "temporal_context_drift": 163,
+      "infrastructure_semantic_manipulation": 120,
+      "priority_manipulation": 264,
+      "role_manipulation": 179,
+      "false_clearance": 75,
+      "context_poisoning": 160,
+      "hazard_suppression": 42,
+      "semantic_narrative_poisoning": 16,
+      "authority_override": 6,
+      "collaborative_semantic_agreement": 19,
+      "cross_source_contradiction": 17,
+      "planner_manipulation": 6
+    },
+    "ACCEPT->CAUTION": {
+      "context_poisoning": 4,
+      "goal_manipulation": 4,
+      "benign_control": 69,
+      "semantic_narrative_poisoning": 13,
+      "hazard_amplification": 2,
+      "mixed_semantic_attacks": 8,
+      "multi_message_context_poisoning": 7,
+      "temporal_context_drift": 1,
+      "context_inversion": 2,
+      "role_manipulation": 5,
+      "indirect_prompt_injection": 6,
+      "traffic_efficiency_lure": 5,
+      "planner_manipulation": 2
+    }
+  }
+}
