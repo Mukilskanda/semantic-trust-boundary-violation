@@ -122,6 +122,58 @@ The bottom band is a real, reproducible weakness (identical ordering at n=300 an
 
 **Known pre-existing blocker (unrelated to STBV-Bench, not yet resolved):** `tests/test_large_scale_framework.py` fails with `AttributeError: 'ScaledScenario' object has no attribute 'vehicle_count'` — confirmed via `git stash` to predate all changes in this session (a `large_scale/scaling.py` API-drift issue). STBV-Bench's own scale-up (`build_stbv_bench.py --n`) does not depend on `large_scale/` and is unaffected.
 
+### Layer ablation study — ✅ complete, full write-up in `ABLATION_STUDY.md`
+
+Ran on the identical fixed 10,000-sample STBV-Bench v1 slice used for the
+baseline (no re-sampling), 5 configs (B1 only / B1+B2 / B1+B2+CP /
+B1+B2+CP+B3-no-fusion / full stack), one harness batch
+(`stbv_bench/run_ablation.py` + `analyze_ablation.py`; results in
+`results/ablation/`). Required adding a new `enable_b3` flag to
+`ISCEPipeline` (real skip of B3's computation, not post-hoc filtering —
+see `ABLATION_STUDY.md` Step 1 for the full audit).
+
+**Headline, stated precisely (do not round up in any paper draft):**
+
+| Config | Accuracy | Precision | Recall | F1 | FPR |
+|---|---|---|---|---|---|
+| 1. B1 only | 0.299 | undefined (0 positives predicted) | 0.000 | undefined | 0.000 |
+| 2. B1+B2 | 0.305 | 0.643 | 0.018 | 0.034 | 0.023 |
+| 3. B1+B2+CP | 0.305 | 0.643 | 0.018 | 0.034 | 0.023 |
+| 4. B1+B2+CP+B3, no fusion | 0.689 | **1.000** | 0.557 | 0.715 | **0.000** |
+| 5. Full stack | 0.688 | 0.983 | 0.565 | 0.718 | 0.023 |
+
+- **Config 2 and config 3 are byte-identical, 0/10,000 decisions differ.**
+  Root cause (not a weak-CP finding — a benchmark-methodology finding):
+  CP only contributes when a sample window has >1 message
+  (`pipeline/orchestrator.py:609`); STBV-Bench v1 evaluates single-message
+  windows only, so CP is structurally inert on this benchmark by
+  construction. CP was already separately verified working on the
+  multi-vehicle `scenarios/collusion` fixtures (Phase 2 above) — this does
+  **not** contradict that; it shows this specific benchmark can't exercise
+  it. Flagged as a concrete STBV-Bench v2 recommendation (multi-message
+  scenario windows).
+- **B3 alone (no fusion) reaches F1=0.715 at perfect precision** — B3 is
+  doing essentially all of the STBV detection work, which is the
+  architecturally *expected* result (STBV-Bench's honesty contract keeps
+  kinematics real/unmodified, so MBD/CP — which reason over
+  kinematics — have no signal for a purely semantic attack; that's a
+  different, non-overlapping threat class already covered separately in
+  Phase 2's Sybil/Replay/Collusion work).
+- **DS fusion's marginal contribution is small but real** (128/10,000
+  decisions flip specifically due to fusion, p=3.06e-29): a small recall
+  gain (+0.84pp) traded against a small precision cost (69 benign samples
+  pushed from ACCEPT to CAUTION/REJECT), nearly cancelling in aggregate F1
+  (+0.0024) — a genuine, reportable, small effect, not noise and not
+  nothing.
+- **Recommended framing for the manuscript** (narrower and more defensible
+  than "every layer contributes to every decision"): the complete
+  architecture is necessary because layers cover **complementary,
+  non-overlapping threat classes** (B3 for semantic/STBV, MBD/CP for
+  kinematic/behavioral) — not because every layer contributes comparably
+  to detecting any single attack class. Full per-family flip breakdown,
+  McNemar/Cohen's h tables, and the anomaly-check reasoning are in
+  `ABLATION_STUDY.md` (Steps 3-6).
+
 ## Phase 4 — Standard benchmark integration (VeReMi)
 
 ⬜ Not started. Requires network access to fetch VeReMi/VeReMi Extension — network availability not yet confirmed in this environment.
