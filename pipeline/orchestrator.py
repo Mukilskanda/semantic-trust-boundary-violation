@@ -113,6 +113,7 @@ class ISCEPipeline:
         adapters: Optional[Dict[str, Adapter]] = None,
         enable_mbd: bool = True,
         enable_cp: bool = True,
+        enable_b3: bool = True,
         pki_ca: Optional[Any] = None,
     ) -> None:
 
@@ -122,6 +123,14 @@ class ISCEPipeline:
         self.adapters = adapters or {}
         self.enable_mbd = enable_mbd
         self.enable_cp = enable_cp
+        # Ablation-only switch (added for the layer ablation study, see
+        # ABLATION_STUDY.md). Default True preserves the frozen
+        # architecture's normal behavior for every existing caller; this
+        # follows the same precedent as enable_mbd/enable_cp above. When
+        # False, B3's model is not even loaded and classify_text() is never
+        # called for this pipeline instance -- a real skip of computation,
+        # not a post-hoc ignoring of B3's output.
+        self.enable_b3 = enable_b3
         self.pki_ca = pki_ca
 
         self._mbd_history = None
@@ -153,10 +162,12 @@ class ISCEPipeline:
         # first classify_text() call inside run(). This keeps the ~150s
         # one-time model-load cost out of any single message's "bridge_ms"
         # (see pipeline/b3_bridge.py::preload_classifier docstring).
-        self.b3_load_ms = preload_classifier()
+        # Skipped entirely when enable_b3=False (ablation configs 1-3):
+        # B3's model is never loaded for this instance.
+        self.b3_load_ms = preload_classifier() if self.enable_b3 else None
 
         b3_config = load_b3_config()
-        self.enable_b3_ensembling = b3_config.get("enable_ensembling", False)
+        self.enable_b3_ensembling = b3_config.get("enable_ensembling", False) if self.enable_b3 else False
 
         if csia is not None:
             # Legacy compatibility shim only. b2_csia.CSIA is deprecated and
@@ -461,8 +472,25 @@ class ISCEPipeline:
 
         # 5. Run Message Synthesizer & 6. Run B3 Adapter Bridge (Semantic Gate)
         t_synt_start = time.perf_counter()
-        
-        if self.enable_b3_ensembling:
+
+        if not self.enable_b3:
+            # Ablation configs 1-3 (see ABLATION_STUDY.md): B3 genuinely
+            # does not run -- no synthesize_message() call, no
+            # classify_text() call, no model forward pass. b3_result is
+            # the same "unavailable" shape decide()/classify_semantic_risk()
+            # already handle for the B1-fatal path, so it contributes a
+            # vacuous mass to DS fusion (zero influence either direction).
+            synthesized_message = {"text": "skipped (enable_b3=False, ablation)"}
+            synt_ms = (time.perf_counter() - t_synt_start) * 1000.0
+            bridge_ms = 0.0
+            b3_result = {
+                "available": False,
+                "label": None,
+                "confidence": None,
+                "risk_level": "unavailable",
+                "status": "disabled (ablation: enable_b3=False)",
+            }
+        elif self.enable_b3_ensembling:
             from pipeline.synthesizer import TemplateStyle
             from pipeline.b3_bridge import _CLASSIFIER_INSTANCE
             
