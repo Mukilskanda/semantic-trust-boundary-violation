@@ -1,0 +1,27 @@
+{
+  "master_seed": 20260803,
+  "n_scenes": 24,
+  "n_messages": 142,
+  "by_category": {
+    "genuine_multi_vehicle_corroboration": {
+      "n_scenes": 5,
+      "n_messages": 30
+    },
+    "lone_fabricator_vs_honest_majority": {
+      "n_scenes": 6,
+      "n_messages": 36
+    },
+    "colluding_minority_consistent_fabrication": {
+      "n_scenes": 5,
+      "n_messages": 40
+    },
+    "sparse_reporting_uncertainty": {
+      "n_scenes": 4,
+      "n_messages": 12
+    },
+    "natural_sensor_noise_no_attacker": {
+      "n_scenes": 4,
+      "n_messages": 24
+    }
+  }
+}
