@@ -140,16 +140,61 @@ unchanged — the injection *targets* change, not the payload library:
   "how does the architecture behave on real, continuous multi-vehicle
   traffic," not a superset that invalidates v1.
 
-## Prototype status
+## Prototype status and results
 
-A minimal, working prototype (`stbv_bench/build_stbv_bench_v2.py`) implementing
-window construction + single-attacker and multi-source injection (strategies
-1-2 above) has been built and run at small scale (see
-`PUBLICATION_PROGRESS.md` for the resulting numbers) to validate the design
-is actually executable, not just specified on paper. Narrative-evolution and
-progressive-poisoning injection (strategies 3-4) are specified above but not
-yet implemented in the prototype; implementing them is a direct extension of
-the same `generator.py`-reuse pattern and is left as the next increment,
-sized appropriately once the CP fix lands (there is limited value in
-building the full v2 attack-injection surface before CP itself can score
-any of it).
+The prototype (`stbv_bench/build_stbv_bench_v2.py`) was run at 150 windows /
+5,062 messages (ConstPos_1416 alone; 261 eligible windows exist in that one
+source dataset). Results: `results/stbv_bench_v2/` (raw per-message CSV,
+window JSONL with full provenance, `analysis_summary.json`).
+
+**Headline result — every previously-weak family improved, none regressed:**
+
+| Family | v1 recall (n=10,000) | v2 recall (n as noted) | Δ |
+|---|---|---|---|
+| goal_manipulation | 0.01 | 0.76 (n=33) | +0.75 |
+| indirect_prompt_injection | 0.02 | 0.62 (n=32) | +0.60 |
+| semantic_narrative_poisoning | 0.09 | 0.62 (n=53) | +0.53 |
+| multi_message_context_poisoning | 0.02 | 0.54 (n=13) | +0.52 |
+| traffic_efficiency_lure | 0.01 | 0.50 (n=56) | +0.49 |
+| context_poisoning | 0.50 | 0.92 (n=26) | +0.42 |
+| role_manipulation | 0.54 | 0.88 (n=25) | +0.34 |
+| planner_manipulation | 0.55 | 0.88 (n=33) | +0.33 |
+| temporal_context_drift | 0.54 | 0.81 (n=27) | +0.27 |
+| mixed_semantic_attacks | 0.02 | 0.24 (n=45) | +0.22 |
+| hazard_amplification | 0.42 | 0.54 (n=41) | +0.12 |
+| context_inversion | 0.65 | 0.71 (n=68) | +0.06 |
+| (8 families already at 1.00 in v1) | 1.00 | 1.00 | +0.00 |
+
+**Root cause, confirmed by direct text inspection** (not assumed): v1's
+`synthesize_message()` output for an isolated single message always ends
+with the literal sentence `"No other vehicles in cooperative cluster."`;
+v2's genuine multi-vehicle windows instead produce real
+`"Cluster peer N, (station ..., type=...), position=..., distance=... m
+from ego, ..."` sentences describing the actual co-located traffic. The
+exact same injected payload sentence is classified far more reliably by
+B3 when embedded in this richer, more realistic scene description.
+
+**Two honest interpretations, not yet distinguished (flagged, not
+resolved):**
+1. v1 may have systematically under-estimated real-world detection
+   performance for these families, since real V2X traffic essentially
+   never consists of a single, permanently isolated vehicle — v2's
+   numbers would then be the more deployment-representative estimate.
+2. B3's own training-data distribution may itself have been skewed toward
+   "populated scene" phrasing (matching `semantic_evaluation`'s existing
+   corpus conventions, which always include cooperative-cluster context),
+   in which case v1's isolated-message phrasing was partly
+   out-of-distribution for B3 rather than a harder-but-fair test.
+   Distinguishing these requires inspecting B3's actual training corpus
+   composition, which is out of scope for this session. **The manuscript
+   should report the v1→v2 delta as an observed, reproducible fact and
+   flag this open question explicitly, rather than picking an
+   explanation without evidence.**
+
+Narrative-evolution and progressive-poisoning injection (strategies 3-4 in
+the design above) are specified but not yet implemented; the same
+`generator.py`-reuse pattern extends directly to them, left as a future
+increment. CP's `cp_confidence` was confirmed exactly `1.0` on all 5,062
+messages despite `cp_num_reports` reaching 212 — a third, independent
+confirmation of the wiring bug in `VERIFICATION_ADDENDUM.md`, still not
+fixed this session.
