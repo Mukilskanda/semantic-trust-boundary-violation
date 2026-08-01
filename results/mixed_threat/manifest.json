@@ -1,0 +1,12 @@
+{
+  "benchmark": "Mixed-Threat-Bench",
+  "seed": 31,
+  "n_windows": 120,
+  "composition_counts": {
+    "semantic_only": 53,
+    "clean": 38,
+    "mixed": 14,
+    "kinematic_only": 15
+  },
+  "note": "kinematic ground truth is VeReMi's own unmodified is_attacker label; semantic ground truth is this script's own injection (_is_semantic_attacker). The two are independent and can co-occur on DIFFERENT vehicles in the SAME window (composition='mixed')."
+}
