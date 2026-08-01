@@ -41,19 +41,17 @@ Status markers: ✅ verified working · ⚠️ works partially / honest gap ·
 | **MBD** | ⚠️ small, real, off-target | 1.9pp | Fires occasionally on real VeReMi kinematic side-effects, NOT on the semantic payload — see `ABLATION_STUDY.md` Step 6 |
 | **CP** | ❌ verified inert | 0% | Confirmed bug (see below), not a benchmark limitation alone |
 
-## Kinematic/behavioral threat families — evidence: `results/veremi_kinematic/` (Task 2), n≈14,400 real VeReMi messages, stateful per-vehicle replay
+## Kinematic/behavioral threat families — evidence: `results/veremi_kinematic/` (Task 2), n=13,511 real VeReMi messages, 360 vehicles (180 attacker/180 benign), stateful per-vehicle replay
 
-*(Filled in once the background run completes — see `PUBLICATION_PROGRESS.md`
-for the numbers; the row shape is fixed here so the matrix's structure does
-not depend on the exact figures.)*
-
-| Attack family (VeReMi) | Detecting layer | Recall | Why |
-|---|---|---|---|
-| Constant-position falsification (ConstPos) | MBD | ⏳ | Displacement-vs-reported-speed consistency check; confirmed firing directly on sender 8193 before the full run (see `stbv_bench/build_and_run_veremi_kinematic_bench.py` docstring) |
-| Data replay (DataReplay) | MBD (+ B1 exact-match cache) | ⏳ | Dual detection path per Phase 2's `PUBLICATION_PROGRESS.md` finding on `scenarios/replay` |
-| DoS/flooding (DoS) | MBD | ⏳ | Rate/behavioral anomaly checks |
-| (all three) | B3 | expected null | No text present in pure-kinematic VeReMi messages; B3 has structurally nothing to classify — confirms the complementary (not overlapping) coverage claim from the other direction |
-| (all three) | CP | expected null (bug) | Same wiring bug as the semantic case — CP cannot contribute regardless of threat class until fixed |
+| Attack family (VeReMi) | Detecting layer | Recall | FPR | Why |
+|---|---|---|---|---|
+| Constant-position falsification (ConstPos) | MBD | 91.2% | 57.4% | Displacement-vs-reported-speed consistency check; confirmed firing directly on sender 8193 before the full run |
+| DoS/flooding (DoS) | MBD | 80.3% | 49.7% | Rate/behavioral anomaly checks |
+| Data replay (DataReplay) | MBD (+ B1 exact-match cache) | 60.0% | 50.1% | Weakest of the three; dual detection path (B1+MBD) per Phase 2's `PUBLICATION_PROGRESS.md` finding on `scenarios/replay`, but per-message recall on real VeReMi replay traffic is markedly lower here than the earlier small-fixture check suggested |
+| (all three, pooled) | MBD | 77.5% | 52.4% | Overall per-message. All three types cluster in the same 50-57% FPR band, suggesting FPR is a general property of MBD's plausibility-check sensitivity on real, noisy VeReMi kinematics, not specific to one mechanism |
+| (all three, pooled) | MBD, per-vehicle "ever flagged" | 99.2% | **99.4%** | Confirmed verified NOT working as a standalone decision policy: almost every benign vehicle is ALSO flagged at least once over a 40-message sequence. MBD's signal is real (see per-message numbers) but not currently well-calibrated for a naive cumulative "flag if ever suspicious" rule — this is a genuine, reportable tuning/policy gap, not a detection failure |
+| (all three) | B3 | 0% (structural) | 0% | Confirmed: config 4 (full stack) is byte-identical to config 3 (no B3) on every one of 13,511 messages — B3 contributes nothing, exactly as expected on text-free VeReMi messages. This is the clean converse of the semantic case (B3 100%, MBD ~0% on text-only attacks) and is the direct empirical basis for the "complementary, not overlapping, coverage" claim |
+| (all three) | CP | 0% (bug) | — | Config 3 (CP) identical to config 2 (MBD-only) on every message — same wiring bug as the semantic case, confirmed a third time in a third independent harness |
 
 ## Cooperative-perception-dependent families — blocked pending CP fix
 
