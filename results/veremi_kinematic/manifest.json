@@ -1,0 +1,15 @@
+{
+  "benchmark": "VeReMi-Kinematic-Companion-Bench",
+  "seed": 13,
+  "vehicles_per_class_per_source": 60,
+  "max_msgs_per_vehicle": 40,
+  "source_datasets": [
+    "data/veremi_processed/ConstPos_1416",
+    "data/veremi_processed/DataReplay_1416_full",
+    "data/veremi_processed/DoS_1416_full"
+  ],
+  "n_vehicles_selected": 360,
+  "n_attacker_vehicles": 180,
+  "n_benign_vehicles": 180,
+  "methodology": "Each selected vehicle's own real, time-ordered VeReMi message sequence (capped at max_msgs_per_vehicle) is replayed through ONE persistent ISCEPipeline per (vehicle, config) -- fresh per vehicle, persistent within that vehicle's sequence, so MBD's temporal/history-dependent checks have real data to work with. Ground truth is VeReMi's own per-report is_attacker label (NOT any STBV-Bench semantic label); no scene-context text is injected."
+}
