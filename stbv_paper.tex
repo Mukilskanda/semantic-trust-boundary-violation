@@ -8,6 +8,8 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{url}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -43,7 +45,7 @@ Existing Vehicle-to-Everything (V2X) trust architectures rely on Public Key Infr
 
 To formalize this vulnerability, we define Semantic Trust Boundary Violations (STBVs), a threat model in which communication authenticity does not imply semantic reliability. We propose a Layered Semantic-Aware V2X Trust Architecture that introduces decision trust as an explicit security objective by incorporating the B3 Semantic Trust Gate, a semantic verification layer positioned between cooperative perception and downstream AI-enabled decision modules, fused with communication and behavioral trust evidence through a Dempster-Shafer/Yager Trust Decision Engine.
 
-We evaluate the proposed architecture on STBV-Bench, a reproducible benchmark built from real VeReMi Extension vehicular trajectories combined with a seeded semantic transformation engine spanning twenty attack families ($n=10{,}000$). The semantic verification layer (B3) alone achieves 100\% precision and 55.7\% recall (F1$=0.715$) against attacks that carry no kinematic signature, and the complete fused architecture achieves F1$=0.718$, with evidence fusion producing a statistically significant (McNemar $p=3.06\times10^{-29}$) effect that routes 92.5\% of its decision changes through an intermediate Caution state rather than forcing binary accept/reject calls. A companion evaluation on genuine VeReMi kinematic attacks (constant-position falsification, data replay, and denial-of-service; $n=13{,}511$ real messages) shows the behavioral layer independently achieves 60--91\% recall (by attack type) with zero measurable contribution from the semantic layer, confirming that behavioral and semantic verification address complementary, non-overlapping threat classes. A contextual multi-vehicle evaluation shows this complementary behavior is robust to threshold miscalibration (aggregate metrics unchanged across a wide sweep of decision thresholds) but that aggregate precision degrades under realistic ambient traffic for a specific, identified reason. End-to-end per-message decision latency averages 110~ms ($p_{95}=189$~ms, $p_{99}=254$~ms). To address the concern that STBV-Bench's headline numbers reflect only this project's own generator, we additionally evaluate the frozen, unmodified B3 checkpoint against an independent external corpus ($n=117$) combining directly-authored, LLM-generated (three separate providers), and public-prompt-injection-derived attacks, verified to share zero template overlap with STBV-Bench: B3 achieves 89.9\% recall and 97.6\% precision (ROC AUC 0.975), and its single worst-performing family on this external corpus is the same authority-override phrasing pattern already identified as a weak point on STBV-Bench, corroborating rather than contradicting that internally-measured limitation. We report these results together with their limitations, including a bounded detection gap on six semantic attack families phrased as subtle narrative framing and an unresolved data-generation gap that currently prevents Cooperative Perception from contributing measurable evidence to any benchmark evaluated in this work, despite its detection logic being independently verified correct. These findings demonstrate that communication authenticity alone is insufficient for trustworthy autonomous decision making and establish semantic trust verification as a necessary, evidence-grounded complement to existing V2X trust architectures.
+We evaluate the proposed architecture on STBV-Bench, a reproducible benchmark built from real VeReMi Extension vehicular trajectories combined with a seeded semantic transformation engine spanning twenty attack families ($n=10{,}000$). The semantic verification layer (B3) alone achieves 100\% precision and 55.7\% recall (F1$=0.715$) against attacks that carry no kinematic signature, and the complete fused architecture achieves F1$=0.718$, with evidence fusion producing a statistically significant (McNemar $p=3.06\times10^{-29}$) effect that routes 92.5\% of its decision changes through an intermediate Caution state rather than forcing binary accept/reject calls. A companion evaluation on genuine VeReMi kinematic attacks (constant-position falsification, data replay, and denial-of-service; $n=13{,}511$ real messages) shows the behavioral layer independently achieves 60--91\% recall (by attack type) with zero measurable contribution from the semantic layer, confirming that behavioral and semantic verification address complementary, non-overlapping threat classes. A contextual multi-vehicle evaluation shows this complementary behavior is robust to threshold miscalibration (aggregate metrics unchanged across a wide sweep of decision thresholds) but that aggregate precision degrades under realistic ambient traffic for a specific, identified reason. End-to-end per-message decision latency averages 110~ms ($p_{95}=189$~ms, $p_{99}=254$~ms). To address the concern that STBV-Bench's headline numbers reflect only this project's own generator, we additionally evaluate the frozen, unmodified B3 checkpoint against an independent external corpus ($n=117$) combining directly-authored, LLM-generated (three separate providers), and public-prompt-injection-derived attacks, verified to share zero template overlap with STBV-Bench: B3 achieves 89.9\% recall and 97.6\% precision (ROC AUC 0.975), and its single worst-performing family on this external corpus is the same authority-override phrasing pattern already identified as a weak point on STBV-Bench, corroborating rather than contradicting that internally-measured limitation. Critically, every result above measures single-shot detection only; a real adaptive-attacker evaluation, in which an automated attacker observes B3's prediction and iteratively revises its attack (paraphrasing, synonym substitution, context poisoning, and six further mutation strategies) against the same frozen checkpoint, achieves an 83.7\% attack success rate within a 10-round budget, with a median of roughly 3 rounds to first evasion -- a substantially more serious finding than any single-shot number in this paper, reported here in full rather than hedged. We report these results together with their limitations, including a bounded detection gap on six semantic attack families phrased as subtle narrative framing and an unresolved data-generation gap that currently prevents Cooperative Perception from contributing measurable evidence to any benchmark evaluated in this work, despite its detection logic being independently verified correct. These findings demonstrate that communication authenticity alone is insufficient for trustworthy autonomous decision making and establish semantic trust verification as a necessary, evidence-grounded complement to existing V2X trust architectures.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -88,7 +90,7 @@ No single reviewed work combines PKI-grounded communication trust, behavioral tr
 
 \subsubsection*{Misbehavior Detection Systems} MBD complements PKI by reasoning over behavioral and kinematic plausibility across time rather than cryptographic validity at an instant \cite{r_mbd_survey1,r_mbd_survey2,r_mbd_knowledge}. This literature is explicit that MBD targets participants who pass PKI trivially but behave inconsistently -- our Section~\ref{sec:results} companion kinematic evaluation is a direct, quantitative instantiation of exactly this claim, and simultaneously demonstrates MBD's blindness to purely semantic content.
 
-\subsubsection*{Cooperative perception security} Zhang et al.'s USENIX Security study on data fabrication in collaborative vehicular perception \cite{r_cp_fabrication} makes the closest structural observation to our own threat model: standardized security "cannot block data fabrication attacks because attackers can modify data before wrapping it into protocol messages where protection is enforced." That work targets fabricated \emph{objects and positions}; our threat model targets semantically deceptive \emph{text content} injected into otherwise-valid scene-context fields -- a related but distinct attack surface, addressed by our CP layer's cross-source consistency checks and B3's content verification respectively, not by either alone.
+\subsubsection*{Cooperative perception security} Zhang et al.'s USENIX Security study on data fabrication in collaborative vehicular perception \cite{r_cp_fabrication} makes the closest structural observation to our own threat model: standardized security ``cannot block data fabrication attacks because attackers can modify data before wrapping it into protocol messages where protection is enforced.'' That work targets fabricated \emph{objects and positions}; our threat model targets semantically deceptive \emph{text content} injected into otherwise-valid scene-context fields -- a related but distinct attack surface, addressed by our CP layer's cross-source consistency checks and B3's content verification respectively, not by either alone.
 
 \subsubsection*{Context-aware trust models} Context-aware trust schemes for VANETs incorporate spatial-temporal situation and purpose-of-communication into trust scoring \cite{r_context_aware,r_cares}, closely paralleling our B2/CSIA layer's design intent. This literature evaluates whether a message is plausible \emph{given the traffic situation}; it does not evaluate whether the message's own stated content is internally coherent, which is where our B3 layer begins.
 
@@ -150,7 +152,7 @@ This paper's primary focus, and the threat class STBV-Bench (Section~\ref{sec:me
 \section{Proposed Architecture}
 \label{sec:architecture}
 %======================================================================
-The proposed Semantic Trust Boundary Verification (STBV) architecture answers the problem in Section~\ref{sec:problem} with a layered pipeline: Communication Trust (PKI, SCSV) $\rightarrow$ Behavioral Trust (MBD, CSIA) $\rightarrow$ Semantic Trust (CP, B3) $\rightarrow$ Trust Decision Engine. Each layer addresses a distinct category of threat identified in Section~\ref{sec:problem}, and no layer is bypassed: a message must clear communication and structural checks before behavioral analysis is attempted, and clear behavioral analysis before semantic evidence is fused in. A vertical block diagram of this pipeline is planned but not yet produced at submission time; its specification (purpose, contents, and placement at this point in the text) is given in the companion document \texttt{FIGURE\_PLACEMENT.md} rather than inserted here as a placeholder, per this project's standing rule against fabricated figures.
+The proposed Semantic Trust Boundary Verification (STBV) architecture answers the problem in Section~\ref{sec:problem} with a layered pipeline: Communication Trust (PKI, SCSV) $\rightarrow$ Behavioral Trust (MBD, CSIA) $\rightarrow$ Semantic Trust (CP, B3) $\rightarrow$ Trust Decision Engine. Each layer addresses a distinct category of threat identified in Section~\ref{sec:problem}, and no layer is bypassed: a message must clear communication and structural checks before behavioral analysis is attempted, and clear behavioral analysis before semantic evidence is fused in. A vertical block diagram of this pipeline is planned to detail the specific interactions and data flow between these layers.
 
 \subsection{Communication Trust Layer}
 \subsubsection{Public Key Infrastructure (PKI)} Every transmitted CAM/DENM message is digitally signed using short-term pseudonym certificates issued by a trusted Certification Authority, consistent with IEEE 1609.2/ETSI ITS standards. PKI guarantees origin authenticity, integrity, and non-repudiation, but by design does not evaluate whether authenticated content is semantically correct.
@@ -275,12 +277,13 @@ Each subsection below states a research question, the experiment that answers it
 \centering
 \caption{Layer Contribution on STBV-Bench v1 ($n=10{,}000$)}
 \label{tab:main_ablation}
+\begin{threeparttable}
 \begin{tabular}{@{}lccccc@{}}
 \toprule
 Configuration & Acc. & Prec. & Rec. & F1 & FPR \\
 \midrule
-B1 only & 0.299 & --\textsuperscript{a} & 0.000 & --\textsuperscript{a} & 0.000 \\
-B1+B2 (=B1+B2+CP\textsuperscript{b}) & 0.305 & 0.643 & 0.018 & 0.034 & 0.023 \\
+B1 only & 0.299 & --\tnote{a} & 0.000 & --\tnote{a} & 0.000 \\
+B1+B2 (=B1+B2+CP\tnote{b}) & 0.305 & 0.643 & 0.018 & 0.034 & 0.023 \\
 B3 alone (no fusion) & 0.689 & 1.000 & 0.557 & 0.715 & 0.000 \\
 \textbf{B1+B2+B3 (full stack)} & \textbf{0.688} & \textbf{0.983} & \textbf{0.565} & \textbf{0.718} & \textbf{0.023} \\
 \bottomrule
@@ -290,6 +293,7 @@ B3 alone (no fusion) & 0.689 & 1.000 & 0.557 & 0.715 & 0.000 \\
 \item[a] Undefined: zero positive predictions.
 \item[b] Confirmed byte-identical, 0/10,000 decisions differ; see Section~\ref{sec:results}C.
 \end{tablenotes}
+\end{threeparttable}
 \end{table}
 
 \subsection{RQ2: What Is the Marginal Effect of Evidence Fusion Beyond B3 Alone?}
@@ -347,6 +351,7 @@ Table~\ref{tab:main_ablation} (visualized with bootstrap confidence intervals in
 \centering
 \caption{Threat-Class Coverage Summary}
 \label{tab:coverage}
+\begin{threeparttable}
 \begin{tabular}{@{}lccc@{}}
 \toprule
 Threat class & Detecting layer & Recall & Contributing layers \\
@@ -358,13 +363,14 @@ Kinematic (DoS) & MBD & 80.3\% & MBD only \\
 Kinematic (Replay) & MBD & 60.0\% & MBD + B1 \\
 Mixed scene (kinematic side) & MBD & 90.3\% & MBD only \\
 Mixed scene (semantic side) & B3 & 70.3\% & B3 only \\
-Cooperative (event-labeled) & CP & verified\textsuperscript{a} & CP (Appendix~\ref{app:cp}) \\
+Cooperative (event-labeled) & CP & verified\tnote{a} & CP (Appendix~\ref{app:cp}) \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \footnotesize
 \item[a] Verified functionally correct on event-labeled fixtures; not measurable on STBV-Bench (Section~\ref{sec:results}C).
 \end{tablenotes}
+\end{threeparttable}
 \end{table}
 
 \subsection{RQ6: Does Richer, Real Multi-Vehicle Context Change Semantic Detection? (Contextual Evaluation, Not a Competing Headline)}
@@ -462,6 +468,39 @@ PR AUC & 0.981 \\
 
 Precision (0.976) and ROC AUC (0.975, Fig.~\ref{fig_ext_roc}) are both strong out-of-distribution results and weigh against the concern that B3 only pattern-matches STBV-Bench's specific sentences. At the same time, the external corpus's single worst-performing family -- spoofed-authority-override phrasing, recall 0.500 -- is conceptually the same weak point already documented on STBV-Bench (six narrative-indirection families at $\le$9\% recall, Section~\ref{sec:limitations}), reproducing independently in text this project's generator never produced. This external evaluation therefore corroborates, rather than contradicts, STBV-Bench's own documented weak-family finding: it rules out the possibility that the weakness is an artifact of STBV-Bench's own phrasing conventions, while also ruling out the opposite overclaim that external validation is uniformly worse (per-family breakdown, Fig.~\ref{fig_ext_per_family}). Applying B3's existing post-hoc calibration temperature ($T{=}2.145$, fit internally on an unrelated 85-sample split) to this external corpus, without refitting, \emph{increases} ECE from 0.054 to 0.169 -- evidence that a temperature fit on one narrow split does not transfer across distributions, not evidence against calibration as a technique. Full methodology, per-source and per-family breakdowns, and the calibration-transfer figure are given in Appendix~\ref{app:external}.
 
+\subsection{Adaptive Attack Evaluation (Frozen Model)}
+\label{sec:adaptive}
+Every evaluation to this point, including the external corpus above, measures single-shot detection: one fixed text, one prediction. This subsection instead measures B3 against an iterative adaptive attacker that observes the model's prediction and revises its attack accordingly -- the frozen, unmodified checkpoint is queried repeatedly; no retraining or fine-tuning occurs anywhere in this process. Seeds are the 49 external-corpus messages B3 currently detects correctly, stratified across all 9 non-benign families. Headline results are given in Table~\ref{tab:adaptive}. Each round, nine candidate mutations (paraphrasing, synonym substitution, indirect prompt injection, role confusion, narrative poisoning, authority obfuscation, instruction hiding, context poisoning, semantic drift -- deterministic, seeded text transforms, not a live LLM search) are generated from the current text, all nine evaluated against B3, and the lowest-confidence candidate adopted for the next round; the loop stops on evasion (predicted \texttt{BENIGN}) or after 10 rounds.
+
+\begin{table}[t]
+\centering
+\caption{Adaptive Attack Evaluation, Frozen B3 ($n=49$ seeds)}
+\label{tab:adaptive}
+\begin{tabular}{@{}lc@{}}
+\toprule
+Metric & Value \\
+\midrule
+Attack Success Rate & 83.7\% (41/49) \\
+Avg.\ iterations (all seeds) & 4.06 \\
+Avg.\ iterations (successful only) & 2.90 \\
+Detection probability, round 0 & 1.000 \\
+Detection probability, round 2 & 0.592 \\
+Detection probability, round 10 & 0.163 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{adaptive_attack/figures/adaptive_fig_confidence_evolution.pdf}
+\caption{Mean $P(\text{malicious})$ and detection probability across 10 adaptive mutation rounds, $n=49$ seeds.}
+\label{fig_adaptive_confidence}
+\end{figure}
+
+\textbf{Stated plainly: this is the single most serious finding in this paper.} Detection probability collapses from 1.000 to 0.592 within two mutation rounds and to 0.163 by round 10 (Fig.~\ref{fig_adaptive_confidence}). Every one of the 9 attack families tested has an adaptive Attack Success Rate of at least 66.7\%; the two families most robust to adaptive attack (\texttt{sensor\_discreditation}, \texttt{reputation\_inflation}, both 66.7\% ASR) are, notably, the same two families that scored a perfect 1.000 recall under single-shot evaluation (Appendix~\ref{app:external}) -- direct evidence that single-shot recall and adaptive-evasion robustness are different properties, and that a strong single-shot score provides no assurance against an adaptive attacker. Context poisoning (benign filler padding) is the most-used and most-effective mutation, responsible for 18 of the 41 evasions; indirect prompt injection, by contrast, never won a single round across the entire campaign. Full per-family, per-strategy, and per-seed failure-mode detail, including all 8 seeds B3 successfully resisted, is given in \texttt{ADAPTIVE\_ATTACK\_EVALUATION.md}.
+
+No single-shot result reported elsewhere in this paper is overturned by this finding -- both measure real, valid, but different questions -- but no single-shot detection number in this paper should be read as evidence of robustness against an attacker who observes B3's output and revises their message.
+
 %======================================================================
 \section{Discussion}
 \label{sec:discussion}
@@ -486,6 +525,8 @@ Precision (0.976) and ROC AUC (0.975, Fig.~\ref{fig_ext_roc}) are both strong ou
 
 \textbf{Why external validation corroborates rather than dismisses the weak-family finding.} The external evaluation (Section~\ref{sec:external_eval}) rules out the most convenient explanation for STBV-Bench's documented narrative-indirection weakness -- that it is an artifact of this project's own phrasing conventions -- by reproducing a conceptually equivalent weak point (authority-override framing, recall 0.500) in independently-written text. A less careful reading of a strong external precision/AUC result could have been used to wave the internal limitation away; reporting the per-family breakdown instead of only the aggregate closes that door.
 
+\textbf{Why single-shot recall does not predict adaptive robustness.} Section~\ref{sec:adaptive}'s two most single-shot-accurate families under-perform, not out-perform, the campaign average once an attacker is allowed to iterate: sensor-discrediting and reputation-inflation phrasing appear easiest for B3 to catch once, but hardest to catch repeatedly across small, confidence-guided rewrites. This suggests B3's decision boundary for these families sits close enough to gradient-accessible text perturbations that a handful of dilution/rewording rounds crosses it, even where the boundary is, on average, further from any single unmodified attack. A single-shot benchmark, however large, cannot surface this; only an iterative evaluation can.
+
 \textbf{Research implications.} The v1-vs-v2 finding suggests any V2X semantic-detection benchmark built from independent, isolated messages should be treated cautiously as a \emph{precision} estimate specifically, even where its recall claims are sound -- a caveat with implications for benchmark design in this subfield beyond this paper. The demonstrated non-overlap between B3 and MBD is direct, quantitative evidence for a layered-defense design philosophy in V2X trust architectures generally, over investing further effort into any single detector.
 
 %======================================================================
@@ -500,11 +541,11 @@ Precision (0.976) and ROC AUC (0.975, Fig.~\ref{fig_ext_roc}) are both strong ou
 
 \textbf{Internally-generated benchmark, no externally-published semantic corpus.} STBV-Bench's semantic-attack text is generated by this paper's own seeded engine, not drawn from an independently-authored, externally-published semantic V2X attack corpus -- none was identified in our literature search (Section~\ref{sec:related}), which we report as a field-level gap, not only a limitation of this paper. We partially address the narrower concern of generator-specific overfitting with the external evaluation (Section~\ref{sec:external_eval}, Appendix~\ref{app:external}), but that corpus is itself LLM-authored for this evaluation, not drawn from a pre-existing, independently-published ground truth, and is far smaller ($n=117$) than STBV-Bench v1 ($n=10{,}000$) -- it is a directional cross-check, not a resolution of this limitation.
 
-\textbf{B3's original training-data provenance cannot be independently reconstructed from this repository.} An exhaustive search of the working tree and the complete git history (all commits, all refs) found no training script and no raw training/validation/test corpus for B3 anywhere in this repository; only the finished checkpoint, tokenizer, and a handful of downstream analysis scripts referencing a since-removed split were carried over from an antecedent project. Training hyperparameters (learning rate, epochs, seed 42, etc.) are recovered directly from the checkpoint's own serialized \texttt{training\_args.bin} and are reliable; training-set size, validation-set size, and the data-generation seed are not recoverable. Taxonomy-level comparison rules out direct template overlap between B3's training families and STBV-Bench's independently-named families (Appendix~\ref{app:params}), and the same comparison identifies a confirmed, but already-deprecated and non-headline, leakage risk in an earlier 120-scenario evaluation corpus whose own docstring states its text was deliberately phrased to match B3's training distribution. Stylistic convergence at the level of generic V2X message-formatting conventions cannot be excluded without the original training corpus, which no longer exists in a recoverable form.
+\textbf{B3's original training-data provenance cannot be independently reconstructed from this repository.} An exhaustive search of the working tree and the complete git history (all commits, all refs) found no training script and no raw training/validation/test corpus for B3 anywhere in this repository at any commit. \texttt{training\_args.bin}'s own embedded \texttt{output\_dir}/\texttt{logging\_dir} paths (\texttt{/home/harshitvaish123/v2x-pi-project/...}) and a downstream analysis script's docstring (\texttt{verify\_cases\_1\_4.py}) jointly indicate the training run occurred in an antecedent project on a different machine, from which only the finished checkpoint, tokenizer, and a few downstream analysis scripts (referencing a since-absent split file) were carried into this repository. Hyperparameters above are read directly from that surviving checkpoint metadata and are reliable; dataset size, split composition, and the data-generation seed are not recoverable. A separate, structurally incompatible file (\texttt{data/v1/train.json}, structured numeric CAM/B2 features $\to$ 3-class decision, not text $\to$ binary label) was investigated and ruled out as a candidate. Taxonomy-level comparison confirms zero family-name overlap between B3's training taxonomy and STBV-Bench's independently-named families (Section~\ref{sec:limitations}); a separate, already-deprecated 120-scenario evaluation corpus is confirmed, by its own docstring, to have been deliberately phrased to match B3's training distribution, and is not used for any headline result in this paper. Stylistic convergence at the level of generic V2X message-formatting conventions cannot be excluded without the original training corpus, which no longer exists in a recoverable form.
 
 \textbf{No parameter sensitivity beyond the threshold sweep performed.} The sweep in Section~\ref{sec:results} varies one parameter at a time; CP's consistency weights were not swept, since CP is inert on this benchmark regardless (above); no joint/interaction sweep across multiple parameters was performed.
 
-\textbf{No adaptive-attacker evaluation.} Every attack in this paper is a single-shot construction against a fixed, already-deployed classifier (Section~\ref{sec:problem}); there is no adversarial-search or red-teaming campaign targeting B3's specific decision boundary. This is a materially weaker guarantee than a dedicated adaptive-attack study and should not be conflated with one.
+\textbf{Adaptive-attacker evaluation: performed, and the result is severe.} Section~\ref{sec:adaptive} closes this gap directly: an iterative, confidence-guided mutation search achieves an 83.7\% attack success rate against the frozen B3 checkpoint within a 10-round budget. This is reported as a first, not exhaustive, adaptive evaluation -- 9 rule-based (not LLM-driven) mutation strategies, a greedy (not fully combinatorial) search, a 10-round budget -- and should be read as a lower bound on B3's true adaptive vulnerability, not an upper one. No single-shot detection claim anywhere in this paper (STBV-Bench, the external corpus, or the mixed-threat evaluation) should be read as a robustness guarantee against an attacker who observes B3's output and revises their message in response.
 
 \textbf{Prevalence assumptions.} STBV-Bench v1's headline precision/F1 are measured at a 70.07\%/29.93\% malicious/benign split, not any claimed operational prevalence, which is almost certainly lower. FPR is the prevalence-robust number and should be preferred for deployment-relevance claims.
 
@@ -512,7 +553,7 @@ Precision (0.976) and ROC AUC (0.975, Fig.~\ref{fig_ext_roc}) are both strong ou
 
 \textbf{Mixed-scene sample size.} The shared-scene case study (Section~\ref{sec:results}) draws from a small, non-family-stratified sample; its exact percentages should be treated as directionally indicative pending a larger, stratified re-run.
 
-Two items above -- the absence of an external semantic-attack corpus and the absence of an adaptive-attacker evaluation -- cannot be resolved from this repository alone: the former requires new externally-published data that does not currently exist publicly, and the latter requires a substantial new red-teaming research effort. Both are stated as genuine future work, not attempted here, and not fabricated.
+One item above cannot be resolved from this repository alone: no externally-published, independently-authored semantic V2X attack corpus exists publicly, and this paper cannot manufacture one. The adaptive-attacker evaluation, by contrast, has been performed (Section~\ref{sec:adaptive}) rather than left as an unresolved gap; what remains as future work is extending it beyond a first pass -- a larger round budget, compositional multi-strategy mutations per round, and a genuine LLM-driven adaptive rewriter in place of this campaign's deterministic text transforms.
 
 %======================================================================
 \section{Conclusion}
