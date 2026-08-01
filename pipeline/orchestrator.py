@@ -270,7 +270,7 @@ class ISCEPipeline:
         target_sender_id: Any,
     ) -> Dict[str, Any]:
         from cp import cp_layer
-        from bridges.message_adapter import to_flat_report
+        from bridges.message_adapter import to_flat_report, _extract_denm_event
 
         target_msg = messages[-1]
         lat = target_msg.get("cam", {}).get("cam_parameters", {}).get(
@@ -280,6 +280,18 @@ class ISCEPipeline:
         # Persistent origin (Phase 2 fix, shared with _run_mbd) -- see
         # _get_or_create_projection_origin's docstring.
         origin = self._get_or_create_projection_origin(lat, lon)
+
+        # Bug found and fixed (see VERIFICATION_ADDENDUM.md Sec 4): this was
+        # previously never computed, so cp_layer()'s event_label was always
+        # None, observations_available was always False, and CP always
+        # returned neutral/vacuous values regardless of window size or
+        # sender count. Mirrors _run_mbd's own event extraction above
+        # exactly, so both layers read the target message's event the same
+        # way.
+        event_str = (
+            target_msg.get("event")
+            or _extract_denm_event(target_msg)
+        )
 
         reports = []
         weights: Dict[Any, float] = {}
@@ -296,7 +308,7 @@ class ISCEPipeline:
                 target_sender_weight if flat["sender"] == target_sender_id else 1.0
             )
 
-        return cp_layer(reports, observation_weights=weights)
+        return cp_layer(reports, event_label=event_str, observation_weights=weights)
 
     def run(
         self,
