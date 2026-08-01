@@ -286,14 +286,27 @@ is computed?). `results/stbv_bench_v2/full_corpus_decision_trust_metrics.json`:
 Accuracy=0.5476, Precision=0.3654, Recall=0.8839, **F1=0.5171**, FPR=0.5793
 — computed over all 5,062 messages. This is a **worse** F1 than v1's
 0.7175 (§R1/§R2), and this is not in tension with R6a — it measures a
-different thing. 3,675 of v2's 5,062 messages are real, unmodified
-bystander vehicles with no equivalent in v1 (every v1 sample is either
-a designated `benign_control` or a designated attacker, never an
-incidental bystander); MBD flags 57.9% of these bystanders as CAUTION
-(fp=2,129 of 3,675), closely matching §R3's independently-measured ~52%
+different thing. 3,675 of v2's 5,062 messages are non-attacker-sender
+rows with no single equivalent in v1 (every v1 sample is either a
+designated `benign_control` or a designated attacker, never an
+incidental bystander); this 3,675 decomposes into two distinct subsets,
+checked separately rather than assumed uniform
+(`results/stbv_bench_v2/bystander_decomposition.json`): **1,942 rows
+from windows with no attacker present at all** (`attack_family=
+benign_control`, the direct v2 analog of v1's deliberate negative
+control) — 57.4% flagged CAUTION/REJECT; and **1,733 rows that are
+real, unmodified co-located vehicles sharing an attack-assigned window
+with a different, designated attacker** (true incidental bystanders) —
+58.5% flagged. The two rates are nearly identical (57.4% vs. 58.5%),
+which matters: it confirms the aggregate 57.9% FPR is a uniform
+MBD-baseline-sensitivity effect on real VeReMi kinematics, not an
+artifact of whether a vehicle happens to share a window with an
+attacker. This closely matches §R3's independently-measured ~52%
 baseline per-message FPR on real VeReMi kinematics — the same real MBD
-behavior, now visible in an aggregate metric specifically because v2 is
-the first STBV-Bench harness to include genuine ambient real traffic.
+behavior, confirmed by two independently-built benchmarks, now visible
+in v2's aggregate metric specifically because v2 is the first
+STBV-Bench harness to include genuine ambient real traffic (of either
+subset) at all.
 
 **Interpretation.** Two real, non-contradictory findings: (R6a) B3's
 detection of a specific semantic attacker measurably improves given

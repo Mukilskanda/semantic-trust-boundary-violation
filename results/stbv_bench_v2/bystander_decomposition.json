@@ -1,0 +1,14 @@
+{
+  "benign_control_window_rows": {
+    "n": 1942,
+    "flagged": 1115,
+    "flag_rate": 0.574150360453141
+  },
+  "incidental_bystander_rows": {
+    "n": 1733,
+    "flagged": 1014,
+    "flag_rate": 0.5851125216387767
+  },
+  "total_non_attacker_rows": 3675,
+  "note": "Decomposes the 3,675 non-attacker-sender rows in results/stbv_bench_v2/full_corpus_decision_trust_metrics.json into two subsets: (1) rows from windows assigned attack_family=benign_control, i.e. no attacker present at all in that window (a deliberate negative control, analogous to v1 benign_control) -- 1,942 rows, 57.4% flagged CAUTION/REJECT; (2) rows from windows WITH an assigned attacker, but this specific row is a different, real, unmodified co-located vehicle, not the designated attacker (an incidental bystander) -- 1,733 rows, 58.5% flagged. The two rates are nearly identical (57.4% vs 58.5%), confirming the 57.9% aggregate FPR in full_corpus_decision_trust_metrics.json is a uniform MBD-baseline-sensitivity effect on real VeReMi kinematics, not an artifact of window composition (deliberate control vs incidental bystander) -- consistent with the kinematic companion bench (results/veremi_kinematic/analysis_summary.json config_2 fpr=0.5237) measuring the same underlying MBD behavior independently."
+}
