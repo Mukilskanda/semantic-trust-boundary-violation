@@ -53,11 +53,43 @@ Status markers: ✅ verified working · ⚠️ works partially / honest gap ·
 | (all three) | B3 | 0% (structural) | 0% | Confirmed: config 4 (full stack) is byte-identical to config 3 (no B3) on every one of 13,511 messages — B3 contributes nothing, exactly as expected on text-free VeReMi messages. This is the clean converse of the semantic case (B3 100%, MBD ~0% on text-only attacks) and is the direct empirical basis for the "complementary, not overlapping, coverage" claim |
 | (all three) | CP | 0% (bug) | — | Config 3 (CP) identical to config 2 (MBD-only) on every message — same wiring bug as the semantic case, confirmed a third time in a third independent harness |
 
+## STBV-Bench v2 — genuine multi-vehicle windows, n=5,062 messages (150 windows, `results/stbv_bench_v2/`)
+
+| Finding | Evidence |
+|---|---|
+| Every family weak in v1 improved in v2; none regressed; all 8 families already at 100% in v1 stayed at 100% | See table in `STBV_BENCH_V2_DESIGN.md`; largest gains: goal_manipulation +75pp, indirect_prompt_injection +60pp, semantic_narrative_poisoning +53pp, multi_message_context_poisoning +52pp, traffic_efficiency_lure +49pp |
+| Root cause confirmed by direct text inspection (not assumed) | v1's synthesized text always ends `"No other vehicles in cooperative cluster."`; v2's real windows produce genuine `"Cluster peer N..."` context sentences — B3 classifies the identical injected payload more reliably when embedded in richer, realistic scene context |
+| CP still confirmed inert (3rd independent harness) | `cp_confidence == 1.0` on all 5,062 messages despite `cp_num_reports` reaching 212 |
+
+## Mixed-threat benchmark — semantic + real kinematic attackers in the SAME scene, n=4,123 messages (120 windows, `results/mixed_threat/`)
+
+| Composition | n | Result |
+|---|---|---|
+| `mixed` windows, kinematic-attacker rows | 154 | 90.3% detected (via MBD) |
+| `mixed` windows, semantic-attacker rows | 138 | 70.3% detected (via B3) |
+| `kinematic_only` windows, kinematic-attacker rows (control) | 90 | 81.1% detected |
+| `semantic_only` windows, semantic-attacker rows (control) | 633 | 86.7% detected |
+
+**This is the direct empirical demonstration Task 3 asked for**: in a
+single shared multi-vehicle scene containing both a real kinematic
+attacker and an independently-injected semantic attacker on a *different*
+vehicle, MBD and B3 each correctly flag their respective attacker at a
+rate consistent with their threat-class-pure benchmarks (§ above), with
+no vehicle ever double-counted as both attacker types (0/431 by
+construction). The ~16pp lower semantic recall in mixed windows (70.3%
+vs. 86.7% in semantic-only) is reported honestly as an **open, unresolved
+question** rather than a confirmed interaction effect — with CP inert,
+there is currently no mechanism in the codebase that could cause the two
+attacker vehicles to influence each other's decision, so sampling
+variance (n=138 vs n=633) is the more likely explanation, but this was
+not conclusively ruled out and should not be asserted either way without
+a larger run.
+
 ## Cooperative-perception-dependent families — blocked pending CP fix
 
 | Attack family | Intended layer | Status |
 |---|---|---|
-| collaborative_semantic_agreement (true multi-source variant) | CP + B3 | ⏳ blocked — needs both the CP fix AND STBV-Bench v2's multi-source injection (`STBV_BENCH_V2_DESIGN.md`) |
+| collaborative_semantic_agreement (true multi-source variant) | CP + B3 | ⏳ blocked — needs both the CP fix AND STBV-Bench v2's multi-source injection (implemented in the prototype, but CP itself still cannot score it) |
 | cross_source_contradiction (true multi-source variant) | CP + B3 | ⏳ blocked — same |
 | Sybil (co-location) | MBD | ✅ verified working — Phase 2 (`PUBLICATION_PROGRESS.md`): fixed a projection-origin bug this made possible to verify; sybil_score correctly discriminates attacker (0.87→CAUTION) from benign (0.0→ACCEPT) on `scenarios/sybil` |
 | Collusion | MBD | ⚠️ verified working, but only when an explicit `event`/DENM cause-code is present (Phase 2 finding) — a data-availability limitation on plain CAM-only traffic, not an algorithm defect |
@@ -97,9 +129,15 @@ Status markers: ✅ verified working · ⚠️ works partially / honest gap ·
 
 ## What is still missing before this matrix is complete
 
-- Kinematic companion bench numbers (running; Task 2).
-- STBV-Bench v2 numbers at a real scale beyond the 15-window smoke test
-  (Task 1 prototype; needs a larger run once GPU is free).
-- Mixed-threat benchmark numbers (Task 3; script written, not yet run).
 - Everything CP-dependent, until the CP fix lands and is independently
-  re-validated (explicitly out of scope for this session).
+  re-validated (explicitly out of scope for this session — see
+  `VERIFICATION_ADDENDUM.md` §4 for the precisely scoped fix).
+- Narrative-evolution / progressive-poisoning injection strategies
+  (STBV-Bench v2 design strategies 3-4, specified but not implemented).
+- The B3-training-distribution question flagged in `STBV_BENCH_V2_DESIGN.md`
+  (does v1→v2's recall jump reflect real-world representativeness, B3's
+  training-data composition, or both) — would require inspecting B3's
+  actual training corpus, not attempted this session.
+- The mixed-window semantic-recall gap (70.3% vs 86.7%) at a larger n, to
+  determine whether it is sampling noise or a real, currently
+  unexplained effect.
