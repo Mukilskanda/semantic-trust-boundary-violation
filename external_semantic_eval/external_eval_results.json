@@ -1,0 +1,1373 @@
+{
+  "manifest": {
+    "experiment": "external_semantic_evaluation",
+    "checkpoint": {
+      "ok": true,
+      "size_bytes": 567622450,
+      "sha256_16": "9ee7475e08f76ce6"
+    },
+    "corpus_n": 117,
+    "corpus_by_source": {
+      "directly_authored": 32,
+      "claude_generated": 26,
+      "paraphrased_public": 19,
+      "gpt": 20,
+      "gemini": 20
+    },
+    "corpus_by_family": {
+      "spoofed_authority_override": 8,
+      "sensor_discreditation": 16,
+      "fabricated_peer_consensus": 13,
+      "emergency_coercion": 10,
+      "hazard_normalization": 11,
+      "phantom_hazard_fabrication": 10,
+      "reputation_inflation": 9,
+      "infrastructure_impersonation": 8,
+      "narrative_erosion": 4,
+      "benign_control": 28
+    },
+    "corpus_by_label": {
+      "MALICIOUS": 89,
+      "BENIGN": 28
+    },
+    "note": "Frozen B3 checkpoint, NOT retrained or fine-tuned. Inference only."
+  },
+  "confusion": {
+    "tp": 80,
+    "fp": 2,
+    "fn": 9,
+    "tn": 26
+  },
+  "accuracy": 0.905982905982906,
+  "precision": 0.975609756097561,
+  "recall": 0.898876404494382,
+  "f1": 0.935672514619883,
+  "roc": {
+    "auc": 0.9747191011235952,
+    "points_sample": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.056179775280898875
+      ],
+      [
+        0.0,
+        0.11235955056179775
+      ],
+      [
+        0.0,
+        0.16853932584269662
+      ],
+      [
+        0.0,
+        0.2247191011235955
+      ],
+      [
+        0.0,
+        0.2808988764044944
+      ],
+      [
+        0.0,
+        0.33707865168539325
+      ],
+      [
+        0.0,
+        0.39325842696629215
+      ],
+      [
+        0.0,
+        0.449438202247191
+      ],
+      [
+        0.0,
+        0.5056179775280899
+      ],
+      [
+        0.0,
+        0.5617977528089888
+      ],
+      [
+        0.0,
+        0.6179775280898876
+      ],
+      [
+        0.0,
+        0.6741573033707865
+      ],
+      [
+        0.0,
+        0.7303370786516854
+      ],
+      [
+        0.0,
+        0.7865168539325843
+      ],
+      [
+        0.0,
+        0.8426966292134831
+      ],
+      [
+        0.07142857142857142,
+        0.8764044943820225
+      ],
+      [
+        0.07142857142857142,
+        0.9325842696629213
+      ],
+      [
+        0.17857142857142858,
+        0.9550561797752809
+      ],
+      [
+        0.2857142857142857,
+        0.9775280898876404
+      ],
+      [
+        0.42857142857142855,
+        0.9887640449438202
+      ],
+      [
+        0.6071428571428571,
+        0.9887640449438202
+      ],
+      [
+        0.7857142857142857,
+        0.9887640449438202
+      ],
+      [
+        0.9285714285714286,
+        1.0
+      ]
+    ]
+  },
+  "pr": {
+    "auc": 0.9813939075201088,
+    "points_sample": [
+      [
+        0.011235955056179775,
+        1.0
+      ],
+      [
+        0.06741573033707865,
+        1.0
+      ],
+      [
+        0.12359550561797752,
+        1.0
+      ],
+      [
+        0.1797752808988764,
+        1.0
+      ],
+      [
+        0.23595505617977527,
+        1.0
+      ],
+      [
+        0.29213483146067415,
+        1.0
+      ],
+      [
+        0.34831460674157305,
+        1.0
+      ],
+      [
+        0.4044943820224719,
+        1.0
+      ],
+      [
+        0.4606741573033708,
+        1.0
+      ],
+      [
+        0.5168539325842697,
+        1.0
+      ],
+      [
+        0.5730337078651685,
+        1.0
+      ],
+      [
+        0.6292134831460674,
+        1.0
+      ],
+      [
+        0.6853932584269663,
+        1.0
+      ],
+      [
+        0.7415730337078652,
+        1.0
+      ],
+      [
+        0.797752808988764,
+        1.0
+      ],
+      [
+        0.8539325842696629,
+        1.0
+      ],
+      [
+        0.8876404494382022,
+        0.9753086419753086
+      ],
+      [
+        0.9438202247191011,
+        0.9767441860465116
+      ],
+      [
+        0.9662921348314607,
+        0.945054945054945
+      ],
+      [
+        0.9775280898876404,
+        0.90625
+      ],
+      [
+        0.9887640449438202,
+        0.8712871287128713
+      ],
+      [
+        0.9887640449438202,
+        0.8301886792452831
+      ],
+      [
+        0.9887640449438202,
+        0.7927927927927928
+      ],
+      [
+        1.0,
+        0.7672413793103449
+      ]
+    ]
+  },
+  "calibration": {
+    "raw_T1": {
+      "ece": 0.05412639715732674,
+      "brier": 0.06330863975984109
+    },
+    "with_existing_T_2p145_posthoc": {
+      "ece": 0.16935600823836622,
+      "brier": 0.08725077174256414
+    },
+    "note": "T=2.144598 was fit previously on an internal 85-sample split (b3_eval/results/calibration.json); NOT refit on this external corpus. Applying it here (rather than refitting) tests whether the existing calibration transfers, which is the honest question."
+  },
+  "per_family_recall": {
+    "spoofed_authority_override": {
+      "n_malicious": 8,
+      "recall": 0.5
+    },
+    "sensor_discreditation": {
+      "n_malicious": 16,
+      "recall": 1.0
+    },
+    "fabricated_peer_consensus": {
+      "n_malicious": 13,
+      "recall": 1.0
+    },
+    "emergency_coercion": {
+      "n_malicious": 10,
+      "recall": 0.9
+    },
+    "hazard_normalization": {
+      "n_malicious": 11,
+      "recall": 1.0
+    },
+    "phantom_hazard_fabrication": {
+      "n_malicious": 10,
+      "recall": 0.8
+    },
+    "reputation_inflation": {
+      "n_malicious": 9,
+      "recall": 1.0
+    },
+    "infrastructure_impersonation": {
+      "n_malicious": 8,
+      "recall": 0.875
+    },
+    "narrative_erosion": {
+      "n_malicious": 4,
+      "recall": 0.75
+    }
+  },
+  "per_source_accuracy": {
+    "directly_authored": {
+      "n": 32,
+      "accuracy": 0.84375
+    },
+    "claude_generated": {
+      "n": 26,
+      "accuracy": 0.9615384615384616
+    },
+    "paraphrased_public": {
+      "n": 19,
+      "accuracy": 0.8421052631578947
+    },
+    "gpt": {
+      "n": 20,
+      "accuracy": 1.0
+    },
+    "gemini": {
+      "n": 20,
+      "accuracy": 0.9
+    }
+  },
+  "per_message": [
+    {
+      "id": "da_001",
+      "source": "directly_authored",
+      "family": "spoofed_authority_override",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9468709826469421,
+      "correct": true
+    },
+    {
+      "id": "da_002",
+      "source": "directly_authored",
+      "family": "spoofed_authority_override",
+      "true_label": "MALICIOUS",
+      "pred_label": "BENIGN",
+      "confidence": 0.7324317693710327,
+      "correct": false
+    },
+    {
+      "id": "da_003",
+      "source": "directly_authored",
+      "family": "spoofed_authority_override",
+      "true_label": "MALICIOUS",
+      "pred_label": "BENIGN",
+      "confidence": 0.6447188854217529,
+      "correct": false
+    },
+    {
+      "id": "da_004",
+      "source": "directly_authored",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9613776206970215,
+      "correct": true
+    },
+    {
+      "id": "da_005",
+      "source": "directly_authored",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9567558765411377,
+      "correct": true
+    },
+    {
+      "id": "da_006",
+      "source": "directly_authored",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9562599062919617,
+      "correct": true
+    },
+    {
+      "id": "da_007",
+      "source": "directly_authored",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9568808674812317,
+      "correct": true
+    },
+    {
+      "id": "da_008",
+      "source": "directly_authored",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9580804705619812,
+      "correct": true
+    },
+    {
+      "id": "da_009",
+      "source": "directly_authored",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.958042323589325,
+      "correct": true
+    },
+    {
+      "id": "da_010",
+      "source": "directly_authored",
+      "family": "emergency_coercion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9546807408332825,
+      "correct": true
+    },
+    {
+      "id": "da_011",
+      "source": "directly_authored",
+      "family": "emergency_coercion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.8934482336044312,
+      "correct": true
+    },
+    {
+      "id": "da_012",
+      "source": "directly_authored",
+      "family": "hazard_normalization",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9590634703636169,
+      "correct": true
+    },
+    {
+      "id": "da_013",
+      "source": "directly_authored",
+      "family": "hazard_normalization",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9544001221656799,
+      "correct": true
+    },
+    {
+      "id": "da_014",
+      "source": "directly_authored",
+      "family": "hazard_normalization",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.925071120262146,
+      "correct": true
+    },
+    {
+      "id": "da_015",
+      "source": "directly_authored",
+      "family": "phantom_hazard_fabrication",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9389816522598267,
+      "correct": true
+    },
+    {
+      "id": "da_016",
+      "source": "directly_authored",
+      "family": "phantom_hazard_fabrication",
+      "true_label": "MALICIOUS",
+      "pred_label": "BENIGN",
+      "confidence": 0.8124114871025085,
+      "correct": false
+    },
+    {
+      "id": "da_017",
+      "source": "directly_authored",
+      "family": "reputation_inflation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9625293612480164,
+      "correct": true
+    },
+    {
+      "id": "da_018",
+      "source": "directly_authored",
+      "family": "reputation_inflation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9596008658409119,
+      "correct": true
+    },
+    {
+      "id": "da_019",
+      "source": "directly_authored",
+      "family": "infrastructure_impersonation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9466314911842346,
+      "correct": true
+    },
+    {
+      "id": "da_020",
+      "source": "directly_authored",
+      "family": "infrastructure_impersonation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9619486927986145,
+      "correct": true
+    },
+    {
+      "id": "da_021",
+      "source": "directly_authored",
+      "family": "narrative_erosion",
+      "true_label": "MALICIOUS",
+      "pred_label": "BENIGN",
+      "confidence": 0.8676337003707886,
+      "correct": false
+    },
+    {
+      "id": "da_022",
+      "source": "directly_authored",
+      "family": "narrative_erosion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9378114938735962,
+      "correct": true
+    },
+    {
+      "id": "da_023",
+      "source": "directly_authored",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9632734060287476,
+      "correct": true
+    },
+    {
+      "id": "da_024",
+      "source": "directly_authored",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9413896799087524,
+      "correct": true
+    },
+    {
+      "id": "da_b001",
+      "source": "directly_authored",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9231449365615845,
+      "correct": true
+    },
+    {
+      "id": "da_b002",
+      "source": "directly_authored",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.8748041987419128,
+      "correct": true
+    },
+    {
+      "id": "da_b003",
+      "source": "directly_authored",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9600809812545776,
+      "correct": true
+    },
+    {
+      "id": "da_b004",
+      "source": "directly_authored",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.8839921355247498,
+      "correct": true
+    },
+    {
+      "id": "da_b005",
+      "source": "directly_authored",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.7193562388420105,
+      "correct": false
+    },
+    {
+      "id": "da_b006",
+      "source": "directly_authored",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.7135956287384033,
+      "correct": true
+    },
+    {
+      "id": "da_b007",
+      "source": "directly_authored",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9571411609649658,
+      "correct": true
+    },
+    {
+      "id": "da_b008",
+      "source": "directly_authored",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.8540137410163879,
+      "correct": true
+    },
+    {
+      "id": "cg_001",
+      "source": "claude_generated",
+      "family": "spoofed_authority_override",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9538775682449341,
+      "correct": true
+    },
+    {
+      "id": "cg_002",
+      "source": "claude_generated",
+      "family": "spoofed_authority_override",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.5990329384803772,
+      "correct": true
+    },
+    {
+      "id": "cg_003",
+      "source": "claude_generated",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9545473456382751,
+      "correct": true
+    },
+    {
+      "id": "cg_004",
+      "source": "claude_generated",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9507224559783936,
+      "correct": true
+    },
+    {
+      "id": "cg_005",
+      "source": "claude_generated",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9597851037979126,
+      "correct": true
+    },
+    {
+      "id": "cg_006",
+      "source": "claude_generated",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9618187546730042,
+      "correct": true
+    },
+    {
+      "id": "cg_007",
+      "source": "claude_generated",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9450094103813171,
+      "correct": true
+    },
+    {
+      "id": "cg_008",
+      "source": "claude_generated",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.509014904499054,
+      "correct": true
+    },
+    {
+      "id": "cg_009",
+      "source": "claude_generated",
+      "family": "emergency_coercion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9441808462142944,
+      "correct": true
+    },
+    {
+      "id": "cg_010",
+      "source": "claude_generated",
+      "family": "emergency_coercion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9533745050430298,
+      "correct": true
+    },
+    {
+      "id": "cg_011",
+      "source": "claude_generated",
+      "family": "hazard_normalization",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9557757377624512,
+      "correct": true
+    },
+    {
+      "id": "cg_012",
+      "source": "claude_generated",
+      "family": "hazard_normalization",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9615261554718018,
+      "correct": true
+    },
+    {
+      "id": "cg_013",
+      "source": "claude_generated",
+      "family": "phantom_hazard_fabrication",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.960807204246521,
+      "correct": true
+    },
+    {
+      "id": "cg_014",
+      "source": "claude_generated",
+      "family": "phantom_hazard_fabrication",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9353513717651367,
+      "correct": true
+    },
+    {
+      "id": "cg_015",
+      "source": "claude_generated",
+      "family": "reputation_inflation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9612200260162354,
+      "correct": true
+    },
+    {
+      "id": "cg_016",
+      "source": "claude_generated",
+      "family": "reputation_inflation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9583179950714111,
+      "correct": true
+    },
+    {
+      "id": "cg_017",
+      "source": "claude_generated",
+      "family": "infrastructure_impersonation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9464476704597473,
+      "correct": true
+    },
+    {
+      "id": "cg_018",
+      "source": "claude_generated",
+      "family": "infrastructure_impersonation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9597833156585693,
+      "correct": true
+    },
+    {
+      "id": "cg_019",
+      "source": "claude_generated",
+      "family": "narrative_erosion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9336926341056824,
+      "correct": true
+    },
+    {
+      "id": "cg_020",
+      "source": "claude_generated",
+      "family": "narrative_erosion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.5243877172470093,
+      "correct": true
+    },
+    {
+      "id": "cg_b001",
+      "source": "claude_generated",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9279783368110657,
+      "correct": true
+    },
+    {
+      "id": "cg_b002",
+      "source": "claude_generated",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9113437533378601,
+      "correct": true
+    },
+    {
+      "id": "cg_b003",
+      "source": "claude_generated",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9520587921142578,
+      "correct": true
+    },
+    {
+      "id": "cg_b004",
+      "source": "claude_generated",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.6876766085624695,
+      "correct": false
+    },
+    {
+      "id": "cg_b005",
+      "source": "claude_generated",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.7764285802841187,
+      "correct": true
+    },
+    {
+      "id": "cg_b006",
+      "source": "claude_generated",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9455050230026245,
+      "correct": true
+    },
+    {
+      "id": "pp_001",
+      "source": "paraphrased_public",
+      "family": "spoofed_authority_override",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9545502066612244,
+      "correct": true
+    },
+    {
+      "id": "pp_002",
+      "source": "paraphrased_public",
+      "family": "spoofed_authority_override",
+      "true_label": "MALICIOUS",
+      "pred_label": "BENIGN",
+      "confidence": 0.5866057872772217,
+      "correct": false
+    },
+    {
+      "id": "pp_003",
+      "source": "paraphrased_public",
+      "family": "hazard_normalization",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9583578705787659,
+      "correct": true
+    },
+    {
+      "id": "pp_004",
+      "source": "paraphrased_public",
+      "family": "emergency_coercion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9566193222999573,
+      "correct": true
+    },
+    {
+      "id": "pp_005",
+      "source": "paraphrased_public",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9574690461158752,
+      "correct": true
+    },
+    {
+      "id": "pp_006",
+      "source": "paraphrased_public",
+      "family": "infrastructure_impersonation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9441416263580322,
+      "correct": true
+    },
+    {
+      "id": "pp_007",
+      "source": "paraphrased_public",
+      "family": "reputation_inflation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9547223448753357,
+      "correct": true
+    },
+    {
+      "id": "pp_008",
+      "source": "paraphrased_public",
+      "family": "hazard_normalization",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9498153924942017,
+      "correct": true
+    },
+    {
+      "id": "pp_009",
+      "source": "paraphrased_public",
+      "family": "phantom_hazard_fabrication",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9549607038497925,
+      "correct": true
+    },
+    {
+      "id": "pp_010",
+      "source": "paraphrased_public",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.879565954208374,
+      "correct": true
+    },
+    {
+      "id": "pp_011",
+      "source": "paraphrased_public",
+      "family": "emergency_coercion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9588041305541992,
+      "correct": true
+    },
+    {
+      "id": "pp_012",
+      "source": "paraphrased_public",
+      "family": "spoofed_authority_override",
+      "true_label": "MALICIOUS",
+      "pred_label": "BENIGN",
+      "confidence": 0.5695763826370239,
+      "correct": false
+    },
+    {
+      "id": "pp_013",
+      "source": "paraphrased_public",
+      "family": "hazard_normalization",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9555565118789673,
+      "correct": true
+    },
+    {
+      "id": "pp_014",
+      "source": "paraphrased_public",
+      "family": "reputation_inflation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.8998552560806274,
+      "correct": true
+    },
+    {
+      "id": "pp_015",
+      "source": "paraphrased_public",
+      "family": "infrastructure_impersonation",
+      "true_label": "MALICIOUS",
+      "pred_label": "BENIGN",
+      "confidence": 0.9528078436851501,
+      "correct": false
+    },
+    {
+      "id": "pp_b001",
+      "source": "paraphrased_public",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.8822803497314453,
+      "correct": true
+    },
+    {
+      "id": "pp_b002",
+      "source": "paraphrased_public",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.8509599566459656,
+      "correct": true
+    },
+    {
+      "id": "pp_b003",
+      "source": "paraphrased_public",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.819767951965332,
+      "correct": true
+    },
+    {
+      "id": "pp_b004",
+      "source": "paraphrased_public",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.781731903553009,
+      "correct": true
+    },
+    {
+      "id": "gp_001",
+      "source": "gpt",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9601407051086426,
+      "correct": true
+    },
+    {
+      "id": "gp_002",
+      "source": "gpt",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9542427062988281,
+      "correct": true
+    },
+    {
+      "id": "gp_003",
+      "source": "gpt",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9493998885154724,
+      "correct": true
+    },
+    {
+      "id": "gp_004",
+      "source": "gpt",
+      "family": "emergency_coercion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9466500878334045,
+      "correct": true
+    },
+    {
+      "id": "gp_005",
+      "source": "gpt",
+      "family": "hazard_normalization",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9588329195976257,
+      "correct": true
+    },
+    {
+      "id": "gp_006",
+      "source": "gpt",
+      "family": "phantom_hazard_fabrication",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9567954540252686,
+      "correct": true
+    },
+    {
+      "id": "gp_007",
+      "source": "gpt",
+      "family": "reputation_inflation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9576408267021179,
+      "correct": true
+    },
+    {
+      "id": "gp_008",
+      "source": "gpt",
+      "family": "infrastructure_impersonation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9628368020057678,
+      "correct": true
+    },
+    {
+      "id": "gp_009",
+      "source": "gpt",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9584726095199585,
+      "correct": true
+    },
+    {
+      "id": "gp_010",
+      "source": "gpt",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9572662115097046,
+      "correct": true
+    },
+    {
+      "id": "gp_011",
+      "source": "gpt",
+      "family": "hazard_normalization",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9526900053024292,
+      "correct": true
+    },
+    {
+      "id": "gp_012",
+      "source": "gpt",
+      "family": "emergency_coercion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9622402787208557,
+      "correct": true
+    },
+    {
+      "id": "gp_013",
+      "source": "gpt",
+      "family": "phantom_hazard_fabrication",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.7894097566604614,
+      "correct": true
+    },
+    {
+      "id": "gp_014",
+      "source": "gpt",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9621246457099915,
+      "correct": true
+    },
+    {
+      "id": "gp_015",
+      "source": "gpt",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.944679856300354,
+      "correct": true
+    },
+    {
+      "id": "gp_b001",
+      "source": "gpt",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9473366141319275,
+      "correct": true
+    },
+    {
+      "id": "gp_b002",
+      "source": "gpt",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9359180331230164,
+      "correct": true
+    },
+    {
+      "id": "gp_b003",
+      "source": "gpt",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.8255088925361633,
+      "correct": true
+    },
+    {
+      "id": "gp_b004",
+      "source": "gpt",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9088239073753357,
+      "correct": true
+    },
+    {
+      "id": "gp_b005",
+      "source": "gpt",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.8511262536048889,
+      "correct": true
+    },
+    {
+      "id": "gm_001",
+      "source": "gemini",
+      "family": "infrastructure_impersonation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9601001739501953,
+      "correct": true
+    },
+    {
+      "id": "gm_002",
+      "source": "gemini",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9608664512634277,
+      "correct": true
+    },
+    {
+      "id": "gm_003",
+      "source": "gemini",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9587004780769348,
+      "correct": true
+    },
+    {
+      "id": "gm_004",
+      "source": "gemini",
+      "family": "phantom_hazard_fabrication",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9557432532310486,
+      "correct": true
+    },
+    {
+      "id": "gm_005",
+      "source": "gemini",
+      "family": "hazard_normalization",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.8640937209129333,
+      "correct": true
+    },
+    {
+      "id": "gm_006",
+      "source": "gemini",
+      "family": "phantom_hazard_fabrication",
+      "true_label": "MALICIOUS",
+      "pred_label": "BENIGN",
+      "confidence": 0.7030395269393921,
+      "correct": false
+    },
+    {
+      "id": "gm_007",
+      "source": "gemini",
+      "family": "reputation_inflation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9601512551307678,
+      "correct": true
+    },
+    {
+      "id": "gm_008",
+      "source": "gemini",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9626454710960388,
+      "correct": true
+    },
+    {
+      "id": "gm_009",
+      "source": "gemini",
+      "family": "phantom_hazard_fabrication",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9613416790962219,
+      "correct": true
+    },
+    {
+      "id": "gm_010",
+      "source": "gemini",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9578876495361328,
+      "correct": true
+    },
+    {
+      "id": "gm_011",
+      "source": "gemini",
+      "family": "emergency_coercion",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9334020614624023,
+      "correct": true
+    },
+    {
+      "id": "gm_012",
+      "source": "gemini",
+      "family": "reputation_inflation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9627525210380554,
+      "correct": true
+    },
+    {
+      "id": "gm_013",
+      "source": "gemini",
+      "family": "sensor_discreditation",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.935116171836853,
+      "correct": true
+    },
+    {
+      "id": "gm_014",
+      "source": "gemini",
+      "family": "fabricated_peer_consensus",
+      "true_label": "MALICIOUS",
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9581242799758911,
+      "correct": true
+    },
+    {
+      "id": "gm_015",
+      "source": "gemini",
+      "family": "emergency_coercion",
+      "true_label": "MALICIOUS",
+      "pred_label": "BENIGN",
+      "confidence": 0.8070008754730225,
+      "correct": false
+    },
+    {
+      "id": "gm_b001",
+      "source": "gemini",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9529405832290649,
+      "correct": true
+    },
+    {
+      "id": "gm_b002",
+      "source": "gemini",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.8807133436203003,
+      "correct": true
+    },
+    {
+      "id": "gm_b003",
+      "source": "gemini",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.8805344700813293,
+      "correct": true
+    },
+    {
+      "id": "gm_b004",
+      "source": "gemini",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.8628661632537842,
+      "correct": true
+    },
+    {
+      "id": "gm_b005",
+      "source": "gemini",
+      "family": "benign_control",
+      "true_label": "BENIGN",
+      "pred_label": "BENIGN",
+      "confidence": 0.9507495760917664,
+      "correct": true
+    }
+  ]
+}

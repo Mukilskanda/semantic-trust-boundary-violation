@@ -43,7 +43,7 @@ Existing Vehicle-to-Everything (V2X) trust architectures rely on Public Key Infr
 
 To formalize this vulnerability, we define Semantic Trust Boundary Violations (STBVs), a threat model in which communication authenticity does not imply semantic reliability. We propose a Layered Semantic-Aware V2X Trust Architecture that introduces decision trust as an explicit security objective by incorporating the B3 Semantic Trust Gate, a semantic verification layer positioned between cooperative perception and downstream AI-enabled decision modules, fused with communication and behavioral trust evidence through a Dempster-Shafer/Yager Trust Decision Engine.
 
-We evaluate the proposed architecture on STBV-Bench, a reproducible benchmark built from real VeReMi Extension vehicular trajectories combined with a seeded semantic transformation engine spanning twenty attack families ($n=10{,}000$). The semantic verification layer (B3) alone achieves 100\% precision and 55.7\% recall (F1$=0.715$) against attacks that carry no kinematic signature, and the complete fused architecture achieves F1$=0.718$, with evidence fusion producing a statistically significant (McNemar $p=3.06\times10^{-29}$) effect that routes 92.5\% of its decision changes through an intermediate Caution state rather than forcing binary accept/reject calls. A companion evaluation on genuine VeReMi kinematic attacks (constant-position falsification, data replay, and denial-of-service; $n=13{,}511$ real messages) shows the behavioral layer independently achieves 60--91\% recall (by attack type) with zero measurable contribution from the semantic layer, confirming that behavioral and semantic verification address complementary, non-overlapping threat classes. A contextual multi-vehicle evaluation shows this complementary behavior is robust to threshold miscalibration (aggregate metrics unchanged across a wide sweep of decision thresholds) but that aggregate precision degrades under realistic ambient traffic for a specific, identified reason. End-to-end per-message decision latency averages 110~ms ($p_{95}=189$~ms, $p_{99}=254$~ms). We report these results together with their limitations, including a bounded detection gap on six semantic attack families phrased as subtle narrative framing and an unresolved data-generation gap that currently prevents Cooperative Perception from contributing measurable evidence to any benchmark evaluated in this work, despite its detection logic being independently verified correct. These findings demonstrate that communication authenticity alone is insufficient for trustworthy autonomous decision making and establish semantic trust verification as a necessary, evidence-grounded complement to existing V2X trust architectures.
+We evaluate the proposed architecture on STBV-Bench, a reproducible benchmark built from real VeReMi Extension vehicular trajectories combined with a seeded semantic transformation engine spanning twenty attack families ($n=10{,}000$). The semantic verification layer (B3) alone achieves 100\% precision and 55.7\% recall (F1$=0.715$) against attacks that carry no kinematic signature, and the complete fused architecture achieves F1$=0.718$, with evidence fusion producing a statistically significant (McNemar $p=3.06\times10^{-29}$) effect that routes 92.5\% of its decision changes through an intermediate Caution state rather than forcing binary accept/reject calls. A companion evaluation on genuine VeReMi kinematic attacks (constant-position falsification, data replay, and denial-of-service; $n=13{,}511$ real messages) shows the behavioral layer independently achieves 60--91\% recall (by attack type) with zero measurable contribution from the semantic layer, confirming that behavioral and semantic verification address complementary, non-overlapping threat classes. A contextual multi-vehicle evaluation shows this complementary behavior is robust to threshold miscalibration (aggregate metrics unchanged across a wide sweep of decision thresholds) but that aggregate precision degrades under realistic ambient traffic for a specific, identified reason. End-to-end per-message decision latency averages 110~ms ($p_{95}=189$~ms, $p_{99}=254$~ms). To address the concern that STBV-Bench's headline numbers reflect only this project's own generator, we additionally evaluate the frozen, unmodified B3 checkpoint against an independent external corpus ($n=117$) combining directly-authored, LLM-generated (three separate providers), and public-prompt-injection-derived attacks, verified to share zero template overlap with STBV-Bench: B3 achieves 89.9\% recall and 97.6\% precision (ROC AUC 0.975), and its single worst-performing family on this external corpus is the same authority-override phrasing pattern already identified as a weak point on STBV-Bench, corroborating rather than contradicting that internally-measured limitation. We report these results together with their limitations, including a bounded detection gap on six semantic attack families phrased as subtle narrative framing and an unresolved data-generation gap that currently prevents Cooperative Perception from contributing measurable evidence to any benchmark evaluated in this work, despite its detection logic being independently verified correct. These findings demonstrate that communication authenticity alone is insufficient for trustworthy autonomous decision making and establish semantic trust verification as a necessary, evidence-grounded complement to existing V2X trust architectures.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -424,6 +424,44 @@ STBV-Bench v1's per-message log records only total end-to-end latency, not a per
 \label{fig_latency_per_stage}
 \end{figure}
 
+\subsection{External Semantic Evaluation (Independent Corpus, Frozen Model)}
+\label{sec:external_eval}
+Every result above is measured on STBV-Bench, built from this project's own generator. To test whether B3 detects the underlying threat concepts rather than this generator's specific phrasing, we evaluate the same frozen, unmodified checkpoint (no retraining, no fine-tuning) against an independently constructed external corpus ($n=117$: 89 malicious, 28 benign) spanning five disjoint authorial sources: text directly authored by an LLM assistant one item at a time, a separate batch-generated set from the same model, attacks adapted from publicly documented (non-V2X) prompt-injection archetypes, and attacks generated independently by two third-party LLM providers from a shared fixed prompt. A public-dataset search (Appendix~\ref{app:external}) found no existing published corpus of labeled, V2X-contextualized semantic attacks -- ETSI CAM/DENM messages carry no free-text field under the standard itself, so this is a field-level absence, not a search failure. Every external-corpus entry was verified, programmatically, to share zero literal-substring overlap with STBV-Bench's own template strings.
+
+\begin{table}[t]
+\centering
+\caption{External Semantic Evaluation, Frozen B3 ($n=117$)}
+\label{tab:external_eval}
+\begin{tabular}{@{}lc@{}}
+\toprule
+Metric & Value \\
+\midrule
+Accuracy & 0.906 \\
+Precision & 0.976 \\
+Recall & 0.899 \\
+F1 & 0.936 \\
+ROC AUC & 0.975 \\
+PR AUC & 0.981 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{external_semantic_eval/figures/ext_fig_roc.pdf}
+\caption{ROC curve, frozen B3 on the external semantic evaluation corpus ($n=117$).}
+\label{fig_ext_roc}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{external_semantic_eval/figures/ext_fig_per_family_recall.pdf}
+\caption{Per-family recall, frozen B3, external corpus. The lowest-recall family (authority-override phrasing, 0.500) matches the weakest pattern already identified on STBV-Bench (Section~\ref{sec:limitations}).}
+\label{fig_ext_per_family}
+\end{figure}
+
+Precision (0.976) and ROC AUC (0.975, Fig.~\ref{fig_ext_roc}) are both strong out-of-distribution results and weigh against the concern that B3 only pattern-matches STBV-Bench's specific sentences. At the same time, the external corpus's single worst-performing family -- spoofed-authority-override phrasing, recall 0.500 -- is conceptually the same weak point already documented on STBV-Bench (six narrative-indirection families at $\le$9\% recall, Section~\ref{sec:limitations}), reproducing independently in text this project's generator never produced. This external evaluation therefore corroborates, rather than contradicts, STBV-Bench's own documented weak-family finding: it rules out the possibility that the weakness is an artifact of STBV-Bench's own phrasing conventions, while also ruling out the opposite overclaim that external validation is uniformly worse (per-family breakdown, Fig.~\ref{fig_ext_per_family}). Applying B3's existing post-hoc calibration temperature ($T{=}2.145$, fit internally on an unrelated 85-sample split) to this external corpus, without refitting, \emph{increases} ECE from 0.054 to 0.169 -- evidence that a temperature fit on one narrow split does not transfer across distributions, not evidence against calibration as a technique. Full methodology, per-source and per-family breakdowns, and the calibration-transfer figure are given in Appendix~\ref{app:external}.
+
 %======================================================================
 \section{Discussion}
 \label{sec:discussion}
@@ -446,6 +484,8 @@ STBV-Bench v1's per-message log records only total end-to-end latency, not a per
 
 \textbf{Failure modes.} Silent under-detection on six narrative-indirection attack families is a predictable target for an adversary aware of this architecture's weak spot. Over-defense on two perturbation families is, in principle, exploitable as a false-alarm-inducing denial-of-service vector against legitimate traffic, though this was not tested as an explicit attack here (Section~\ref{sec:limitations}).
 
+\textbf{Why external validation corroborates rather than dismisses the weak-family finding.} The external evaluation (Section~\ref{sec:external_eval}) rules out the most convenient explanation for STBV-Bench's documented narrative-indirection weakness -- that it is an artifact of this project's own phrasing conventions -- by reproducing a conceptually equivalent weak point (authority-override framing, recall 0.500) in independently-written text. A less careful reading of a strong external precision/AUC result could have been used to wave the internal limitation away; reporting the per-family breakdown instead of only the aggregate closes that door.
+
 \textbf{Research implications.} The v1-vs-v2 finding suggests any V2X semantic-detection benchmark built from independent, isolated messages should be treated cautiously as a \emph{precision} estimate specifically, even where its recall claims are sound -- a caveat with implications for benchmark design in this subfield beyond this paper. The demonstrated non-overlap between B3 and MBD is direct, quantitative evidence for a layered-defense design philosophy in V2X trust architectures generally, over investing further effort into any single detector.
 
 %======================================================================
@@ -458,7 +498,9 @@ STBV-Bench v1's per-message log records only total end-to-end latency, not a per
 
 \textbf{Robustness weaknesses.} Instruction-hiding and role-confusion perturbations produce a 100\% over-defense rate; paraphrase produces a 33\% evasion rate (Section~\ref{sec:results}). These must remain visible in any summary of this work rather than being averaged into an aggregate score.
 
-\textbf{Internally-generated benchmark, no external semantic corpus.} STBV-Bench's semantic-attack text is generated by this paper's own seeded engine, not drawn from an independently-authored, externally-published semantic V2X attack corpus -- none was identified in our literature search (Section~\ref{sec:related}), which we report as a field-level gap, not only a limitation of this paper.
+\textbf{Internally-generated benchmark, no externally-published semantic corpus.} STBV-Bench's semantic-attack text is generated by this paper's own seeded engine, not drawn from an independently-authored, externally-published semantic V2X attack corpus -- none was identified in our literature search (Section~\ref{sec:related}), which we report as a field-level gap, not only a limitation of this paper. We partially address the narrower concern of generator-specific overfitting with the external evaluation (Section~\ref{sec:external_eval}, Appendix~\ref{app:external}), but that corpus is itself LLM-authored for this evaluation, not drawn from a pre-existing, independently-published ground truth, and is far smaller ($n=117$) than STBV-Bench v1 ($n=10{,}000$) -- it is a directional cross-check, not a resolution of this limitation.
+
+\textbf{B3's original training-data provenance cannot be independently reconstructed from this repository.} An exhaustive search of the working tree and the complete git history (all commits, all refs) found no training script and no raw training/validation/test corpus for B3 anywhere in this repository; only the finished checkpoint, tokenizer, and a handful of downstream analysis scripts referencing a since-removed split were carried over from an antecedent project. Training hyperparameters (learning rate, epochs, seed 42, etc.) are recovered directly from the checkpoint's own serialized \texttt{training\_args.bin} and are reliable; training-set size, validation-set size, and the data-generation seed are not recoverable. Taxonomy-level comparison rules out direct template overlap between B3's training families and STBV-Bench's independently-named families (Appendix~\ref{app:params}), and the same comparison identifies a confirmed, but already-deprecated and non-headline, leakage risk in an earlier 120-scenario evaluation corpus whose own docstring states its text was deliberately phrased to match B3's training distribution. Stylistic convergence at the level of generic V2X message-formatting conventions cannot be excluded without the original training corpus, which no longer exists in a recoverable form.
 
 \textbf{No parameter sensitivity beyond the threshold sweep performed.} The sweep in Section~\ref{sec:results} varies one parameter at a time; CP's consistency weights were not swept, since CP is inert on this benchmark regardless (above); no joint/interaction sweep across multiple parameters was performed.
 
@@ -492,6 +534,9 @@ The authors thank the contributors to the VeReMi Extension dataset for making re
 %======================================================================
 \subsection{Semantic Classifier}
 DeBERTa-v2 sequence classifier: 6 hidden layers, hidden size 768, 12 attention heads, intermediate size 3072, vocabulary 128,100, max position embeddings 512; 141,896,450 parameters; \texttt{DebertaV2Tokenizer} (SentencePiece), max inference sequence length 256 tokens; two output labels (\texttt{BENIGN}, \texttt{MALICIOUS\_SEMANTIC\_MANIPULATION}). Training hyperparameters, recovered directly from the checkpoint's own \texttt{training\_args.bin} (not re-derived): learning rate $2\times10^{-5}$, 15 epochs, batch size 16, AdamW optimizer, linear schedule with 0.1 warmup ratio, weight decay 0.01, FP16, seed 42. Checkpoint SHA-256: \texttt{9ee7475e...} (full hash in project documentation). Inference hardware: NVIDIA RTX 4050 Laptop GPU, CUDA 13.1, PyTorch 2.7.1+cu118, Transformers 5.12.1. The original training data's raw files are not present in the evaluation environment; hyperparameters are read from the artifact, not reproduced by re-training.
+
+\subsection{Training Data Provenance}
+A dedicated forensic search (working tree, full git history across all refs, all LFS objects) found no training script and no raw training/validation/test corpus for B3 anywhere in this repository at any commit. \texttt{training\_args.bin}'s own embedded \texttt{output\_dir}/\texttt{logging\_dir} paths (\texttt{/home/harshitvaish123/v2x-pi-project/...}) and a downstream analysis script's docstring (\texttt{verify\_cases\_1\_4.py}) jointly indicate the training run occurred in an antecedent project on a different machine, from which only the finished checkpoint, tokenizer, and a few downstream analysis scripts (referencing a since-absent split file) were carried into this repository. Hyperparameters above are read directly from that surviving checkpoint metadata and are reliable; dataset size, split composition, and the data-generation seed are not recoverable. A separate, structurally incompatible file (\texttt{data/v1/train.json}, structured numeric CAM/B2 features $\to$ 3-class decision, not text $\to$ binary label) was investigated and ruled out as a candidate. Taxonomy-level comparison confirms zero family-name overlap between B3's training taxonomy and STBV-Bench's independently-named families (Section~\ref{sec:limitations}); a separate, already-deprecated 120-scenario evaluation corpus is confirmed, by its own docstring, to have been deliberately phrased to match B3's training distribution, and is not used for any headline result in this paper.
 
 \subsection{Fusion Constants}
 $\tau_H=0.70$ (Accept threshold), $\tau_L=0.40$ (Reject threshold), B3 risk bands $0.85$/$0.60$ (high/medium confidence), maximum source confidence clamp $0.98$ (prevents any single Dempster-Shafer source from acquiring absolute veto power), CP consistency weights $0.35$/$0.25$/$0.20$/$0.20$ (spatial/speed/heading/diversity, the one place in the codebase matching a literal fixed weighted sum). All are fixed design constants, not fitted from data; the single fitted parameter in the entire pipeline is B3's post-hoc calibration temperature, $T=2.145$, fit by minimizing negative log-likelihood on $n=85$ labeled samples.
@@ -542,6 +587,71 @@ A second real example (a \texttt{hazard\_suppression} payload on a different ben
 %======================================================================
 An exhaustive search of every fixture in the evaluation repository for a populated \texttt{event} field -- the input CP's consistency gate requires -- found exactly one qualifying fixture set (3 of 20 messages in a multi-vehicle collusion scenario; no other scenario family and no STBV-Bench-generated content carries this field). Replaying this fixture with CP enabled vs.\ disabled: on the three event-labeled messages, \texttt{cp\_confidence} moves from a flatlined $1.0$ (CP's neutral/vacuous branch, active whenever no event label is present) to genuinely computed values of $0.800$, $0.835$, and $0.879$, and the fused trust score shows a real, non-zero delta between the CP-on and CP-off arms at the same step -- direct, reproducible evidence that CP's consistency-scoring logic is correct and activates precisely when, and only when, event data is present. Decision-level flips on this fixture are nonetheless zero, because MBD's own collusion score already drives the same Caution outcome for these messages independently -- a fixture-specific redundancy with MBD, not evidence CP failed to activate. No benchmark evaluated in the main text of this paper populates the event field CP requires; this is the data-generation gap stated in Section~\ref{sec:limitations}, not a defect in CP's algorithm.
 
+%======================================================================
+\section{External Semantic Evaluation}
+\label{app:external}
+%======================================================================
+\subsection{Public Dataset Search}
+A web search (not a memory recall) found no publicly available dataset of labeled, V2X-contextualized semantic/social-engineering attacks. \cite{r_v2aix} is a real, public, large-scale ($>$285,000 message) corpus of genuine ETSI ITS V2X traffic, but it is entirely structurally-encoded, benign traffic -- the CAM/DENM/CPM standard itself carries no free-text payload field for a semantic attack to occupy, so no public corpus of \emph{real} semantic V2X attacks can exist under the current standard; this is a field-level fact, not a search failure. Generic (non-V2X) public prompt-injection/jailbreak datasets do exist and are actively maintained \cite{r_prompt_inj_bench}; their documented archetypes (authority-override framing, fabricated social proof, urgency coercion) are used, adapted into V2X context, as one of this corpus's five sources.
+
+\subsection{Corpus Construction}
+Five disjoint sources (Table~\ref{tab:external_sources}), $n=117$ total (89 malicious, 28 benign), across 10 independently-named attack families (\texttt{spoofed\_authority\_override}, \texttt{sensor\_discreditation}, \texttt{fabricated\_peer\_consensus}, \texttt{emergency\_coercion}, \texttt{hazard\_normalization}, \texttt{phantom\_hazard\_fabrication}, \texttt{reputation\_inflation}, \texttt{infrastructure\_impersonation}, \texttt{narrative\_erosion}, \texttt{benign\_control}), verified to share zero family-name string overlap with both STBV-Bench's 20 families and B3's training taxonomy:
+
+\begin{table}[t]
+\centering
+\caption{External Corpus Composition by Source}
+\label{tab:external_sources}
+\begin{tabular}{@{}lc@{}}
+\toprule
+Source & $n$ \\
+\midrule
+Directly authored (one item at a time) & 32 \\
+Batch-generated, same model & 26 \\
+Adapted from public prompt-injection archetypes & 19 \\
+Independent third-party LLM provider A & 20 \\
+Independent third-party LLM provider B & 20 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Both third-party providers were given an identical fixed prompt requesting 15 malicious and 5 benign V2X messages spanning a specified concept list, in their own words, with no phrasing copied from any existing dataset. Every entry was programmatically checked for literal-substring overlap, in either direction, against every quoted string $\ge$25 characters in \texttt{stbv\_bench/transformations.py} -- STBV-Bench's actual template source. Result: zero overlap hits, zero internal exact-duplicate texts, across all 117 entries.
+
+\subsection{Evaluation Methodology and Full Results}
+The identical production checkpoint used throughout this paper (same SHA-256) was loaded via its production inference class; the evaluation script contains no training, fine-tuning, or weight-write code path. Table~\ref{tab:external_eval} (main text) reports the headline metrics. Full confusion counts: TP=80, FP=2, FN=9, TN=26. Per-family recall is given in Table~\ref{tab:external_family}; the calibration-transfer test is shown in Fig.~\ref{fig_ext_calibration}.
+
+\begin{table}[t]
+\centering
+\caption{Per-Family Recall, External Corpus}
+\label{tab:external_family}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Family & $n$ (malicious) & Recall \\
+\midrule
+sensor\_discreditation & 16 & 1.000 \\
+fabricated\_peer\_consensus & 13 & 1.000 \\
+hazard\_normalization & 11 & 1.000 \\
+reputation\_inflation & 9 & 1.000 \\
+emergency\_coercion & 10 & 0.900 \\
+infrastructure\_impersonation & 8 & 0.875 \\
+phantom\_hazard\_fabrication & 10 & 0.800 \\
+narrative\_erosion & 4 & 0.750 \\
+spoofed\_authority\_override & 8 & 0.500 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{external_semantic_eval/figures/ext_fig_calibration.pdf}
+\caption{Calibration transfer test: applying B3's existing post-hoc temperature ($T{=}2.145$, fit on an unrelated internal split) to the external corpus, without refitting, increases ECE rather than reducing it.}
+\label{fig_ext_calibration}
+\end{figure}
+
+Per-source accuracy (exploratory, not statistically powered at this sample size per source): the two third-party-provider subsets scored 1.000 and 0.900, at the high end of the range (0.842--0.962 across the other three sources) -- evidence against the concern that the predominantly LLM-authored-by-one-model corpus was unrepresentatively easy.
+
+\subsection{What This Evaluation Does Not Claim}
+It does not claim statistical power comparable to STBV-Bench v1's $n=10{,}000$; it does not claim the two third-party subsets are representative of those providers' typical output beyond this single 20-sample draw each; and it does not resolve the field-level absence of an externally-published, independently-authored ground-truth corpus of real-world V2X semantic attacks (Section~\ref{sec:limitations}) -- this corpus is itself authored for this evaluation, not drawn from a pre-existing published source.
+
 \begin{thebibliography}{00}
 \bibitem{b1} ``V2X Cooperative Perception for Autonomous Driving: Recent Advances and Challenges,'' 2023 Survey.
 \bibitem{b2} ``Towards Vehicle-to-Everything Autonomous Driving: A Survey on Collaborative Perception,'' 2023.
@@ -571,6 +681,8 @@ An exhaustive search of every fixture in the evaluation repository for a populat
 \bibitem{r_ds_improved1} ``Research on improved evidence theory based on multi-sensor information fusion,'' Scientific Reports, 2021.
 \bibitem{r_ds_improved2} ``Paradox Elimination in Dempster-Shafer Combination Rule with Novel Entropy Function,'' PMC, 2019.
 \bibitem{r_decision_fusion} ``A Review of Multi-Sensor Fusion in Autonomous Driving,'' Sensors (MDPI), 2025.
+\bibitem{r_v2aix} ``V2AIX: A Multi-Modal Real-World Dataset of ETSI ITS V2X Messages in Public Road Traffic,'' arXiv:2403.10221, 2024.
+\bibitem{r_prompt_inj_bench} OWASP GenAI LLM01-aligned and community prompt-injection/jailbreak benchmarks (e.g., \texttt{qualifire/prompt-injections-benchmark}, \texttt{PointGuardAI/Prompt-Injection-OWASP-Benchmark-V2}), Hugging Face Datasets, accessed 2026.
 \end{thebibliography}
 
 \end{document}
