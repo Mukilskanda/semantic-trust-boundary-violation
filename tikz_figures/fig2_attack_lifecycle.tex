@@ -1,0 +1,143 @@
+% ============================================================
+% FIG 2 — STBV Attack Lifecycle
+% Shows how an attacker bypasses existing layers and is caught at B3.
+% ============================================================
+% PREAMBLE:
+%   \usepackage{tikz}
+%   \usepackage{xcolor}
+%   \usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc}
+%
+% PLACEMENT: single column
+%   \begin{figure}[t]
+%     \centering
+%     \input{fig2_attack_lifecycle.tex}
+%     \caption{STBV attack lifecycle. An adversary with valid credentials
+%     passes all communication and behavioral checks. The Semantic Trust
+%     Boundary is the only point at which semantic manipulation is
+%     detectable; B3 intercepts the attack before it reaches the planner.}
+%     \label{fig:attack_lifecycle}
+%   \end{figure}
+% ============================================================
+
+\begin{tikzpicture}[
+  arrow/.style={-{Stealth[length=5pt]}, thick},
+  passblock/.style={
+    rectangle, rounded corners=2pt,
+    minimum width=3.8cm, minimum height=0.50cm,
+    font=\scriptsize, align=center,
+    draw=green!60!black, fill=green!12, thick
+  },
+  stopblock/.style={
+    rectangle, rounded corners=2pt,
+    minimum width=3.8cm, minimum height=0.50cm,
+    font=\scriptsize\bfseries, align=center,
+    draw=red!70!black, fill=red!15, thick
+  },
+  ticklabel/.style={
+    % [LAYOUT] Added text width guard to prevent right-side overflow
+    font=\scriptsize\bfseries, text=green!50!black,
+    text width=1.8cm, align=left
+  },
+  crosslabel/.style={
+    % [LAYOUT] Added text width guard to prevent right-side overflow
+    font=\scriptsize\bfseries, text=red!70!black,
+    text width=1.8cm, align=left
+  },
+  node distance=0.30cm
+]
+
+\definecolor{attackcolor}{RGB}{140,20,20}
+\definecolor{stbvred}{RGB}{190,30,30}
+\definecolor{passgreen}{RGB}{40,140,60}
+
+% --- Attacker node ---
+\node[
+  rectangle, rounded corners=3pt,
+  draw=attackcolor, fill=attackcolor!10, thick,
+  minimum width=3.8cm, minimum height=0.52cm,
+  font=\scriptsize\bfseries, align=center, text=attackcolor
+] (atk) {Adversary with Valid Credentials};
+
+% --- Pass layers ---
+\node[passblock, below=0.28cm of atk]  (pki) {PKI Authentication};
+\node[passblock, below=0.28cm of pki]  (b1)  {B1 --- Protocol Validation};
+\node[passblock, below=0.28cm of b1]   (mbd) {MBD --- Behavioral Check};
+\node[passblock, below=0.28cm of mbd]  (b2)  {B2 --- Contextual Trust};
+\node[passblock, below=0.28cm of b2]   (cp)  {CP --- Cooperative Perception};
+
+% --- STB line ---
+\node[
+  below=0.32cm of cp,
+  font=\bfseries\scriptsize, text=stbvred,
+  minimum width=3.8cm, align=center
+] (stb) {--- SEMANTIC TRUST BOUNDARY ---};
+
+% --- B3 stop ---
+\node[stopblock, below=0.28cm of stb] (b3)
+  {B3 --- Semantic Trust Gate};
+
+% --- Reject ---
+\node[
+  rectangle, rounded corners=2pt,
+  below=0.28cm of b3,
+  minimum width=3.8cm, minimum height=0.50cm,
+  font=\scriptsize\bfseries, align=center,
+  draw=red!60!black, fill=red!25, thick
+] (rej) {REJECT --- Attack Neutralised};
+
+% --- Planner (greyed out, attack never reaches) ---
+\node[
+  rectangle, rounded corners=2pt,
+  below=0.52cm of rej,
+  minimum width=3.8cm, minimum height=0.50cm,
+  font=\scriptsize, align=center,
+  draw=gray!40, fill=gray!8, thick, text=gray!60
+] (planner) {Planner / Vehicle Controller};
+
+% ============================================================
+% ARROWS
+% ============================================================
+\draw[arrow, color=attackcolor]  (atk) -- (pki);
+\draw[arrow, color=passgreen]    (pki) -- (b1);
+\draw[arrow, color=passgreen]    (b1)  -- (mbd);
+\draw[arrow, color=passgreen]    (mbd) -- (b2);
+\draw[arrow, color=passgreen]    (b2)  -- (cp);
+\draw[arrow, color=stbvred]      (cp)  -- (stb);
+\draw[arrow, color=stbvred]      (stb) -- (b3);
+\draw[arrow, color=red!70!black] (b3)  -- (rej);
+% Blocked arrow to planner
+\draw[arrow, dashed, gray!40]    (rej) -- (planner);
+
+% ============================================================
+% RIGHT-SIDE TICK / CROSS ANNOTATIONS
+% ============================================================
+\node[ticklabel, right=0.25cm of pki]  {\checkmark\ passes};
+\node[ticklabel, right=0.25cm of b1]   {\checkmark\ passes};
+\node[ticklabel, right=0.25cm of mbd]  {\checkmark\ passes};
+\node[ticklabel, right=0.25cm of b2]   {\checkmark\ passes};
+\node[ticklabel, right=0.25cm of cp]   {\checkmark\ passes};
+\node[crosslabel, right=0.25cm of b3]  {\texttimes\ detected};
+
+% Blocked annotation
+\node[font=\scriptsize\itshape, text=gray!60, right=0.25cm of planner]
+  {never reached};
+
+% ============================================================
+% LEFT-SIDE — what each layer checks
+% [LAYOUT] Removed manual \\ line-breaks; set text width=2.2cm for
+%          consistent auto-wrapping across all left annotations
+% ============================================================
+\node[font=\tiny, text=gray!70, align=right, text width=2.2cm,
+      left=0.20cm of pki]  {certificate validity};
+\node[font=\tiny, text=gray!70, align=right, text width=2.2cm,
+      left=0.20cm of b1]   {format, timestamp, replay};
+\node[font=\tiny, text=gray!70, align=right, text width=2.2cm,
+      left=0.20cm of mbd]  {kinematic plausibility};
+\node[font=\tiny, text=gray!70, align=right, text width=2.2cm,
+      left=0.20cm of b2]   {behavioral history};
+\node[font=\tiny, text=gray!70, align=right, text width=2.2cm,
+      left=0.20cm of cp]   {cross-source consistency};
+\node[font=\tiny, text=red!60!black, align=right, text width=2.2cm,
+      left=0.20cm of b3]   {semantic content};
+
+\end{tikzpicture}

@@ -1,0 +1,243 @@
+% ============================================================
+% FIG 1 — Evolution from Communication Trust to Decision Trust
+% ============================================================
+% PREAMBLE: Add these to your document preamble if not present:
+%   \usepackage{tikz}
+%   \usepackage{xcolor}
+%   \usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, calc, backgrounds}
+%
+% PLACEMENT: Use as a full-width figure (spans both columns):
+%   \begin{figure*}[t]
+%     \centering
+%     \input{fig1_trust_evolution.tex}
+%     \caption{...}
+%     \label{fig:trust_evolution}
+%   \end{figure*}
+% ============================================================
+
+\begin{tikzpicture}[
+  % --- Arrow style ---
+  arrow/.style={-{Stealth[length=5pt]}, thick, gray!60},
+  % --- Zone band style ---
+  zone/.style={
+    rectangle, rounded corners=3pt,
+    minimum width=5.2cm, minimum height=0.55cm,
+    font=\bfseries\scriptsize, align=center
+  },
+  % --- Layer block style ---
+  block/.style={
+    rectangle, rounded corners=2pt,
+    minimum width=4.4cm, minimum height=0.52cm,
+    font=\scriptsize, align=center,
+    draw, thick
+  },
+  % --- Side label style (left column) ---
+  % [LAYOUT] Widened from 2.4cm to 2.6cm; removed manual \\ line-breaks
+  sidelabel/.style={
+    font=\scriptsize\bfseries, align=right, text width=2.6cm
+  },
+  % --- Side annotation style (right column) ---
+  % [LAYOUT] Widened from 2.6cm to 3.0cm; removed manual \\ line-breaks
+  sideannot/.style={
+    font=\scriptsize\itshape, align=left, text width=3.0cm, gray!80!black
+  },
+  % --- Thick boundary line ---
+  boundary/.style={dashed, thick, red!70!black, dash pattern=on 4pt off 2pt},
+  % --- Node spacing ---
+  node distance=0.32cm
+]
+
+% ============================================================
+% COLORS
+% ============================================================
+\definecolor{commblue}{RGB}{220,235,255}
+\definecolor{commblue_dark}{RGB}{60,100,180}
+\definecolor{semgreen}{RGB}{220,245,220}
+\definecolor{semgreen_dark}{RGB}{40,140,60}
+\definecolor{decgold}{RGB}{255,245,210}
+\definecolor{decgold_dark}{RGB}{180,130,0}
+\definecolor{blockstroke}{RGB}{100,100,120}
+\definecolor{msgcolor}{RGB}{50,50,50}
+\definecolor{stbvred}{RGB}{190,30,30}
+
+% ============================================================
+% MAIN COLUMN — central flow
+% ============================================================
+
+% --- Incoming message ---
+\node[
+  rectangle, rounded corners=3pt,
+  draw=msgcolor, fill=gray!12, thick,
+  minimum width=4.4cm, minimum height=0.52cm,
+  font=\scriptsize\bfseries, align=center
+] (msg) {Incoming CAM / DENM Message};
+
+% ---------- COMMUNICATION TRUST ZONE ----------
+\node[
+  zone, below=0.28cm of msg,
+  fill=commblue, draw=commblue_dark, text=commblue_dark
+] (zone_comm) {COMMUNICATION TRUST};
+
+\node[block, below=0.18cm of zone_comm,
+  fill=commblue!40, draw=blockstroke] (pki)
+  % [LAYOUT] Split label to two lines to fit within 4.4 cm block width
+  {PKI --- Identity \& Certificate\\Validation};
+
+\node[block, below=0.22cm of pki,
+  fill=commblue!40, draw=blockstroke] (b1)
+  {B1 (SCSV) --- Protocol \& Structural Validation};
+
+\node[block, below=0.22cm of b1,
+  fill=commblue!40, draw=blockstroke] (mbd)
+  {MBD --- Misbehavior Detection};
+
+\node[block, below=0.22cm of mbd,
+  fill=commblue!40, draw=blockstroke] (b2)
+  {B2 (CSIA) --- Behavioral Trust};
+
+\node[block, below=0.22cm of b2,
+  fill=commblue!40, draw=blockstroke] (cp)
+  {CP --- Cooperative Perception};
+
+% ---------- SEMANTIC TRUST BOUNDARY ----------
+\node[
+  below=0.30cm of cp,
+  font=\bfseries\scriptsize, text=stbvred,
+  align=center
+] (stb_label) {$\longleftarrow$\; SEMANTIC TRUST BOUNDARY \;$\longrightarrow$};
+
+% ---------- SEMANTIC TRUST ZONE ----------
+\node[
+  zone, below=0.28cm of stb_label,
+  fill=semgreen, draw=semgreen_dark, text=semgreen_dark
+] (zone_sem) {SEMANTIC TRUST};
+
+\node[block, below=0.18cm of zone_sem,
+  fill=semgreen!50, draw=blockstroke] (b3)
+  {B3 --- Semantic Trust Gate (DeBERTa-v2)};
+
+% ---------- DECISION TRUST ZONE ----------
+\node[
+  zone, below=0.28cm of b3,
+  fill=decgold, draw=decgold_dark, text=decgold_dark
+] (zone_dec) {DECISION TRUST};
+
+\node[block, below=0.18cm of zone_dec,
+  fill=decgold!50, draw=blockstroke] (fusion)
+  {Trust Decision Engine};
+
+\node[block, below=0.22cm of fusion,
+  fill=decgold!50, draw=blockstroke] (ds)
+  {Dempster--Shafer / Yager Fusion};
+
+\node[block, below=0.22cm of ds,
+  fill=decgold!50, draw=blockstroke] (score)
+  {Decision Trust Score (pignistic)};
+
+% --- Three-way output ---
+\node[
+  rectangle, rounded corners=2pt,
+  below left=0.32cm and -1.5cm of score,
+  minimum width=1.1cm, minimum height=0.46cm,
+  fill=green!25, draw=green!60!black, thick,
+  font=\scriptsize\bfseries, align=center
+] (acc) {Accept};
+
+\node[
+  rectangle, rounded corners=2pt,
+  below=0.32cm of score,
+  minimum width=1.1cm, minimum height=0.46cm,
+  fill=orange!25, draw=orange!70!black, thick,
+  font=\scriptsize\bfseries, align=center
+] (cau) {Caution};
+
+\node[
+  rectangle, rounded corners=2pt,
+  below right=0.32cm and -1.5cm of score,
+  minimum width=1.1cm, minimum height=0.46cm,
+  fill=red!20, draw=red!60!black, thick,
+  font=\scriptsize\bfseries, align=center
+] (rej) {Reject};
+
+% --- Planner ---
+\node[
+  rectangle, rounded corners=3pt,
+  below=0.55cm of cau,
+  draw=msgcolor, fill=gray!12, thick,
+  minimum width=4.4cm, minimum height=0.52cm,
+  font=\scriptsize\bfseries, align=center
+] (planner) {Planner / Vehicle Controller};
+
+% ============================================================
+% ARROWS — central flow
+% ============================================================
+\draw[arrow] (msg)       -- (zone_comm);
+\draw[arrow] (zone_comm) -- (pki);
+\draw[arrow] (pki)       -- (b1);
+\draw[arrow] (b1)        -- (mbd);
+\draw[arrow] (mbd)       -- (b2);
+\draw[arrow] (b2)        -- (cp);
+\draw[arrow] (cp)        -- (stb_label);
+\draw[arrow] (stb_label) -- (zone_sem);
+\draw[arrow] (zone_sem)  -- (b3);
+\draw[arrow] (b3)        -- (zone_dec);
+\draw[arrow] (zone_dec)  -- (fusion);
+\draw[arrow] (fusion)    -- (ds);
+\draw[arrow] (ds)        -- (score);
+% Fan out to three decisions
+\draw[arrow] (score.south) -- ++(0,-0.15) -| (acc.north);
+\draw[arrow] (score.south) -- (cau.north);
+\draw[arrow] (score.south) -- ++(0,-0.15) -| (rej.north);
+% Fan in to planner (only Accept and Caution feed forward)
+\draw[arrow] (acc.south) |- (planner.west);
+\draw[arrow] (cau.south) -- (planner.north);
+
+% ============================================================
+% LEFT COLUMN — trust level labels
+% [LAYOUT] Removed manual \\ line-breaks; text width handles wrapping.
+% "Communication Trust" is long at \scriptsize\bfseries; explicit break used.
+% ============================================================
+\node[sidelabel, left=1.1cm of zone_comm]  (l_comm) {Communication\\Trust};
+\node[sidelabel, left=1.1cm of zone_sem]   (l_sem)  {Semantic Trust};
+\node[sidelabel, left=1.1cm of zone_dec]   (l_dec)  {Decision Trust};
+
+% Vertical bracket / line connecting left labels
+\draw[thick, gray!50]
+  ($(l_comm.north east) + (0.15, 0.05)$) --
+  ($(l_comm.south east) + (0.15,-0.05)$);
+\draw[thick, gray!50]
+  ($(l_sem.north east) + (0.15, 0.05)$) --
+  ($(l_sem.south east) + (0.15,-0.05)$);
+\draw[thick, gray!50]
+  ($(l_dec.north east) + (0.15, 0.05)$) --
+  ($(l_dec.south east) + (0.15,-0.05)$);
+
+% ============================================================
+% RIGHT COLUMN — threat annotations
+% [LAYOUT] Removed manual \\ line-breaks; text width 3.0cm handles wrapping
+% ============================================================
+% "Existing layers" brace label
+\node[sideannot, right=0.2cm of b2]  (r_exist)
+  {Existing architecture (PKI, MBD, CP)};
+\draw[-{Stealth[length=4pt]}, gray!50, thin]
+  (r_exist.west) -- ($(b2.east) + (0.08,0)$);
+
+% STBV annotation
+\node[sideannot, right=0.2cm of stb_label, text=stbvred]  (r_stbv)
+  {STBVs bypass all layers above};
+\draw[-{Stealth[length=4pt]}, stbvred!70, thin]
+  (r_stbv.west) -- ($(stb_label.east) + (0.1,0)$);
+
+% B3 annotation
+\node[sideannot, right=0.2cm of b3, text=semgreen_dark]  (r_b3)
+  {New: semantic content verified};
+\draw[-{Stealth[length=4pt]}, semgreen_dark!80, thin]
+  (r_b3.west) -- ($(b3.east) + (0.08,0)$);
+
+% Decision annotation
+\node[sideannot, right=0.2cm of score, text=decgold_dark]  (r_dec)
+  {Trust-informed driving decisions};
+\draw[-{Stealth[length=4pt]}, decgold_dark!80, thin]
+  (r_dec.west) -- ($(score.east) + (0.08,0)$);
+
+\end{tikzpicture}

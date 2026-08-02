@@ -1,0 +1,339 @@
+% ============================================================
+% FIG 3 — Layer-wise Threat Coverage Matrix
+% Rows: threat/attack types. Columns: architecture layers.
+% Cells: recall % where measured, or symbol where not applicable.
+% Data sourced from Table III and Section VI of the paper.
+% ============================================================
+% PREAMBLE:
+%   \usepackage{tikz}
+%   \usepackage{xcolor}
+%   \usepackage{colortbl}   % if embedding in tabular instead
+%   \usetikzlibrary{positioning, calc}
+%
+% PLACEMENT: full width recommended
+%   \begin{figure*}[t]
+%     \centering
+%     \input{fig3_threat_coverage_matrix.tex}
+%     \caption{Layer-wise threat coverage matrix. Cells show recall (\%)
+%     where measured; \checkmark\ denotes detection with no recall figure
+%     reported; -- denotes out of scope by design.}
+%     \label{fig:threat_matrix}
+%   \end{figure*}
+% ============================================================
+
+\begin{tikzpicture}[
+  every node/.style={font=\scriptsize},
+]
+
+% ============================================================
+% LAYOUT CONSTANTS
+% ============================================================
+\def\cellW{1.55}   % column width (cm)
+\def\cellH{0.52}   % row height (cm)
+% [LAYOUT] Increased from 3.6 to 3.8 cm so long threat names
+%          (e.g. "Collaborative Semantic Agreement") do not wrap mid-word
+\def\rowlabelW{3.8} % threat label width (cm)
+
+% Colors
+\definecolor{highgreen}{RGB}{180,230,180}
+\definecolor{midyellow}{RGB}{255,235,160}
+\definecolor{lowred}{RGB}{245,190,190}
+\definecolor{nonecolor}{RGB}{235,235,235}
+\definecolor{headerblue}{RGB}{60,100,180}
+\definecolor{headerbg}{RGB}{220,232,255}
+\definecolor{rowalt}{RGB}{248,248,252}
+
+% ============================================================
+% HELPER MACRO
+% \cell{col}{row}{fill}{text}
+%   col, row are 0-indexed integers
+% ============================================================
+\newcommand{\cell}[4]{
+  \fill[#3]
+    (#1*\cellW, -#2*\cellH)
+    rectangle +(\cellW, \cellH);
+  \draw[gray!40, thin]
+    (#1*\cellW, -#2*\cellH)
+    rectangle +(\cellW, \cellH);
+  \node[align=center, font=\scriptsize\bfseries]
+    at (#1*\cellW + 0.5*\cellW, -#2*\cellH + 0.5*\cellH) {#4};
+}
+
+% ============================================================
+% COLUMN HEADERS (7 columns: PKI, B1, MBD, B2, CP, B3, Fusion)
+% ============================================================
+\def\cols{{"PKI","B1","MBD","B2","CP","B3","Fusion"}}
+
+% Header background
+\fill[headerbg]
+  (0, 0) rectangle (7*\cellW, \cellH);
+\draw[headerblue, thick]
+  (0, 0) rectangle (7*\cellW, \cellH);
+
+\foreach \i/\lbl in {
+  0/PKI, 1/B1, 2/MBD, 3/B2, 4/CP, 5/B3, 6/Fusion}{
+  \node[font=\scriptsize\bfseries, text=headerblue, align=center,
+        text width=\cellW cm]
+    at (\i*\cellW + 0.5*\cellW, 0.5*\cellH) {\lbl};
+  \draw[gray!50, thin]
+    (\i*\cellW, 0) -- (\i*\cellW, \cellH);
+}
+
+% ============================================================
+% ROW LABELS (left of grid)
+% Rows:
+%  0 Constant Position Falsification
+%  1 Data Replay
+%  2 Denial of Service
+%  3 Instruction Injection
+%  4 Authority Override
+%  5 False Clearance
+%  6 Priority Manipulation
+%  7 Context Poisoning
+%  8 Temporal Context Drift
+%  9 Narrative Poisoning
+% 10 Goal Manipulation
+% 11 Traffic Efficiency Lure
+% 12 Indirect Prompt Injection
+% 13 Cross-Source Contradiction
+% 14 Collaborative Semantic Agreement
+% 15 Mixed Scene (kinematic side)
+% 16 Mixed Scene (semantic side)
+% ============================================================
+
+\foreach \r/\lbl in {
+  0/Constant Position Falsification,
+  1/Data Replay,
+  2/Denial of Service,
+  3/Instruction Injection,
+  4/Authority Override,
+  5/False Clearance,
+  6/Priority Manipulation,
+  7/Context Poisoning,
+  8/Temporal Context Drift,
+  9/Semantic Narrative Poisoning,
+  10/Goal Manipulation,
+  11/Traffic Efficiency Lure,
+  12/Indirect Prompt Injection,
+  13/Cross-Source Contradiction,
+  14/Collab.\ Semantic Agreement,
+  15/Mixed Scene (kinematic),
+  16/Mixed Scene (semantic)}{
+  % alternating row background
+  \pgfmathparse{mod(\r,2)==0 ? "white" : "rowalt"}
+  \edef\rowfill{\pgfmathresult}
+  \fill[\rowfill]
+    (0, -\r*\cellH - \cellH)
+    rectangle (7*\cellW, -\r*\cellH);
+  % [LAYOUT] Anchor offset adjusted from -0.12 to -0.15 to give
+  %          slightly more clearance between label and grid edge
+  \node[align=right, text width=\rowlabelW cm,
+        font=\scriptsize, anchor=east]
+    at (-0.15, -\r*\cellH - 0.5*\cellH) {\lbl};
+  % row grid outline
+  \draw[gray!30, thin]
+    (0, -\r*\cellH - \cellH) rectangle (7*\cellW, -\r*\cellH);
+}
+
+% ============================================================
+% CELL DATA
+% Format: \cell{col}{row}{color}{text}
+% highgreen = detected / high recall
+% midyellow = partial
+% lowred    = low recall
+% nonecolor = not applicable / out of scope
+%
+% SOURCE: Table III + Section VI results
+% PKI=0, B1=1, MBD=2, B2=3, CP=4, B3=5, Fusion=6
+% ============================================================
+
+% --- Row 0: Constant Position Falsification ---
+\cell{0}{0}{nonecolor}{--}
+\cell{1}{0}{midyellow}{partial}
+\cell{2}{0}{highgreen}{91.2\%}
+\cell{3}{0}{nonecolor}{--}
+\cell{4}{0}{nonecolor}{--}
+\cell{5}{0}{nonecolor}{--}
+\cell{6}{0}{highgreen}{91.2\%}
+
+% --- Row 1: Data Replay ---
+\cell{0}{1}{midyellow}{partial}
+\cell{1}{1}{midyellow}{partial}
+\cell{2}{1}{midyellow}{60.0\%}
+\cell{3}{1}{nonecolor}{--}
+\cell{4}{1}{nonecolor}{--}
+\cell{5}{1}{nonecolor}{--}
+\cell{6}{1}{midyellow}{60.0\%}
+
+% --- Row 2: Denial of Service ---
+\cell{0}{2}{nonecolor}{--}
+\cell{1}{2}{nonecolor}{--}
+\cell{2}{2}{highgreen}{80.3\%}
+\cell{3}{2}{nonecolor}{--}
+\cell{4}{2}{nonecolor}{--}
+\cell{5}{2}{nonecolor}{--}
+\cell{6}{2}{highgreen}{80.3\%}
+
+% --- Row 3: Instruction Injection ---
+\cell{0}{3}{nonecolor}{--}
+\cell{1}{3}{nonecolor}{--}
+\cell{2}{3}{nonecolor}{--}
+\cell{3}{3}{nonecolor}{--}
+\cell{4}{3}{nonecolor}{--}
+\cell{5}{3}{highgreen}{100\%}
+\cell{6}{3}{highgreen}{100\%}
+
+% --- Row 4: Authority Override ---
+\cell{0}{4}{nonecolor}{--}
+\cell{1}{4}{nonecolor}{--}
+\cell{2}{4}{nonecolor}{--}
+\cell{3}{4}{nonecolor}{--}
+\cell{4}{4}{nonecolor}{--}
+\cell{5}{4}{highgreen}{100\%}
+\cell{6}{4}{highgreen}{100\%}
+
+% --- Row 5: False Clearance ---
+\cell{0}{5}{nonecolor}{--}
+\cell{1}{5}{nonecolor}{--}
+\cell{2}{5}{nonecolor}{--}
+\cell{3}{5}{nonecolor}{--}
+\cell{4}{5}{nonecolor}{--}
+\cell{5}{5}{highgreen}{100\%}
+\cell{6}{5}{highgreen}{100\%}
+
+% --- Row 6: Priority Manipulation ---
+\cell{0}{6}{nonecolor}{--}
+\cell{1}{6}{nonecolor}{--}
+\cell{2}{6}{nonecolor}{--}
+\cell{3}{6}{nonecolor}{--}
+\cell{4}{6}{nonecolor}{--}
+\cell{5}{6}{highgreen}{100\%}
+\cell{6}{6}{highgreen}{100\%}
+
+% --- Row 7: Context Poisoning ---
+\cell{0}{7}{nonecolor}{--}
+\cell{1}{7}{nonecolor}{--}
+\cell{2}{7}{nonecolor}{--}
+\cell{3}{7}{nonecolor}{--}
+\cell{4}{7}{nonecolor}{--}
+\cell{5}{7}{midyellow}{partial}
+\cell{6}{7}{midyellow}{partial}
+
+% --- Row 8: Temporal Context Drift ---
+\cell{0}{8}{nonecolor}{--}
+\cell{1}{8}{nonecolor}{--}
+\cell{2}{8}{nonecolor}{--}
+\cell{3}{8}{nonecolor}{--}
+\cell{4}{8}{nonecolor}{--}
+\cell{5}{8}{midyellow}{partial}
+\cell{6}{8}{midyellow}{partial}
+
+% --- Row 9: Semantic Narrative Poisoning ---
+\cell{0}{9}{nonecolor}{--}
+\cell{1}{9}{nonecolor}{--}
+\cell{2}{9}{nonecolor}{--}
+\cell{3}{9}{nonecolor}{--}
+\cell{4}{9}{nonecolor}{--}
+\cell{5}{9}{lowred}{$\leq$9\%}
+\cell{6}{9}{lowred}{$\leq$9\%}
+
+% --- Row 10: Goal Manipulation ---
+\cell{0}{10}{nonecolor}{--}
+\cell{1}{10}{nonecolor}{--}
+\cell{2}{10}{nonecolor}{--}
+\cell{3}{10}{nonecolor}{--}
+\cell{4}{10}{nonecolor}{--}
+\cell{5}{10}{lowred}{$\leq$9\%}
+\cell{6}{10}{lowred}{$\leq$9\%}
+
+% --- Row 11: Traffic Efficiency Lure ---
+\cell{0}{11}{nonecolor}{--}
+\cell{1}{11}{nonecolor}{--}
+\cell{2}{11}{nonecolor}{--}
+\cell{3}{11}{nonecolor}{--}
+\cell{4}{11}{nonecolor}{--}
+\cell{5}{11}{lowred}{$\leq$9\%}
+\cell{6}{11}{lowred}{$\leq$9\%}
+
+% --- Row 12: Indirect Prompt Injection ---
+\cell{0}{12}{nonecolor}{--}
+\cell{1}{12}{nonecolor}{--}
+\cell{2}{12}{nonecolor}{--}
+\cell{3}{12}{nonecolor}{--}
+\cell{4}{12}{nonecolor}{--}
+\cell{5}{12}{lowred}{$\leq$9\%}
+\cell{6}{12}{lowred}{$\leq$9\%}
+
+% --- Row 13: Cross-Source Contradiction ---
+\cell{0}{13}{nonecolor}{--}
+\cell{1}{13}{nonecolor}{--}
+\cell{2}{13}{nonecolor}{--}
+\cell{3}{13}{nonecolor}{--}
+\cell{4}{13}{nonecolor}{--}
+\cell{5}{13}{highgreen}{100\%}
+\cell{6}{13}{highgreen}{100\%}
+
+% --- Row 14: Collaborative Semantic Agreement ---
+\cell{0}{14}{nonecolor}{--}
+\cell{1}{14}{nonecolor}{--}
+\cell{2}{14}{nonecolor}{--}
+\cell{3}{14}{nonecolor}{--}
+\cell{4}{14}{nonecolor}{--}
+\cell{5}{14}{highgreen}{100\%}
+\cell{6}{14}{highgreen}{100\%}
+
+% --- Row 15: Mixed Scene (kinematic side) ---
+\cell{0}{15}{nonecolor}{--}
+\cell{1}{15}{midyellow}{partial}
+\cell{2}{15}{highgreen}{90.3\%}
+\cell{3}{15}{nonecolor}{--}
+\cell{4}{15}{nonecolor}{--}
+\cell{5}{15}{nonecolor}{--}
+\cell{6}{15}{highgreen}{90.3\%}
+
+% --- Row 16: Mixed Scene (semantic side) ---
+\cell{0}{16}{nonecolor}{--}
+\cell{1}{16}{nonecolor}{--}
+\cell{2}{16}{nonecolor}{--}
+\cell{3}{16}{nonecolor}{--}
+\cell{4}{16}{nonecolor}{--}
+\cell{5}{16}{midyellow}{70.3\%}
+\cell{6}{16}{midyellow}{70.3\%}
+
+% ============================================================
+% OUTER BORDER
+% ============================================================
+\draw[gray!60, thick]
+  (0, \cellH) rectangle (7*\cellW, -17*\cellH);
+
+% ============================================================
+% LEGEND
+% [LAYOUT] Redistributed legend into two rows so all items fit
+%          within the grid width (7*1.55 = 10.85 cm). Original
+%          layout had the last item starting at x=10.8 cm which
+%          clipped beyond the grid on narrow exports.
+% Row 1: High recall | Partial
+% Row 2: Low recall  | Out of scope
+% ============================================================
+\node[font=\scriptsize\bfseries, anchor=west]
+  at (0, -17*\cellH - 0.35) {Legend:};
+
+% Legend row 1
+\fill[highgreen] (1.8, -17*\cellH - 0.62) rectangle +(0.35, 0.28);
+\draw[gray!40,thin] (1.8, -17*\cellH - 0.62) rectangle +(0.35, 0.28);
+\node[font=\scriptsize, anchor=west] at (2.2, -17*\cellH - 0.48) {High recall ($>$60\%)};
+
+\fill[midyellow] (6.0, -17*\cellH - 0.62) rectangle +(0.35, 0.28);
+\draw[gray!40,thin] (6.0, -17*\cellH - 0.62) rectangle +(0.35, 0.28);
+\node[font=\scriptsize, anchor=west] at (6.4, -17*\cellH - 0.48) {Partial};
+
+% Legend row 2
+\fill[lowred] (1.8, -17*\cellH - 1.05) rectangle +(0.35, 0.28);
+\draw[gray!40,thin] (1.8, -17*\cellH - 1.05) rectangle +(0.35, 0.28);
+\node[font=\scriptsize, anchor=west] at (2.2, -17*\cellH - 0.91) {Low recall ($\leq$9\%)};
+
+\fill[nonecolor] (6.0, -17*\cellH - 1.05) rectangle +(0.35, 0.28);
+\draw[gray!40,thin] (6.0, -17*\cellH - 1.05) rectangle +(0.35, 0.28);
+\node[font=\scriptsize, anchor=west] at (6.4, -17*\cellH - 0.91) {Out of scope by design};
+
+\end{tikzpicture}

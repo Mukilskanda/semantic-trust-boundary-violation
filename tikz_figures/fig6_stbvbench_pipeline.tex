@@ -1,0 +1,217 @@
+% ============================================================
+% FIG 6 — STBV-Bench Generation Pipeline
+% Shows how VeReMi records flow through the semantic
+% transformation engine to produce the benchmark.
+% All numbers from Section V of the paper.
+% ============================================================
+% PREAMBLE:
+%   \usepackage{tikz}
+%   \usepackage{xcolor}
+%   \usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc}
+%
+% PLACEMENT: full width
+%   \begin{figure*}[t]
+%     \centering
+%     \input{fig6_stbvbench_pipeline.tex}
+%     \caption{STBV-Bench generation pipeline. Real VeReMi Extension
+%     trajectories supply kinematics; the seeded semantic transformation
+%     engine populates free-text scene-context fields across 20 attack
+%     families plus a benign control. Kinematic ground truth is preserved
+%     separately and never merged with semantic labels.}
+%     \label{fig:stbvbench_pipeline}
+%   \end{figure*}
+% ============================================================
+
+\begin{tikzpicture}[
+  arrow/.style={-{Stealth[length=5pt]}, thick, gray!55},
+  % [LAYOUT] Stage 1 (Dataset) and Stage 6 (STBV-Bench) blocks kept at
+  %          their original widths (2.8cm and 3.0cm respectively).
+  %          Intermediate stages reduced from 2.8cm to 2.3cm to recover
+  %          horizontal space without altering the visual hierarchy.
+  %          The Engine remains the widest and tallest block.
+  mainblock/.style={
+    rectangle, rounded corners=3pt,
+    minimum width=1.85cm, minimum height=1.0cm,
+    font=\scriptsize\bfseries, align=center,
+    draw, thick
+  },
+  subblock/.style={
+    rectangle, rounded corners=2pt,
+    minimum width=1.8cm, minimum height=0.48cm,
+    font=\tiny, align=center, text width=1.9cm,
+    draw=gray!50, fill=gray!8, thin
+  },
+  statnode/.style={
+    font=\tiny\bfseries, align=center, text width=2.4cm
+  },
+  % [LAYOUT] Reduced inter-block spacing from 0.55cm to 0.35cm.
+  node distance=0.5cm and 0.35cm
+]
+
+\definecolor{veremiblue}{RGB}{60,100,180}
+\definecolor{engineorange}{RGB}{200,100,20}
+\definecolor{validgreen}{RGB}{40,140,60}
+\definecolor{benchpurple}{RGB}{120,40,160}
+\definecolor{evalcyan}{RGB}{20,120,140}
+
+% ============================================================
+% STAGE 1: VeReMi Source
+% [LAYOUT] Dataset block kept at original 2.8cm width (unchanged)
+% ============================================================
+\node[mainblock,
+  fill=veremiblue!12, draw=veremiblue, text=veremiblue,
+  minimum width=2.8cm, minimum height=1.2cm
+] (veremi) {VeReMi Extension\\Dataset};
+
+\node[statnode, below=0.10cm of veremi] (veremi_stat)
+  {\textcolor{veremiblue}{221,125 records}\\
+   \textcolor{gray!65}{360 vehicles}\\
+   \textcolor{gray!65}{180 attackers}};
+
+% ============================================================
+% STAGE 2: Field Extraction
+% ============================================================
+\node[mainblock,
+  right=0.30cm of veremi,
+  fill=gray!8, draw=gray!50,
+  minimum height=1.2cm
+] (extract) {Field\\Extraction};
+
+\node[subblock, below=0.08cm of extract] (extract_sub)
+  {pos, speed, heading,\\timestamp\\(unmodified)};
+
+% ============================================================
+% STAGE 3: Semantic Transformation Engine
+% [LAYOUT] Engine kept as largest/widest block at 3.2cm wide,
+%          2.2cm tall, to preserve its focal role in the figure
+% ============================================================
+\node[mainblock,
+  right=0.30cm of extract,
+  fill=engineorange!10, draw=engineorange, text=engineorange,
+  minimum height=3.2cm, minimum width=3.8cm
+] (engine) {};
+
+% Explicitly position every title line to guarantee no overlaps
+\node[font=\scriptsize\bfseries, text=engineorange, align=center,
+      at=(engine.center), yshift=1.0cm]
+  {Semantic};
+\node[font=\scriptsize\bfseries, text=engineorange, align=center,
+      at=(engine.center), yshift=0.65cm]
+  {Transformation};
+\node[font=\scriptsize\bfseries, text=engineorange, align=center,
+      at=(engine.center), yshift=0.30cm]
+  {Engine};
+
+% Sub-labels inside engine — positioned explicitly below the title
+\node[font=\tiny, text=engineorange!80, align=center,
+      at=(engine.center), yshift=-0.25cm]
+  {seed = fixed};
+\node[font=\tiny, text=engineorange!80, align=center,
+      at=(engine.center), yshift=-0.65cm]
+  {rule-based, templated};
+\node[font=\tiny, text=engineorange!80, align=center,
+      at=(engine.center), yshift=-1.05cm]
+  {no LLM, no paraphrase};
+
+% Attack families annotation (above engine)
+\node[
+  font=\tiny\bfseries, text=engineorange,
+  align=center, text width=3.2cm,
+  above=0.15cm of engine
+] {20 attack families + 1 benign control = 21 transformation rules};
+
+% ============================================================
+% STAGE 4: Structural Validation
+% ============================================================
+\node[mainblock,
+  right=0.30cm of engine,
+  fill=validgreen!10, draw=validgreen, text=validgreen,
+  minimum height=1.2cm
+] (valid) {Structural\\Validation};
+
+\node[subblock, below=0.08cm of valid] (valid_sub)
+  {schema check\\abort on failure};
+
+% ============================================================
+% STAGE 5: Label Preservation
+% ============================================================
+\node[mainblock,
+  right=0.30cm of valid,
+  fill=gray!8, draw=gray!50,
+  minimum height=1.2cm
+] (labels) {Label\\Preservation};
+
+\node[subblock, below=0.08cm of labels] (labels_sub)
+  {VeReMi kinematic\\label kept separate\\never merged};
+
+% ============================================================
+% STAGE 6: STBV-Bench v1
+% [LAYOUT] Bench block kept at original 3.0cm width (unchanged)
+% ============================================================
+\node[mainblock,
+  right=0.30cm of labels,
+  fill=benchpurple!10, draw=benchpurple, text=benchpurple,
+  minimum height=1.8cm, minimum width=3.0cm
+] (bench) {};
+
+\node[font=\scriptsize\bfseries, text=benchpurple, align=center,
+      at=(bench.center), yshift=0.60cm]
+  {STBV-Bench v1};
+\node[font=\tiny, text=benchpurple!80, align=center,
+      at=(bench.center), yshift=0.25cm]
+  {\textbf{n = 10,000 samples}};
+\node[font=\tiny, text=benchpurple!80, align=center,
+      at=(bench.center), yshift=-0.05cm]
+  {70.07\% malicious};
+\node[font=\tiny, text=benchpurple!80, align=center,
+      at=(bench.center), yshift=-0.35cm]
+  {29.93\% benign};
+\node[font=\tiny, text=benchpurple!80, align=center,
+      at=(bench.center), yshift=-0.65cm]
+  {seed = fixed};
+
+% ============================================================
+% STAGE 7: Evaluation Pipeline
+% ============================================================
+\node[mainblock,
+  right=0.30cm of bench,
+  fill=evalcyan!10, draw=evalcyan, text=evalcyan,
+  minimum height=1.2cm
+] (eval) {STBV\\Architecture};
+
+\node[subblock, below=0.08cm of eval] (eval_sub)
+  {B1+B2+B3\\+Fusion\\per-message\\independent};
+
+% ============================================================
+% ARROWS
+% ============================================================
+\draw[arrow, veremiblue!60] (veremi.east)  -- (extract.west);
+\draw[arrow]                (extract.east) -- (engine.west);
+\draw[arrow, engineorange!60] (engine.east) -- (valid.west);
+\draw[arrow]                (valid.east)   -- (labels.west);
+\draw[arrow, benchpurple!60] (labels.east) -- (bench.west);
+\draw[arrow, evalcyan!60]   (bench.east)   -- (eval.west);
+
+% ============================================================
+% KINEMATIC BYPASS ARROW (kinematics pass through unmodified)
+% [LAYOUT] Label moved from pos=0.25 to pos=0.5 for better
+%          centering under the dashed path
+% ============================================================
+\draw[
+  -{Stealth[length=4pt]}, dashed, gray!40, thin
+] (extract_sub.south) -- ++(0,-0.4)
+  -| node[pos=0.5, below, font=\tiny, text=gray!60]
+     {kinematics unmodified (pos, speed, heading, timestamp)}
+  (labels_sub.south);
+
+% ============================================================
+% BOTTOM STATS BAR
+% ============================================================
+\node[
+  font=\tiny, text=gray!70, align=center,
+  below=1.2cm of engine
+] {Pool: 221,125 records \quad$\xrightarrow{\text{sample}}$\quad
+   n=10,000 \quad$\xrightarrow{\text{evaluate}}$\quad
+   RQ1--RQ6};
+
+\end{tikzpicture}

@@ -1,0 +1,124 @@
+% ============================================================
+% FIG 5 — Trust Score Evolution Through Layers
+% Uses the real worked example from Appendix B of the paper:
+% instruction_injection payload, seed 3, sender 9999.
+% All numbers are verbatim from the logged pipeline output.
+% ============================================================
+% PREAMBLE:
+%   \usepackage{tikz}
+%   \usepackage{xcolor}
+%   \usetikzlibrary{arrows.meta, positioning, calc}
+%
+% PLACEMENT: single column
+%   \begin{figure}[t]
+%     \centering
+%     \input{fig5_trust_score_evolution.tex}
+%     \caption{Trust score evolution through pipeline layers for a real
+%     \texttt{instruction\_injection} attack (Appendix~B worked example,
+%     seed~3). Communication and behavioral layers produce clean scores;
+%     B3 detects semantic manipulation at confidence 0.699, and the
+%     Trust Decision Engine fuses evidence to a pignistic score of 0.381,
+%     yielding REJECT.}
+%     \label{fig:trust_evolution_scores}
+%   \end{figure}
+% ============================================================
+
+\begin{tikzpicture}[
+  arrow/.style={-{Stealth[length=5pt]}, thick, gray!60},
+  node distance=0.30cm
+]
+
+\definecolor{safegreen}{RGB}{40,140,60}
+\definecolor{warnred}{RGB}{190,30,30}
+\definecolor{headerblue}{RGB}{60,100,180}
+\definecolor{bargreen}{RGB}{100,200,120}
+\definecolor{barred}{RGB}{220,100,100}
+\definecolor{baryellow}{RGB}{240,190,60}
+
+% ============================================================
+% LAYOUT: two columns
+%   Left:  layer name + what it checks
+%   Right: score bar + value
+% ============================================================
+
+\def\barmax{2.4}   % max bar width in cm
+
+% --- Column headers ---
+\node[font=\scriptsize\bfseries, text=headerblue, anchor=west]
+  at (0, 0.22) {Layer};
+\node[font=\scriptsize\bfseries, text=headerblue, anchor=west]
+  at (3.4, 0.22) {Trust Score};
+\draw[headerblue, thin] (0,-0.02) -- (8.8,-0.02);
+
+% ============================================================
+% MACRO: one score row
+% args: {y_top} {height} {bg_color} {layer name} {sub-label} {bar frac} {bar color} {score text}
+% ============================================================
+\newcommand{\scorerow}[8]{%
+  % Background
+  \fill[#3] (0, #1) rectangle (8.8, #1 - #2);
+  % Layer name
+  \node[font=\scriptsize\bfseries, anchor=west, text width=3.2cm]
+    at (0.05, #1 - 0.3) {#4};
+  \node[font=\tiny, text=gray!65, anchor=west, text width=3.2cm]
+    at (0.05, #1 - 0.6) {#5};
+  % Bar background
+  \fill[gray!15]
+    (3.4, #1 - 0.32) rectangle +({\barmax}, -0.26);
+  \draw[gray!30, thin]
+    (3.4, #1 - 0.32) rectangle +({\barmax}, -0.26);
+  % Score bar
+  \fill[#7]
+    (3.4, #1 - 0.32) rectangle +({#6*\barmax}, -0.26);
+  % Score text — placed cleanly outside the maximum bar track
+  \node[font=\scriptsize\bfseries, anchor=west]
+    at ({3.4 + \barmax + 0.15}, #1 - 0.45) {#8};
+  % Row divider
+  \draw[gray!25, thin]
+    (0, #1 - #2) -- (8.8, #1 - #2);
+}
+
+% ============================================================
+% ROWS
+% ============================================================
+\scorerow{0}{0.85}{white}{PKI}{cert.\ valid, non-revoked}{1.00}{bargreen}{1.000}
+\scorerow{-0.85}{0.85}{gray!6}{B1 (SCSV)}{format, timestamp, replay}{1.00}{bargreen}{1.000}
+
+% MBD gets extra height for the annotation
+\scorerow{-1.70}{1.35}{white}{MBD}{kinematic plausibility}{1.00}{bargreen}{1.000}
+
+% Annotation 1 (placed beneath MBD bar, referring to the layers above)
+\node[
+  font=\tiny\itshape, text=safegreen, align=left, anchor=west, text width=5.0cm
+] at (3.4, -2.65)
+  {All communication checks pass by adversary design};
+
+\scorerow{-3.05}{0.85}{gray!6}{B2 (CSIA)}{behavioral context}{1.00}{bargreen}{1.000}
+\scorerow{-3.90}{0.85}{white}{CP}{cross-source (no event label)}{0.84}{bargreen}{0.840}
+
+% B3 gets extra height for the annotation
+\scorerow{-4.75}{1.35}{gray!6}{B3 Semantic Gate}{MALICIOUS, conf=0.699}{0.30}{barred}{0.301 \textrightarrow\ \textbf{med.\ risk}}
+
+% Annotation 2 (placed beneath B3 bar)
+\node[
+  font=\tiny\itshape, text=warnred, align=left, anchor=west, text width=5.0cm
+] at (3.4, -5.70)
+  {Only B3 reads semantic content; detects manipulation};
+
+% Explicit gap before Decision Engine
+\fill[white] (0, -6.10) rectangle (8.8, -6.50);
+
+\scorerow{-6.50}{0.85}{white}{Trust Decision Engine}{pignistic transform}{0.381}{baryellow}{\textbf{0.381} \textrightarrow\ \textcolor{red!70!black}{\textbf{REJECT}}}
+
+% ============================================================
+% FINAL DECISION BOX
+% ============================================================
+\node[
+  rectangle, rounded corners=3pt,
+  draw=warnred, fill=warnred!12, thick,
+  minimum width=8.6cm, minimum height=0.50cm,
+  font=\scriptsize\bfseries, align=center, text=warnred
+] at (4.4, -7.80)
+  {Final Decision: REJECT \quad (TDecision = 0.381 $<$ $\tau_L$ = 0.40)};
+
+\end{tikzpicture}
