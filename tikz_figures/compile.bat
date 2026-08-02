@@ -3,6 +3,8 @@ for /f "delims=" %%F in ('dir /b *.tex ^| findstr /v "^wrapper_"') do (
     echo \documentclass{standalone} > wrapper_%%~nF.tex
     echo \usepackage{tikz} >> wrapper_%%~nF.tex
     echo \usepackage{xcolor} >> wrapper_%%~nF.tex
+    echo \usepackage{DejaVuSans} >> wrapper_%%~nF.tex
+    echo \renewcommand*\familydefault{\sfdefault} >> wrapper_%%~nF.tex
     echo \usepackage{amsmath} >> wrapper_%%~nF.tex
     echo \usepackage{amssymb} >> wrapper_%%~nF.tex
     echo \usepackage{pgfplots} >> wrapper_%%~nF.tex
