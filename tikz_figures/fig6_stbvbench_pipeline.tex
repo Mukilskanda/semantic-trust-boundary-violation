@@ -65,8 +65,8 @@
 
 \node[statnode, below=0.10cm of veremi] (veremi_stat)
   {\textcolor{veremiblue}{221,125 records}\\
-   \textcolor{gray!65}{360 vehicles}\\
-   \textcolor{gray!65}{180 attackers}};
+   \textcolor{black}{360 vehicles}\\
+   \textcolor{black}{180 attackers}};
 
 % ============================================================
 % STAGE 2: Field Extraction
@@ -200,7 +200,7 @@
 \draw[
   -{Stealth[length=4pt]}, dashed, gray!40, thin
 ] (extract_sub.south) -- ++(0,-0.4)
-  -| node[pos=0.5, below, font=\tiny, text=gray!60]
+  -| node[pos=0.5, below, font=\tiny, text=black]
      {kinematics unmodified (pos, speed, heading, timestamp)}
   (labels_sub.south);
 
@@ -208,7 +208,7 @@
 % BOTTOM STATS BAR
 % ============================================================
 \node[
-  font=\tiny, text=gray!70, align=center,
+  font=\tiny, text=black, align=center,
   below=1.2cm of engine
 ] {Pool: 221,125 records \quad$\xrightarrow{\text{sample}}$\quad
    n=10,000 \quad$\xrightarrow{\text{evaluate}}$\quad

@@ -39,7 +39,7 @@
   % --- Side annotation style (right column) ---
   % [LAYOUT] Widened from 2.6cm to 3.0cm; removed manual \\ line-breaks
   sideannot/.style={
-    font=\scriptsize\itshape, align=left, text width=3.0cm, gray!80!black
+    font=\scriptsize\itshape, align=left, text width=3.5cm, black
   },
   % --- Thick boundary line ---
   boundary/.style={dashed, thick, red!70!black, dash pattern=on 4pt off 2pt},
@@ -189,7 +189,6 @@
 \draw[arrow] (score.south) -- (cau.north);
 \draw[arrow] (score.south) -- ++(0,-0.15) -| (rej.north);
 % Fan in to planner (only Accept and Caution feed forward)
-\draw[arrow] (acc.south) |- (planner.west);
 \draw[arrow] (cau.south) -- (planner.north);
 
 % ============================================================
@@ -236,7 +235,7 @@
 
 % Decision annotation
 \node[sideannot, right=0.2cm of score, text=decgold_dark]  (r_dec)
-  {Trust-informed driving decisions};
+  {Trust-informed decisions};
 \draw[-{Stealth[length=4pt]}, decgold_dark!80, thin]
   (r_dec.west) -- ($(score.east) + (0.08,0)$);
 

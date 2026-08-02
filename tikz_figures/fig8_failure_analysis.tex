@@ -111,7 +111,7 @@
     {\pctlbl\%};
   % Reason annotation (right side)
   % [LAYOUT] Moved to +0.9 to provide clearance for the "100%" label text
-  \node[anchor=west, font=\tiny\itshape, text=gray!65,
+  \node[anchor=west, font=\tiny\itshape, text=black,
         text width=5.0cm]
     at (\labelW + 0.1 + \barscale + 0.9, \ypos + 0.5*\barH)
     {\reason};
@@ -126,10 +126,10 @@
 \foreach \v/\lbl in {0/0, 0.25/25, 0.5/50, 0.75/75, 1.0/100}{
   \pgfmathsetmacro{\xp}{\labelW + 0.1 + \v*\barscale}
   \draw[gray!35, thin] (\xp, \axisy) -- (\xp, \axisy - 0.08);
-  \node[font=\tiny, text=gray!60, anchor=north]
+  \node[font=\tiny, text=black, anchor=north]
     at (\xp, \axisy - 0.10) {\lbl};
 }
-\node[font=\tiny, text=gray!60, anchor=north]
+\node[font=\tiny, text=black, anchor=north]
   at (\labelW + 0.1 + 0.5*\barscale, \axisy - 0.38)
   {Recall (\%)};
 

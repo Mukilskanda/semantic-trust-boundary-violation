@@ -110,10 +110,10 @@
 \foreach \v in {0,10,20,30,40,50,60,70}{
   \pgfmathsetmacro{\xpos}{\labelW + 0.1 + \v*\barscale}
   \draw[gray!40, thin] (\xpos, \axisy) -- (\xpos, \axisy - 0.08);
-  \node[font=\tiny, text=gray!65, anchor=north]
+  \node[font=\tiny, text=black, anchor=north]
     at (\xpos, \axisy - 0.10) {\v};
 }
-\node[font=\tiny, text=gray!65, anchor=north]
+\node[font=\tiny, text=black, anchor=north]
   at (\labelW + 0.1 + 37.5*\barscale, \axisy - 0.32)
   {Mean stage latency (ms)};
 
@@ -133,7 +133,7 @@
 % TOTAL ANNOTATION
 % ============================================================
 \node[
-  font=\scriptsize, text=gray!65, align=left,
+  font=\scriptsize, text=black, align=left,
   anchor=west
 ] at (\labelW + 0.1, {-\totalrows*(\barH+\gap) - 0.85})
   {Sum $\approx$ 107 ms \quad reported mean: 110 ms \quad

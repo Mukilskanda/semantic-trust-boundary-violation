@@ -143,15 +143,15 @@
 % COLUMN HEADERS
 % ============================================================
 \pgfmathsetmacro{\topY}{\accYl + \accHl + 0.35}
-\node[font=\scriptsize\bfseries, text=gray!70, align=center]
+\node[font=\scriptsize\bfseries, text=black, align=center]
   at (\lx + 0.5*\boxW, \topY) {B3-only\\(Config 4)};
-\node[font=\scriptsize\bfseries, text=gray!70, align=center]
+\node[font=\scriptsize\bfseries, text=black, align=center]
   at (\rx + 0.5*\boxW, \topY) {Full Stack\\(Config 5)};
 
 % ============================================================
 % TOTAL ANNOTATION
 % ============================================================
-\node[font=\tiny, text=gray!65, align=center]
+\node[font=\tiny, text=black, align=center]
   at (4.95, \topY + 0.5)
   {1,713 total transitions\\(out of 10,000 messages)};
 
@@ -204,7 +204,7 @@
 % TRANSITION ANNOTATIONS (between columns)
 % ============================================================
 % Zero direct reversals note
-\node[font=\tiny\itshape, text=gray!60, align=center,
+\node[font=\tiny\itshape, text=black, align=center,
       text width=3.5cm]
   at (4.95, -0.45)
   {0 direct Accept$\leftrightarrow$Reject reversals};

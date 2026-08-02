@@ -50,13 +50,13 @@
 % ============================================================
 \newcommand{\cell}[4]{
   \fill[#3]
-    (#1*\cellW, -#2*\cellH)
+    (#1*\cellW, -#2*\cellH - \cellH)
     rectangle +(\cellW, \cellH);
   \draw[gray!40, thin]
-    (#1*\cellW, -#2*\cellH)
+    (#1*\cellW, -#2*\cellH - \cellH)
     rectangle +(\cellW, \cellH);
   \node[align=center, font=\scriptsize\bfseries]
-    at (#1*\cellW + 0.5*\cellW, -#2*\cellH + 0.5*\cellH) {#4};
+    at (#1*\cellW + 0.5*\cellW, -#2*\cellH - 0.5*\cellH) {#4};
 }
 
 % ============================================================
