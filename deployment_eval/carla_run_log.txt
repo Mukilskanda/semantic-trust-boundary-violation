@@ -1,0 +1,95 @@
+Connecting to live CARLA server (127.0.0.1:2000)...
+INFO:  Found the required file in cache!  Carla/Maps/Nav/Town01.bin 
+INFO:  Found the required file in cache!  Carla/Maps/TM/Town01.bin 
+Connected. CARLA server version: 0.9.16, map: Carla/Maps/Town01
+Spawning 8 vehicles under autopilot...
+Spawned 8 vehicles: ['vehicle.citroen.c3', 'vehicle.mercedes.sprinter', 'vehicle.nissan.patrol', 'vehicle.nissan.patrol_2021', 'vehicle.nissan.micra', 'vehicle.mercedes.coupe', 'vehicle.mini.cooper_s', 'vehicle.mitsubishi.fusorosa']
+Warm-up: 50 ticks to let traffic manager settle before capturing a scene image...
+Capturing CARLA scene screenshot -> C:\semantic-trust-boundary-violation\semantic-trust-boundary-violation\deployment_eval\carla_figures\fig0_carla_scene.png
+Constructing ISCEPipeline (loads B3 model)...
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 26550.98it/s]
+
+=== Scenario: normal_driving — Benign multi-vehicle CAM stream, truthful CARLA kinematics only. ===
+  [normal_driving 0/40] t=5.2s wall_ms=95.9 decision=ACCEPT (gt=benign) cpu%=85.2 rss_mb=1031.6
+  [normal_driving 10/40] t=6.2s wall_ms=69.5 decision=REJECT (gt=benign) cpu%=98.3 rss_mb=1035.0
+  [normal_driving 20/40] t=7.2s wall_ms=77.0 decision=REJECT (gt=benign) cpu%=105.5 rss_mb=1036.6
+  [normal_driving 30/40] t=8.2s wall_ms=93.8 decision=CAUTION (gt=benign) cpu%=96.6 rss_mb=1037.7
+  [normal_driving 39/40] t=9.1s wall_ms=88.6 decision=REJECT (gt=benign) cpu%=101.9 rss_mb=1038.5
+  scenario 'normal_driving' wall time: 3.6s (11.22 msg/s)
+
+=== Scenario: accident — Truthful accident DENM (cause_code=2) from a vehicle that has really stopped. ===
+  [accident 0/40] t=9.2s wall_ms=76.6 decision=CAUTION (gt=benign) cpu%=116.4 rss_mb=1038.7
+  [accident 10/40] t=10.2s wall_ms=58.7 decision=CAUTION (gt=benign) cpu%=106.9 rss_mb=1039.8
+  [accident 20/40] t=11.2s wall_ms=71.9 decision=CAUTION (gt=benign) cpu%=106.7 rss_mb=1041.4
+  [accident 30/40] t=12.2s wall_ms=57.3 decision=CAUTION (gt=benign) cpu%=97.8 rss_mb=1041.7
+  [accident 39/40] t=13.1s wall_ms=67.8 decision=CAUTION (gt=benign) cpu%=97.3 rss_mb=1042.1
+  scenario 'accident' wall time: 2.8s (14.45 msg/s)
+
+=== Scenario: emergency_vehicle — Truthful special-vehicle station_type + hazardous-location DENM at real elevated speed. ===
+  [emergency_vehicle 0/40] t=13.2s wall_ms=64.4 decision=CAUTION (gt=benign) cpu%=120.2 rss_mb=1042.1
+  [emergency_vehicle 10/40] t=14.2s wall_ms=57.3 decision=CAUTION (gt=benign) cpu%=95.3 rss_mb=1042.8
+  [emergency_vehicle 20/40] t=15.2s wall_ms=65.2 decision=CAUTION (gt=benign) cpu%=97.8 rss_mb=1044.0
+  [emergency_vehicle 30/40] t=16.2s wall_ms=76.2 decision=CAUTION (gt=benign) cpu%=94.0 rss_mb=1044.9
+  [emergency_vehicle 39/40] t=17.1s wall_ms=86.8 decision=CAUTION (gt=benign) cpu%=90.6 rss_mb=1045.3
+  scenario 'emergency_vehicle' wall time: 3.0s (13.18 msg/s)
+
+=== Scenario: road_closure — Truthful road-works DENM (cause_code=3). ===
+  [road_closure 0/40] t=17.2s wall_ms=83.3 decision=CAUTION (gt=benign) cpu%=99.7 rss_mb=1045.3
+  [road_closure 10/40] t=18.2s wall_ms=80.3 decision=CAUTION (gt=benign) cpu%=101.7 rss_mb=1045.6
+  [road_closure 20/40] t=19.2s wall_ms=83.9 decision=CAUTION (gt=benign) cpu%=91.3 rss_mb=1045.9
+  [road_closure 30/40] t=20.2s wall_ms=67.7 decision=CAUTION (gt=benign) cpu%=98.2 rss_mb=1045.9
+  [road_closure 39/40] t=21.1s wall_ms=77.5 decision=CAUTION (gt=benign) cpu%=96.1 rss_mb=1046.1
+  scenario 'road_closure' wall time: 3.6s (11.22 msg/s)
+
+=== Scenario: replay_attack — A real, previously-truthful message re-broadcast verbatim (stale) later. ===
+  [replay_attack 0/40] t=21.2s wall_ms=85.9 decision=CAUTION (gt=benign) cpu%=99.7 rss_mb=1046.3
+  [replay_attack 10/40] t=22.2s wall_ms=83.2 decision=REJECT (gt=attack:replay) cpu%=109.8 rss_mb=1046.9
+  [replay_attack 20/40] t=23.2s wall_ms=89.1 decision=REJECT (gt=attack:replay) cpu%=95.2 rss_mb=1047.1
+  [replay_attack 30/40] t=24.2s wall_ms=93.9 decision=REJECT (gt=attack:replay) cpu%=93.8 rss_mb=1047.6
+  [replay_attack 39/40] t=25.1s wall_ms=92.6 decision=REJECT (gt=attack:replay) cpu%=98.3 rss_mb=1047.9
+  scenario 'replay_attack' wall time: 3.9s (10.17 msg/s)
+
+=== Scenario: sybil_attack — One physical CARLA vehicle broadcasting under 5 different station_ids at ~sub-metre offsets. ===
+  [sybil_attack 0/40] t=25.2s wall_ms=91.9 decision=CAUTION (gt=attack:sybil) cpu%=149.6 rss_mb=1047.9
+  [sybil_attack 10/40] t=26.2s wall_ms=93.2 decision=REJECT (gt=attack:sybil) cpu%=100.0 rss_mb=1048.3
+  [sybil_attack 20/40] t=27.2s wall_ms=99.2 decision=REJECT (gt=attack:sybil) cpu%=113.7 rss_mb=1050.1
+  [sybil_attack 30/40] t=28.2s wall_ms=92.8 decision=REJECT (gt=attack:sybil) cpu%=101.5 rss_mb=1050.6
+  [sybil_attack 39/40] t=29.1s wall_ms=87.0 decision=REJECT (gt=attack:sybil) cpu%=99.9 rss_mb=1050.6
+  scenario 'sybil_attack' wall time: 4.1s (9.78 msg/s)
+
+=== Scenario: semantic_manipulation — Truthful kinematics but a false accident DENM unsupported by CARLA ground truth. ===
+  [semantic_manipulation 0/40] t=29.2s wall_ms=80.8 decision=CAUTION (gt=attack:semantic_manipulation) cpu%=117.6 rss_mb=1050.6
+  [semantic_manipulation 10/40] t=30.2s wall_ms=90.8 decision=CAUTION (gt=attack:semantic_manipulation) cpu%=92.2 rss_mb=1050.8
+  [semantic_manipulation 20/40] t=31.2s wall_ms=88.3 decision=CAUTION (gt=attack:semantic_manipulation) cpu%=116.9 rss_mb=1051.2
+  [semantic_manipulation 30/40] t=32.2s wall_ms=73.6 decision=CAUTION (gt=attack:semantic_manipulation) cpu%=106.6 rss_mb=1051.4
+  [semantic_manipulation 39/40] t=33.1s wall_ms=74.8 decision=CAUTION (gt=attack:semantic_manipulation) cpu%=115.7 rss_mb=1051.5
+  scenario 'semantic_manipulation' wall time: 3.7s (10.68 msg/s)
+
+=== Scenario: authority_override — A passenger car falsely claims station_type=roadSideUnit and issues an override event. ===
+  [authority_override 0/40] t=33.2s wall_ms=77.7 decision=CAUTION (gt=attack:authority_override) cpu%=100.8 rss_mb=1051.6
+  [authority_override 10/40] t=34.2s wall_ms=74.9 decision=CAUTION (gt=attack:authority_override) cpu%=105.1 rss_mb=1052.0
+  [authority_override 20/40] t=35.2s wall_ms=81.3 decision=CAUTION (gt=attack:authority_override) cpu%=112.4 rss_mb=1052.4
+  [authority_override 30/40] t=36.2s wall_ms=88.5 decision=CAUTION (gt=attack:authority_override) cpu%=110.2 rss_mb=1052.5
+  [authority_override 39/40] t=37.1s wall_ms=90.7 decision=CAUTION (gt=attack:authority_override) cpu%=88.4 rss_mb=1052.6
+  scenario 'authority_override' wall time: 3.6s (11.03 msg/s)
+
+=== Scenario: goal_manipulation — False traffic_condition DENM to manipulate other vehicles' routing, no real congestion. ===
+  [goal_manipulation 0/40] t=37.2s wall_ms=76.6 decision=REJECT (gt=attack:goal_manipulation) cpu%=84.0 rss_mb=1052.6
+  [goal_manipulation 10/40] t=38.2s wall_ms=72.7 decision=CAUTION (gt=attack:goal_manipulation) cpu%=110.7 rss_mb=1052.6
+  [goal_manipulation 20/40] t=39.2s wall_ms=77.1 decision=CAUTION (gt=attack:goal_manipulation) cpu%=98.2 rss_mb=1052.7
+  [goal_manipulation 30/40] t=40.2s wall_ms=80.4 decision=CAUTION (gt=attack:goal_manipulation) cpu%=101.7 rss_mb=1052.8
+  [goal_manipulation 39/40] t=41.1s wall_ms=98.5 decision=CAUTION (gt=attack:goal_manipulation) cpu%=101.6 rss_mb=1053.0
+  scenario 'goal_manipulation' wall time: 3.7s (10.74 msg/s)
+
+=== Scenario: false_hazard_clearance — False 'hazard_cleared' claim contradicting a still-active truthful peer hazard report. ===
+  [false_hazard_clearance 0/40] t=41.2s wall_ms=90.2 decision=CAUTION (gt=attack:false_hazard_clearance) cpu%=116.4 rss_mb=1053.3
+  [false_hazard_clearance 10/40] t=42.2s wall_ms=72.5 decision=REJECT (gt=attack:false_hazard_clearance) cpu%=100.1 rss_mb=1054.0
+  [false_hazard_clearance 20/40] t=43.2s wall_ms=82.0 decision=REJECT (gt=attack:false_hazard_clearance) cpu%=101.7 rss_mb=1054.5
+  [false_hazard_clearance 30/40] t=44.2s wall_ms=73.7 decision=REJECT (gt=attack:false_hazard_clearance) cpu%=126.8 rss_mb=1055.0
+  [false_hazard_clearance 39/40] t=45.1s wall_ms=81.3 decision=REJECT (gt=attack:false_hazard_clearance) cpu%=96.2 rss_mb=1055.2
+  scenario 'false_hazard_clearance' wall time: 3.6s (11.09 msg/s)
+
+Eval wall time: 35.7s for 400 messages (11.22 msg/s)
+Wrote C:\semantic-trust-boundary-violation\semantic-trust-boundary-violation\deployment_eval\carla_results\carla_deployment_eval_results.json
+Cleaning up CARLA actors...

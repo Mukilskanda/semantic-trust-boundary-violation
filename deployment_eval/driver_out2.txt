@@ -1,0 +1,40 @@
+=== multi-run driver started Sun Aug  2 20:04:51 IST 2026 ===
+--- Town01_seed1 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 23846.61it/s]
+
+==============================================================
+=== TOWN Town01 ===
+==============================================================
+  loaded: Carla/Maps/Town01
+  --- Town01_seed1 ---
+      400 msgs, 13.23 msg/s, gpu_util=54%, rss=1051MB
+--- Town01_seed2 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 23240.79it/s]
+
+==============================================================
+=== TOWN Town01 ===
+==============================================================
+  loaded: Carla/Maps/Town01
+  --- Town01_seed2 ---
+      400 msgs, 13.19 msg/s, gpu_util=56%, rss=1055MB
+[skip] Town01_seed3 already complete
+[skip] Town01_seed4 already complete
+[skip] Town01_seed5 already complete
+[skip] Town02_seed1 already complete
+[skip] Town02_seed2 already complete
+[skip] Town02_seed3 already complete
+[skip] Town02_seed4 already complete
+[skip] Town02_seed5 already complete
+[skip] Town05_seed1 already complete
+[skip] Town05_seed2 already complete
+[skip] Town05_seed3 already complete
+[skip] Town05_seed4 already complete
+[skip] Town05_seed5 already complete
+=== driver finished Sun Aug  2 20:09:10 IST 2026 ===
+runs on disk: 15

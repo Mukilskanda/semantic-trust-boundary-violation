@@ -1,0 +1,161 @@
+=== multi-run driver started Sun Aug  2 19:36:34 IST 2026 ===
+[skip] Town01_seed1 already complete
+[skip] Town01_seed2 already complete
+--- Town01_seed3 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 30119.65it/s]
+
+==============================================================
+=== TOWN Town01 ===
+==============================================================
+  loaded: Carla/Maps/Town01
+  --- Town01_seed3 ---
+      400 msgs, 13.50 msg/s, gpu_util=47%, rss=1051MB
+--- Town01_seed4 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 26487.71it/s]
+
+==============================================================
+=== TOWN Town01 ===
+==============================================================
+  loaded: Carla/Maps/Town01
+  --- Town01_seed4 ---
+      400 msgs, 13.39 msg/s, gpu_util=52%, rss=1051MB
+--- Town01_seed5 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 25503.14it/s]
+
+==============================================================
+=== TOWN Town01 ===
+==============================================================
+  loaded: Carla/Maps/Town01
+  --- Town01_seed5 ---
+      400 msgs, 13.40 msg/s, gpu_util=54%, rss=1050MB
+--- Town02_seed1 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 17665.84it/s]
+
+==============================================================
+=== TOWN Town02 ===
+==============================================================
+  loaded: Carla/Maps/Town02
+  --- Town02_seed1 ---
+      400 msgs, 13.37 msg/s, gpu_util=50%, rss=1051MB
+--- Town02_seed2 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 21282.73it/s]
+
+==============================================================
+=== TOWN Town02 ===
+==============================================================
+  loaded: Carla/Maps/Town02
+  --- Town02_seed2 ---
+      400 msgs, 13.49 msg/s, gpu_util=54%, rss=1050MB
+--- Town02_seed3 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 22283.29it/s]
+
+==============================================================
+=== TOWN Town02 ===
+==============================================================
+  loaded: Carla/Maps/Town02
+  --- Town02_seed3 ---
+      400 msgs, 13.60 msg/s, gpu_util=55%, rss=1050MB
+--- Town02_seed4 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 24625.91it/s]
+
+==============================================================
+=== TOWN Town02 ===
+==============================================================
+  loaded: Carla/Maps/Town02
+  --- Town02_seed4 ---
+      400 msgs, 13.65 msg/s, gpu_util=55%, rss=1050MB
+--- Town02_seed5 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 29410.35it/s]
+
+==============================================================
+=== TOWN Town02 ===
+==============================================================
+  loaded: Carla/Maps/Town02
+  --- Town02_seed5 ---
+      400 msgs, 13.63 msg/s, gpu_util=57%, rss=1048MB
+--- Town05_seed1 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 25232.48it/s]
+
+==============================================================
+=== TOWN Town05 ===
+==============================================================
+  loaded: Carla/Maps/Town05
+  --- Town05_seed1 ---
+      400 msgs, 13.53 msg/s, gpu_util=54%, rss=1076MB
+--- Town05_seed2 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 23926.18it/s]
+
+==============================================================
+=== TOWN Town05 ===
+==============================================================
+  loaded: Carla/Maps/Town05
+  --- Town05_seed2 ---
+      400 msgs, 13.62 msg/s, gpu_util=57%, rss=1075MB
+--- Town05_seed3 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 20859.35it/s]
+
+==============================================================
+=== TOWN Town05 ===
+==============================================================
+  loaded: Carla/Maps/Town05
+  --- Town05_seed3 ---
+      400 msgs, 13.50 msg/s, gpu_util=56%, rss=1077MB
+--- Town05_seed4 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 26019.56it/s]
+
+==============================================================
+=== TOWN Town05 ===
+==============================================================
+  loaded: Carla/Maps/Town05
+  --- Town05_seed4 ---
+      400 msgs, 13.53 msg/s, gpu_util=56%, rss=1075MB
+--- Town05_seed5 : starting fresh CARLA ---
+Plan: 1 towns x 1 seeds = 1 runs, 400 messages
+Constructing ISCEPipeline once (B3 loaded once, reused across all runs)
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 26495.60it/s]
+
+==============================================================
+=== TOWN Town05 ===
+==============================================================
+  loaded: Carla/Maps/Town05
+  --- Town05_seed5 ---
+      400 msgs, 13.49 msg/s, gpu_util=55%, rss=1075MB
+=== driver finished Sun Aug  2 20:04:23 IST 2026 ===
+runs on disk: 15

@@ -1,0 +1,64 @@
+{
+  "experiment": "carla_multirun_deployment",
+  "towns": [
+    "Town01",
+    "Town02",
+    "Town05"
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "n_vehicles": 8,
+  "ticks_per_scenario": 40,
+  "fixed_delta_seconds": 0.1,
+  "scenarios": [
+    "normal_driving",
+    "accident",
+    "emergency_vehicle",
+    "road_closure",
+    "replay_attack",
+    "sybil_attack",
+    "semantic_manipulation",
+    "authority_override",
+    "goal_manipulation",
+    "false_hazard_clearance"
+  ],
+  "b3_load_ms": 19936.029099990265,
+  "gpu_name": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "note": "Frozen pipeline unchanged; only town and spawn seed vary. All runs retained; aggregate averages over every run.",
+  "runs_completed": [
+    "Town01_seed1",
+    "Town01_seed2"
+  ],
+  "runs_failed": [
+    {
+      "town": "Town01",
+      "seed": 3,
+      "error": "rpc::timeout: Timeout of 2000ms while calling RPC function 'register_vehicle'"
+    },
+    {
+      "town": "Town01",
+      "seed": 4,
+      "error": "rpc::timeout: Timeout of 2000ms while calling RPC function 'register_vehicle'"
+    },
+    {
+      "town": "Town01",
+      "seed": 5,
+      "error": "rpc::timeout: Timeout of 2000ms while calling RPC function 'register_vehicle'"
+    },
+    {
+      "town": "Town02",
+      "seed": null,
+      "error": "town load failed: time-out of 60000ms while waiting for the simulator, make sure the simulator is ready and connected to 127.0.0.1:2000"
+    },
+    {
+      "town": "Town05",
+      "seed": null,
+      "error": "town load failed: time-out of 60000ms while waiting for the simulator, make sure the simulator is ready and connected to 127.0.0.1:2000"
+    }
+  ]
+}

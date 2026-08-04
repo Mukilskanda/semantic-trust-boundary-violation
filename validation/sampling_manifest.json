@@ -1,0 +1,96 @@
+{
+  "n_sampled": 300,
+  "n_population": 10000,
+  "seed": 20260802,
+  "strategy": "stratified by attack_family, proportional with a floor of 14/family, remainder to largest families; presentation order shuffled to de-correlate family from position",
+  "n_families": 21,
+  "per_family": {
+    "context_poisoning": {
+      "n": 14,
+      "mal": 14
+    },
+    "temporal_context_drift": {
+      "n": 14,
+      "mal": 14
+    },
+    "planner_manipulation": {
+      "n": 14,
+      "mal": 14
+    },
+    "hazard_amplification": {
+      "n": 14,
+      "mal": 14
+    },
+    "indirect_prompt_injection": {
+      "n": 14,
+      "mal": 14
+    },
+    "collaborative_semantic_agreement": {
+      "n": 14,
+      "mal": 14
+    },
+    "context_inversion": {
+      "n": 14,
+      "mal": 14
+    },
+    "traffic_efficiency_lure": {
+      "n": 14,
+      "mal": 14
+    },
+    "mixed_semantic_attacks": {
+      "n": 14,
+      "mal": 14
+    },
+    "instruction_injection": {
+      "n": 14,
+      "mal": 14
+    },
+    "benign_control": {
+      "n": 20,
+      "mal": 0
+    },
+    "authority_override": {
+      "n": 14,
+      "mal": 14
+    },
+    "false_clearance": {
+      "n": 14,
+      "mal": 14
+    },
+    "semantic_narrative_poisoning": {
+      "n": 14,
+      "mal": 14
+    },
+    "role_manipulation": {
+      "n": 14,
+      "mal": 14
+    },
+    "multi_message_context_poisoning": {
+      "n": 14,
+      "mal": 14
+    },
+    "priority_manipulation": {
+      "n": 14,
+      "mal": 14
+    },
+    "infrastructure_semantic_manipulation": {
+      "n": 14,
+      "mal": 14
+    },
+    "cross_source_contradiction": {
+      "n": 14,
+      "mal": 14
+    },
+    "hazard_suppression": {
+      "n": 14,
+      "mal": 14
+    },
+    "goal_manipulation": {
+      "n": 14,
+      "mal": 14
+    }
+  },
+  "prevalence_malicious_in_sample": 0.9333333333333333,
+  "annotations_present": false,
+  "note": "Annotator templates are intentionally BLANK. No labels in this repository are machine-generated for the human-validation study."
+}

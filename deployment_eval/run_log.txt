@@ -1,0 +1,18 @@
+Full trace: 1829 timesteps, 36256 messages, max_concurrent=46, mean_concurrent=19.8
+Replaying first 2000 messages (chronological order) through the live pipeline...
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 20835.89it/s]
+  [0/2000] t=0.0s wall_ms=68.6 decision=ACCEPT cpu%=66.7 rss_mb=1078.1
+  [200/2000] t=6.3s wall_ms=58.2 decision=CAUTION cpu%=102.7 rss_mb=1094.7
+  [400/2000] t=9.2s wall_ms=67.1 decision=CAUTION cpu%=103.6 rss_mb=1096.3
+  [600/2000] t=11.4s wall_ms=63.7 decision=CAUTION cpu%=99.8 rss_mb=1097.6
+  [800/2000] t=13.2s wall_ms=59.3 decision=CAUTION cpu%=97.6 rss_mb=1099.1
+  [1000/2000] t=14.8s wall_ms=70.9 decision=CAUTION cpu%=96.8 rss_mb=1100.8
+  [1200/2000] t=16.3s wall_ms=70.1 decision=CAUTION cpu%=98.9 rss_mb=1102.2
+  [1400/2000] t=17.7s wall_ms=64.6 decision=CAUTION cpu%=98.1 rss_mb=1075.9
+  [1600/2000] t=19.0s wall_ms=63.0 decision=CAUTION cpu%=98.0 rss_mb=1077.4
+  [1800/2000] t=20.2s wall_ms=63.7 decision=CAUTION cpu%=98.7 rss_mb=1078.9
+  [1999/2000] t=21.3s wall_ms=67.8 decision=CAUTION cpu%=98.6 rss_mb=1081.0
+
+Replay wall time: 133.8s for 2000 messages (14.95 msg/s)
+Wrote C:\semantic-trust-boundary-violation\semantic-trust-boundary-violation\deployment_eval\results\deployment_eval_results.json

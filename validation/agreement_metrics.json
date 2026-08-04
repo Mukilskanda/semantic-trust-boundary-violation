@@ -1,0 +1,8 @@
+{
+  "status": "AWAITING_HUMAN_ANNOTATION",
+  "annotations_present": false,
+  "detail": [
+    "- **Annotator A:** template present but **0 of 300 labels filled**.",
+    "- **Annotator B:** template present but **0 of 300 labels filled**."
+  ]
+}

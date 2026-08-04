@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-08-02 00:59:21.870774 by Eclipse SUMO randomTrips.py v1_27_0+0000-e238ea04b71
+<configuration>
+    <net-file value="grid.net.xml"/>
+    <seed value="20260802"/>
+    <end value="60.0"/>
+    <period value="1.2"/>
+</configuration>
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <trip id="0" depart="0.00" from="C3D3" to="C0D0"/>
+    <trip id="1" depart="1.20" from="A3B3" to="B1B0"/>
+    <trip id="2" depart="2.40" from="C1C2" to="B0C0"/>
+    <trip id="3" depart="3.60" from="A2A1" to="D0D1"/>
+    <trip id="4" depart="4.80" from="D0D1" to="B1C1"/>
+    <trip id="5" depart="6.00" from="B0A0" to="B2B3"/>
+    <trip id="6" depart="7.20" from="A3A2" to="B2B1"/>
+    <trip id="7" depart="8.40" from="D0D1" to="A1B1"/>
+    <trip id="8" depart="9.60" from="B0B1" to="C2C1"/>
+    <trip id="9" depart="10.80" from="A2B2" to="B0C0"/>
+    <trip id="10" depart="12.00" from="D0C0" to="C0D0"/>
+    <trip id="11" depart="13.20" from="D2D1" to="C2C1"/>
+    <trip id="12" depart="14.40" from="A2A3" to="C0D0"/>
+    <trip id="13" depart="15.60" from="A0B0" to="D2D3"/>
+    <trip id="14" depart="16.80" from="B1B2" to="A2A3"/>
+    <trip id="15" depart="18.00" from="C1C2" to="C2C1"/>
+    <trip id="16" depart="19.20" from="C1C2" to="C2C3"/>
+    <trip id="17" depart="20.40" from="A1A2" to="C1C2"/>
+    <trip id="18" depart="21.60" from="C2D2" to="D1D0"/>
+    <trip id="19" depart="22.80" from="B1C1" to="A2A3"/>
+    <trip id="20" depart="24.00" from="A2A1" to="C0D0"/>
+    <trip id="21" depart="25.20" from="C1C2" to="C1C0"/>
+    <trip id="22" depart="26.40" from="B1A1" to="B2B1"/>
+    <trip id="23" depart="27.60" from="D2C2" to="D2D3"/>
+    <trip id="24" depart="28.80" from="B0A0" to="B1B0"/>
+    <trip id="25" depart="30.00" from="D2C2" to="A1A0"/>
+    <trip id="26" depart="31.20" from="B1C1" to="C0B0"/>
+    <trip id="27" depart="32.40" from="C2B2" to="A1A2"/>
+    <trip id="28" depart="33.60" from="C0D0" to="B0B1"/>
+    <trip id="29" depart="34.80" from="C2C3" to="D3C3"/>
+    <trip id="30" depart="36.00" from="A3A2" to="C1C0"/>
+    <trip id="31" depart="37.20" from="C0B0" to="D1D2"/>
+    <trip id="32" depart="38.40" from="C3C2" to="B0C0"/>
+    <trip id="33" depart="39.60" from="B1B0" to="D1D0"/>
+    <trip id="34" depart="40.80" from="C1C0" to="B2B1"/>
+    <trip id="35" depart="42.00" from="B0C0" to="D3D2"/>
+    <trip id="36" depart="43.20" from="C1C2" to="A3B3"/>
+    <trip id="37" depart="44.40" from="A0B0" to="D3C3"/>
+    <trip id="38" depart="45.60" from="B2C2" to="C3D3"/>
+    <trip id="39" depart="46.80" from="A2B2" to="B0A0"/>
+    <trip id="40" depart="48.00" from="D3D2" to="D3D2"/>
+    <trip id="41" depart="49.20" from="C1B1" to="D1D0"/>
+    <trip id="42" depart="50.40" from="B3C3" to="C1C0"/>
+    <trip id="43" depart="51.60" from="B3B2" to="D1C1"/>
+    <trip id="44" depart="52.80" from="B3C3" to="B1B2"/>
+    <trip id="45" depart="54.00" from="C2B2" to="A1A2"/>
+    <trip id="46" depart="55.20" from="D2C2" to="C2D2"/>
+    <trip id="47" depart="56.40" from="D1C1" to="A1A2"/>
+    <trip id="48" depart="57.60" from="C2B2" to="C1C2"/>
+    <trip id="49" depart="58.80" from="B1B0" to="D3C3"/>
+</routes>
