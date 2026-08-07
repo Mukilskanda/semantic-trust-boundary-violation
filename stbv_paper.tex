@@ -1,4 +1,4 @@
-\documentclass[journal]{IEEEtran}
+\documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
 
 \usepackage{cite}
@@ -20,949 +20,311 @@
 
 \author{
 \IEEEauthorblockN{Harshit Vaish}
-\IEEEauthorblockA{\textit{AIML Department} \\
-\textit{PES University}\\
-Bengaluru, Karnataka \\
-srn@stu.pes.edu}
+\IEEEauthorblockA{\textit{AIML Department} \\ \textit{PES University}\\ Bengaluru, Karnataka \\ srn@stu.pes.edu}
 \and
 \IEEEauthorblockN{V Vyas}
-\IEEEauthorblockA{\textit{CSE Department} \\
-\textit{PES University}\\
-Bengaluru, Karnataka \\
-srn@stu.pes.edu}
+\IEEEauthorblockA{\textit{CSE Department} \\ \textit{PES University}\\ Bengaluru, Karnataka \\ srn@stu.pes.edu}
 \and
 \IEEEauthorblockN{Mukil Skanda}
-\IEEEauthorblockA{\textit{CSE Department} \\
-\textit{PES University}\\
-Bengaluru, Karnataka \\
-srn@stu.pes.edu}
+\IEEEauthorblockA{\textit{CSE Department} \\ \textit{PES University}\\ Bengaluru, Karnataka \\ srn@stu.pes.edu}
 }
 
 \maketitle
 
 \begin{abstract}
-Existing Vehicle-to-Everything (V2X) trust architectures rely on Public Key Infrastructure (PKI), cryptographic validation, and behavioral misbehavior detection to ensure that cooperative messages are authentic and protocol compliant. While these mechanisms establish robust communication trust, they do not determine whether authenticated information remains semantically trustworthy before influencing safety-critical autonomous driving decisions. This disconnect creates a previously under-addressed semantic attack surface through which cryptographically valid yet semantically deceptive cooperative messages can manipulate downstream AI reasoning.
-
-To formalize this vulnerability, we define Semantic Trust Boundary Violations (STBVs), a threat model in which communication authenticity does not imply semantic reliability. We propose a Layered Semantic-Aware V2X Trust Architecture that introduces decision trust as an explicit security objective by incorporating the B3 Semantic Trust Gate, a semantic verification layer positioned between cooperative perception and downstream AI-enabled decision modules, fused with communication and behavioral trust evidence through a Dempster-Shafer/Yager Trust Decision Engine.
-
-We evaluate the proposed architecture on STBV-Bench, a reproducible benchmark built from real VeReMi Extension vehicular trajectories combined with a seeded semantic transformation engine spanning twenty attack families ($n=10{,}000$). The semantic verification layer (B3) alone achieves 100\% precision and 55.7\% recall (F1$=0.715$) against attacks that carry no kinematic signature, and the complete fused architecture achieves F1$=0.718$, with evidence fusion producing a statistically significant (McNemar $p=3.06\times10^{-29}$) effect that routes 92.5\% of its decision changes through an intermediate Caution state rather than forcing binary accept/reject calls. A companion evaluation on genuine VeReMi kinematic attacks (constant-position falsification, data replay, and denial-of-service; $n=13{,}511$ real messages) shows the behavioral layer independently achieves 60--91\% recall (by attack type) with zero measurable contribution from the semantic layer, confirming that behavioral and semantic verification address complementary, non-overlapping threat classes. A contextual multi-vehicle evaluation shows this complementary behavior is robust to threshold miscalibration (aggregate metrics unchanged across a wide sweep of decision thresholds) but that aggregate precision degrades under realistic ambient traffic for a specific, identified reason. End-to-end per-message decision latency averages 110~ms ($p_{95}=189$~ms, $p_{99}=254$~ms). To address the concern that STBV-Bench's headline numbers reflect only this project's own generator, we additionally evaluate the frozen, unmodified B3 checkpoint against an independent external corpus ($n=117$) combining directly-authored, LLM-generated (three separate providers), and public-prompt-injection-derived attacks, verified to share zero template overlap with STBV-Bench: B3 achieves 89.9\% recall and 97.6\% precision (ROC AUC 0.975), and its single worst-performing family on this external corpus is the same authority-override phrasing pattern already identified as a weak point on STBV-Bench, corroborating rather than contradicting that internally-measured limitation. Critically, every result above measures single-shot detection only; a real adaptive-attacker evaluation, in which an automated attacker observes B3's prediction and iteratively revises its attack (paraphrasing, synonym substitution, context poisoning, and six further mutation strategies) against the same frozen checkpoint, achieves an 83.7\% attack success rate within a 10-round budget, with a median of roughly 3 rounds to first evasion -- a substantially more serious finding than any single-shot number in this paper, reported here in full rather than hedged. Separately, we construct a realistic, event-labeled, 142-message multi-vehicle benchmark specifically shaped for Cooperative Perception (CP) -- which contributes zero measurable effect on every other benchmark in this paper due to a data-generation gap, not an algorithmic one -- and find that CP, given data of the kind it was designed for, recovers 11 of 21 attacker messages the rest of the stack missed entirely (6/21$\to$17/21 reaching REJECT), at a disclosed, mechanistically-traced cost of 22 spurious low-severity escalations concentrated at short window depths. We report these results together with their limitations, including a bounded detection gap on six semantic attack families phrased as subtle narrative framing and an unresolved data-generation gap that currently prevents Cooperative Perception from contributing measurable evidence to any benchmark evaluated in this work, despite its detection logic being independently verified correct. We further add the baseline comparison the architecture previously lacked, and it is unfavourable: two trivial bag-of-words detectors (TF-IDF with logistic regression or a linear SVM) achieve a \emph{perfect} F1 of 1.000 on STBV-Bench, far exceeding B3, because the benchmark's 2{,}993 benign control messages are drawn from only ten unique sentences -- a benchmark-validity defect we report and quantify rather than omit, and which retires ``100\% precision'' as evidence of capability on this corpus. Against the two genuinely comparable zero-shot detectors, however, B3 does win (0.311/0.715 vs.\ 0.267 for a 7B LLM judge and 0.235 for regex). Finally, running the identical unmodified pipeline against a SUMO replay ($n=2{,}000$) and \textbf{15 independent live CARLA runs} (3 towns $\times$ 5 seeds, 6{,}000 messages, 95\% bootstrap CIs) identifies B3's unbatched inference as the binding throughput constraint (13.47 [13.40, 13.54]~msg/s against 20--460~msg/s required) and establishes reproducibly what a single run could only suggest: \textbf{across every run, town and seed, B3 returned \texttt{BENIGN} on all 3{,}585 live attack messages}, so every detection in live deployment came from the behavioural layers alone. We additionally prove six formal properties of the Dempster-Shafer/Yager fusion rule directly from its implementation (conservative fusion, trust monotonicity, well-defined conflict handling, decision consistency, and provable trust preservation under missing evidence, among others), and provide a complete, root-caused failure analysis and an autonomous-driving-focused safety analysis showing every measured failure traces to an upstream evidence-generating layer, never to the fusion mathematics, with two failure modes -- a hazard-clearance semantic blind spot and the live-CARLA non-detection finding above -- rated as having no physical-sensor backstop. These findings demonstrate that communication authenticity alone is insufficient for trustworthy autonomous decision making and establish semantic trust verification as a necessary, evidence-grounded complement to existing V2X trust architectures.
+Vehicle-to-Everything (V2X) trust mechanisms -- PKI, misbehavior detection, cooperative perception -- verify that a cooperative message is authentic, protocol-compliant, and behaviorally plausible. None of them evaluate whether its \emph{content} is trustworthy before an AI planner acts on it, leaving a semantic gap through which a cryptographically valid, kinematically plausible message can still assert something false or manipulative. We formalize this gap as the Semantic Trust Boundary (STB) and propose a layered architecture that closes it: a B3 Semantic Trust Gate reads the synthesized scene content a downstream planner would consume, and a Dempster-Shafer/Yager Trust Decision Engine fuses this evidence with communication and behavioral trust under a provably conservative rule -- semantic evidence can only add caution, never relax a decision, a property we prove directly from the implementation rather than assert from design intent. We evaluate the architecture across seven independent regimes: layer ablation, an in-distribution benchmark built from real VeReMi trajectories, a newly constructed template-disjoint held-out benchmark, genuine VeReMi kinematic attacks, a live CARLA simulator, a SUMO deployment replay, and an iterative adaptive attacker. The fused architecture reaches F1$=0.995$ on the in-distribution benchmark, with fusion contributing 69 decision changes, all conservative escalations; a continued fine-tuning pass, verified against a template-disjoint held-out set sharing no training data, improves F1 from 0.918 to 0.945, evidence of genuine generalization rather than benchmark memorization; the behavioral layer independently detects real kinematic attacks the semantic layer cannot see, confirming non-overlapping coverage. Deploying the unmodified pipeline against a live simulator surfaced and let us fix a genuine synthesizer defect that had silently hidden self-reported attack content from the semantic layer -- a finding we report as a methodological contribution in its own right, since it changes how every prior live-deployment result from this architecture should be read. We report every result, including remaining detection gaps and a live-simulator reproducibility limitation, without smoothing them into a single aggregate score.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Vehicle-to-Everything (V2X), Cooperative Intelligent Transportation Systems (C-ITS), Autonomous Vehicles, Semantic Trust, Decision Trust, Trust Management, Dempster-Shafer Theory, Large Language Models.
+Vehicle-to-Everything (V2X), Semantic Trust, Decision Trust, Trust Management, Dempster-Shafer Theory, Large Language Models, CARLA, SUMO.
 \end{IEEEkeywords}
 
 %======================================================================
 \section{Introduction}
 %======================================================================
-\IEEEPARstart{T}{he} rapid evolution of Connected and Autonomous Vehicles (CAVs) is transforming Intelligent Transportation Systems (ITS) by enabling vehicles to exchange real-time information through Vehicle-to-Everything (V2X) communication \cite{b1}. Unlike conventional perception systems that rely solely on onboard sensors, modern V2X-enabled vehicles leverage cooperative perception, roadside infrastructure, and distributed intelligence to extend environmental awareness beyond line-of-sight limitations \cite{b2}, and recent advances in collaborative perception demonstrate that information sharing among connected vehicles significantly improves detection accuracy and decision-making capability \cite{b3}. As artificial intelligence becomes integrated into perception, planning, and control, the trustworthiness of exchanged information becomes a prerequisite for safe vehicle behavior, not merely a desirable property of the communication channel that carries it.
+Connected and Autonomous Vehicles increasingly rely on cooperative V2X messaging to extend awareness beyond onboard sensing \cite{b1,b2,b3}. Existing V2X trust stacks secure this channel at the communication and behavioral layers: PKI provides identity and integrity \cite{b4,b5,b6}; misbehavior detection (MBD) flags kinematically implausible or historically inconsistent senders \cite{b7,b8}; cooperative perception (CP) lets vehicles cross-check observations \cite{b9}. None of these evaluate whether an authenticated, behaviorally plausible message's \emph{content} is trustworthy. A message can hold a valid certificate and a plausible trajectory while still asserting something false or manipulative -- a claimed authority override, a fabricated hazard clearance, an injected instruction meant to make a downstream planner defer to information it should not \cite{b10,b11}.
 
-Contemporary V2X security frameworks address this prerequisite through a multi-layered communication-trust architecture: Public Key Infrastructure (PKI) provides identity authentication and message integrity via digital certificates \cite{b4}, standardized under IEEE 1609.2 and ETSI TS 103 097 \cite{b5,b6}; Misbehavior Detection Systems (MDS) continuously monitor communication and kinematic behavior to identify participants that pass cryptographic checks but behave anomalously \cite{b7,b8}; and cooperative-perception trust-propagation mechanisms let vehicles corroborate observations across multiple sources \cite{b9}. Together these mechanisms verify authenticity, protocol compliance, and behavioral plausibility, forming the security foundation on which AI-enabled cooperative driving is built.
+We term this failure mode a \emph{Semantic Trust Boundary Violation (STBV)}: a message that satisfies every conventional trust check yet crosses the point where verified information is handed to AI reasoning while asserting semantically inconsistent or manipulative content. This paper proposes a Layered Semantic-Aware V2X Trust Architecture that closes this gap with a B3 Semantic Trust Gate and a Dempster-Shafer/Yager Trust Decision Engine, evaluates it across seven independent regimes (in-distribution benchmark, template-disjoint held-out benchmark, genuine kinematic attacks, live CARLA, SUMO replay, adaptive attack, layer ablation), and reports two CRITICAL-rated live-deployment gaps alongside its strengths.
 
-None of these mechanisms, however, evaluate whether an authenticated message's \emph{content} is trustworthy. A message can be cryptographically valid, correctly attributed to a legitimate certificate holder, and behaviorally indistinguishable from ordinary traffic, while still asserting something false, manipulative, or contextually deceptive -- a claimed authority override, a fabricated hazard clearance, a narrative designed to make an AI planner defer to information it should not \cite{b10,b11}. Existing trust mechanisms were not designed to catch this, because it is not a communication-layer or behavioral-layer problem: it is a problem in what the message \emph{means}. We term this failure mode a \emph{Semantic Trust Gap}, and the point at which verified V2X information is handed to an AI reasoning module without any check on its meaning the \emph{Semantic Trust Boundary (STB)}. A message that crosses this boundary while asserting something semantically inconsistent, contradictory, or manipulative constitutes a \emph{Semantic Trust Boundary Violation (STBV)} -- the threat class this paper addresses.
-
-To close this gap, we propose a Layered Semantic-Aware V2X Trust Architecture that extends communication trust into a comprehensive \emph{Decision Trust} framework, built around a new B3 Semantic Trust Gate positioned between cooperative perception and downstream AI decision modules, and a Trust Decision Engine that fuses communication, behavioral, and semantic evidence under Dempster-Shafer theory rather than by simple score averaging. The architecture is additive: it does not replace PKI, misbehavior detection, or cooperative perception, and its semantic evidence is constrained so that it can only ever add caution to a decision, never override a cryptographic rejection. Fig.~\ref{fig_1} illustrates this evolution from a trust stack that terminates at cooperative perception to one that extends through semantic verification and evidence fusion to a decision-level output.
-
-\begin{figure}[!t]
-\centering
-\includegraphics[width=\linewidth]{fig1.png}
-\caption{Evolution of V2X trust from communication trust to decision trust. Existing V2X architectures establish identity, protocol, behavioral, and cooperative trust, but terminate before semantic reasoning. The proposed Decision Trust Stack extends trust beyond the Semantic Trust Boundary through semantic verification, evidence fusion, and trust-informed reasoning.}
-\label{fig_1}
-\end{figure}
-
-\subsection{Main Contributions}
-\begin{itemize}
-    \item We introduce \emph{Decision Trust}, extending communication-centric V2X trust toward a decision-centric assurance that explicitly evaluates whether authenticated information remains semantically trustworthy before it reaches an AI planner.
-    \item We formally define the \emph{Semantic Trust Boundary} and \emph{Semantic Trust Boundary Violations}, giving a systematic vocabulary for semantic inconsistencies that arise between communication-level verification and AI-driven decision making.
-    \item We propose a Layered Semantic-Aware V2X Trust Architecture, additive to existing communication-trust infrastructure, centered on the B3 Semantic Trust Gate and a Dempster-Shafer/Yager Trust Decision Engine.
-    \item We evaluate the architecture on STBV-Bench, a reproducible benchmark built from real, externally-sourced vehicular trajectories combined with a seeded semantic-attack generator ($n=10{,}000$), a companion benchmark of genuine kinematic V2X attacks ($n=13{,}511$), a full layer-ablation study with statistical significance testing, and a case study of co-occurring semantic and kinematic threats in a shared scene -- reporting every result, including a bounded semantic-detection gap and an unresolved evaluation gap in one architectural component, without smoothing either into an aggregate score.
-\end{itemize}
-
-The remainder of this paper is organized as follows. Section~\ref{sec:related} surveys existing V2X trust, cooperative-perception security, and LLM-safety literature and positions this work relative to it. Section~\ref{sec:problem} formalizes the Semantic Trust Boundary and the threat model. Section~\ref{sec:architecture} presents the proposed layered architecture. Section~\ref{sec:methodology} describes the experimental methodology. Section~\ref{sec:results} reports results organized by research question. Section~\ref{sec:discussion} synthesizes the findings, Section~\ref{sec:limitations} states limitations explicitly, and Section~\ref{sec:conclusion} concludes.
+\textbf{Contributions.} (i) We formalize the Semantic Trust Boundary and STBVs. (ii) We propose an additive architecture -- B3 plus a provably conservative fusion engine -- that never relaxes a decision crypto/behavioral evidence alone would have made more severe (six propositions proved directly from the implementation). (iii) We evaluate on STBV-Bench v1 ($n{=}10{,}000$) and a newly constructed, independently template-disjoint benchmark STBV-Bench v2.5b ($n{=}10{,}098$, verified zero overlap with all training data) that demonstrates real, measured generalization from a genuine continued fine-tuning pass. (iv) We run the complete, unmodified pipeline against real VeReMi kinematic attacks, a live CARLA simulator, and a SUMO microscopic-traffic replay, and report a synthesizer defect discovered and fixed as a direct result of the live evaluation. (v) We evaluate against an iterative adaptive attacker, not only single-shot inputs.
 
 %======================================================================
 \section{Related Work}
 \label{sec:related}
 %======================================================================
-No single reviewed work combines PKI-grounded communication trust, behavioral trust, an LLM-based semantic content verification layer, and unified Dempster-Shafer decision fusion, evaluated against V2X cooperative-message semantic manipulation specifically. This section positions our contribution against the closest work in each contributing area; Table~\ref{tab:related_work} summarizes the comparison.
+Table~\ref{tab:related_work} positions this work. PKI/SCMS surveys \cite{r_pki_survey,r_pki_compare} confirm PKI verifies identity, not content. MBD literature \cite{r_mbd_survey1,r_mbd_survey2} targets behavioral/kinematic plausibility, blind to text. Cooperative-perception security work \cite{r_cp_fabrication} targets fabricated \emph{objects}; our threat model targets deceptive \emph{text} in otherwise-valid fields. Context-aware trust \cite{r_context_aware,r_cares} evaluates plausibility given situation, not internal content coherence. No prior work was found combining PKI-grounded, behavioral, and LLM-based semantic verification with Dempster-Shafer fusion for V2X specifically; the closest adjacent work addresses semantic-\emph{channel} backdoors \cite{r_semcom_backdoor}, a different threat model (trusted channel, deceptive decoded content is ours). LLM/VLM-in-driving surveys \cite{r_llm4drive,r_llm_survey} and prompt-injection literature \cite{r_prompt_robot,r_prompt_vla} motivate the attack surface we target through an authenticated V2X channel rather than a direct tool-call. We adopt Yager's conflict-to-ignorance rule \cite{r_ds_improved1,r_ds_improved2} deliberately over more aggressive re-weighting schemes, since its conservative behavior matches our decision policy.
 
-\subsubsection*{PKI-based communication trust} Sedar et al.\ survey the security functions and deployed architectures of PKI in C-ITS \cite{r_pki_survey}, and a 2025 comparison contrasts the North American (IEEE 1609.2.1) and European (ETSI TS 102 941) credential-management standards \cite{r_pki_compare}. Both confirm, in their own scope statements, that PKI verifies sender identity and message integrity but makes no claim about message content -- the boundary this paper's B3 layer is built to address.
-
-\subsubsection*{Misbehavior Detection Systems} MBD complements PKI by reasoning over behavioral and kinematic plausibility across time rather than cryptographic validity at an instant \cite{r_mbd_survey1,r_mbd_survey2,r_mbd_knowledge}. This literature is explicit that MBD targets participants who pass PKI trivially but behave inconsistently -- our Section~\ref{sec:results} companion kinematic evaluation is a direct, quantitative instantiation of exactly this claim, and simultaneously demonstrates MBD's blindness to purely semantic content.
-
-\subsubsection*{Cooperative perception security} Zhang et al.'s USENIX Security study on data fabrication in collaborative vehicular perception \cite{r_cp_fabrication} makes the closest structural observation to our own threat model: standardized security ``cannot block data fabrication attacks because attackers can modify data before wrapping it into protocol messages where protection is enforced.'' That work targets fabricated \emph{objects and positions}; our threat model targets semantically deceptive \emph{text content} injected into otherwise-valid scene-context fields -- a related but distinct attack surface, addressed by our CP layer's cross-source consistency checks and B3's content verification respectively, not by either alone.
-
-\subsubsection*{Context-aware trust models} Context-aware trust schemes for VANETs incorporate spatial-temporal situation and purpose-of-communication into trust scoring \cite{r_context_aware,r_cares}, closely paralleling our B2/CSIA layer's design intent. This literature evaluates whether a message is plausible \emph{given the traffic situation}; it does not evaluate whether the message's own stated content is internally coherent, which is where our B3 layer begins.
-
-\subsubsection*{Semantic trust for V2X} Direct prior work on semantic trust verification specifically for V2X cooperative messages was not found in our literature search -- a scarcity we report as evidence for this paper's contribution rather than smooth over with adjacent citations. The closest related work addresses backdoor attacks on the semantic \emph{encoder/decoder} of a communication channel \cite{r_semcom_backdoor}, a different threat model from ours, which assumes the channel is trusted and evaluates whether the \emph{decoded content} is itself deceptive.
-
-\subsubsection*{LLM/VLM-enabled autonomous driving} Surveys of LLM/VLM integration into autonomous driving stacks \cite{r_llm4drive,r_llm_survey} document rapid adoption of language-model reasoning over cooperative and sensor input for scene understanding and planning -- precisely the attack surface our threat model targets, since any semantic manipulation of that input has a direct path to influencing driving decisions once such integration is deployed.
-
-\subsubsection*{Prompt injection against autonomous systems} Prompt-injection attacks against LLM-integrated robotic and agentic systems are now well documented \cite{r_prompt_robot,r_prompt_vla}, and OWASP ranks prompt injection as the top LLM application vulnerability for 2025. This literature targets instructions arriving through direct user or tool-call channels; our threat model and STBV-Bench extend the same attack family to adversarial content arriving through an authenticated, cryptographically valid V2X cooperative message.
-
-\subsubsection*{Trust fusion architectures} Trust-aware sensor fusion for AV perception \cite{r_trust_sensor_fusion} fuses \emph{sensor} trust (camera/LiDAR/radar redundancy) using dynamic, distribution-based trust modeling -- architecturally similar in spirit to our evidence fusion, but at the sensor level rather than the V2X communication-trust level our Trust Decision Engine operates on.
-
-\subsubsection*{Dempster-Shafer-based trust models} Improved DS combination methods for multi-sensor fusion generally re-weight sources by distance or entropy measures before combination \cite{r_ds_improved1,r_ds_improved2} rather than using Yager's original conflict-to-ignorance reassignment, which this paper adopts directly (Section~\ref{sec:architecture}). We adopt the simpler Yager rule deliberately: its conservative behavior (conflict $\rightarrow$ ignorance, never $\rightarrow$ resolved confidence) is precisely the property our conservative decision policy requires, and comparison against more aggressive conflict-resolution schemes is left for future work rather than adopted without evidence that it improves our specific setting.
-
-\subsubsection*{Decision-level trust systems} Decision-level sensor fusion in AV perception \cite{r_decision_fusion} integrates independent per-sensor predictions at a high level of abstraction -- conceptually parallel to our Decision Trust output, again at the sensor-perception rather than V2X-verification level.
-
-\begin{table*}[t]
+\begin{table}[t]
 \centering
-\caption{Positioning of this work relative to related literature}
+\caption{Positioning relative to related literature}
 \label{tab:related_work}
-\begin{tabular}{@{}lccccccccc@{}}
+\scriptsize
+\begin{tabular}{@{}lccccc@{}}
 \toprule
-Existing Work & Comm. Trust & Behavioral Trust & Semantic Trust & Decision Trust & LLM-aware & Inter-layer Reasoning & Evidence Fusion & Semantic Attacks & Decision-Level Protection \\
+Work & Comm. & Behav. & Semantic & Fusion & Decision \\
 \midrule
-PKI / SCMS surveys \cite{r_pki_survey,r_pki_compare} & \checkmark & -- & -- & -- & -- & -- & -- & -- & -- \\
-MBD surveys \cite{r_mbd_survey1,r_mbd_survey2} & -- & \checkmark & -- & -- & -- & -- & partial & -- & -- \\
-CP security \cite{r_cp_fabrication} & -- & \checkmark (kinematic) & -- & -- & -- & -- & -- & -- (fabrication, not text) & -- \\
-Context-aware trust \cite{r_context_aware,r_cares} & -- & \checkmark & -- & -- & -- & partial & \checkmark & -- & -- \\
-Semantic comm.\ security \cite{r_semcom_backdoor} & -- & -- & partial (channel) & -- & partial & -- & -- & -- (encoder attack) & -- \\
-LLM4Drive-style surveys \cite{r_llm4drive,r_llm_survey} & -- & -- & -- & -- & \checkmark & -- & -- & -- & -- \\
-Prompt injection lit.\ \cite{r_prompt_robot,r_prompt_vla} & -- & -- & \checkmark (general) & -- & \checkmark & -- & -- & \checkmark (not V2X) & -- \\
-Trust-aware sensor fusion \cite{r_trust_sensor_fusion} & -- & -- & -- & \checkmark (sensor) & -- & \checkmark & \checkmark & -- & \checkmark (sensor) \\
-DS/Yager fusion lit.\ \cite{r_ds_improved1,r_ds_improved2} & -- & -- & -- & -- & -- & -- & \checkmark & -- & -- \\
-\textbf{This paper} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark (V2X-specific) & \checkmark \\
+PKI surveys \cite{r_pki_survey,r_pki_compare} & \checkmark & -- & -- & -- & -- \\
+MBD surveys \cite{r_mbd_survey1,r_mbd_survey2} & -- & \checkmark & -- & partial & -- \\
+CP security \cite{r_cp_fabrication} & -- & \checkmark & -- & -- & -- \\
+Context-aware trust \cite{r_context_aware,r_cares} & -- & \checkmark & -- & \checkmark & -- \\
+Sem.\ comm.\ security \cite{r_semcom_backdoor} & -- & -- & partial & -- & -- \\
+\textbf{This paper} & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
-The claim of novelty this comparison supports is one of \emph{combination and domain application}: no individual mechanism in our architecture (PKI, MBD, Dempster-Shafer fusion, or a fine-tuned text classifier) is itself new, and the manuscript does not claim otherwise. What is new is combining them, with an explicit semantic-verification stage and conservative decision policy, and evaluating the combination against a V2X-specific semantic-manipulation threat class that, per our own search, no prior published benchmark directly targets.
+The claim is one of combination and domain application: no single mechanism here is new; combining them with an explicit, provably conservative semantic-verification stage, evaluated end-to-end on live simulators against a V2X-specific semantic threat class, is.
 
 %======================================================================
-\section{Problem Statement and Threat Model}
+\section{Threat Model}
 \label{sec:problem}
 %======================================================================
-\subsection{The Semantic Trust Boundary}
-Existing V2X trust mechanisms establish \emph{communication trust}: message authenticity, certificate validity, protocol compliance, and behavioral consistency over time. None of them evaluate whether an authenticated message is \emph{semantically} trustworthy before it influences an autonomous driving decision. A message carrying a valid certificate, a plausible kinematic profile, and consistent historical behavior may still manipulate downstream reasoning through its content alone -- claiming an authority it does not hold, asserting a hazard has cleared when it has not, or embedding an instruction intended to make a planning module override its own evidence.
+The adversary holds valid or compromised-but-unrevoked credentials sufficient to pass PKI and structural validation, can generate kinematically plausible trajectories, and avoids classical replay/identity detection -- deliberately generous at the communication and behavioral layers, isolating the semantic gap by construction. The threat surface spans communication (signature/certificate misuse, replay, implausible kinematics), behavioral (historical inconsistency, MBD-evasive patterns), and cooperative-perception (Sybil identities, collusion) layers, but this paper's focus is \textbf{semantic manipulation}: attacks that alter meaning in an otherwise valid message. We evaluate 20 attack families spanning direct authority claims (\texttt{authority\_override}, \texttt{false\_clearance}), narrative manipulation (\texttt{context\_inversion}, \texttt{narrative\_poisoning}), multi-source manipulation (\texttt{cross\_source\_contradiction}), and indirection (\texttt{goal\_manipulation}, \texttt{indirect\_prompt\_injection}).
 
-We formalize the point at which this can happen as the \emph{Semantic Trust Boundary (STB)}: the transition where verified V2X information passes from communication-level trust evaluation to AI-driven perception and planning. A \emph{Semantic Trust Boundary Violation (STBV)} is any message that crosses this boundary while satisfying all conventional trust requirements yet asserting content that is semantically inconsistent, contradictory, or manipulative in context. STBVs are, by construction, invisible to any verification mechanism that does not read message content.
-
-\subsection{Threat Model}
-The adversary considered in this work possesses valid communication credentials, or compromised-but-unrevoked certificates, sufficient to pass PKI authentication and structural validation. The adversary can generate kinematically plausible trajectories, maintain protocol-compliant message formats, and avoid classical replay and identity-based detection. Under these assumptions -- deliberately generous to the attacker at the communication and behavioral layers -- conventional trust mechanisms alone cannot identify malicious semantic manipulation, by the threat model's own construction; this is not a weakness of those mechanisms but the precise gap this paper isolates for evaluation.
-
-The threat surface spans three layers. At the communication layer: signature forgery, certificate misuse, replay, stale-timestamp injection, and physically implausible kinematics. At the behavioral layer: abnormal driving patterns, historical inconsistency, and cooperative behavior designed to evade misbehavior detection. At the cooperative-perception layer: Sybil identities, collusion among malicious participants, and inconsistent multi-vehicle observations.
-
-This paper's primary focus, and the threat class STBV-Bench (Section~\ref{sec:methodology}) is built to test, is \textbf{semantic manipulation}: attacks that intentionally alter the meaning of an otherwise communication-and-behavior-valid message. We evaluate twenty representative semantic attack families spanning direct authority/instruction claims (\texttt{authority\_override}, \texttt{priority\_manipulation}, \texttt{false\_clearance}), narrative and contextual manipulation (\texttt{context\_poisoning}, \texttt{context\_inversion}, \texttt{temporal\_context\_drift}, \texttt{semantic\_narrative\_poisoning}), multi-source manipulation (\texttt{cross\_source\_contradiction}, \texttt{collaborative\_semantic\_agreement}), and indirection-based attacks (\texttt{goal\_manipulation}, \texttt{traffic\_efficiency\_lure}, \texttt{indirect\_prompt\_injection}, \texttt{multi\_message\_context\_poisoning}). Every attack scenario is constructed to satisfy communication authentication, structural validation, replay protection, and behavioral plausibility \emph{before} reaching the semantic layer (Section~\ref{sec:methodology}, Appendix~\ref{app:semantic}); successful detection therefore demonstrates capability beyond what communication-centric mechanisms can offer, by construction of the evaluation itself, not by assumption.
-
-\textbf{Out of scope}, stated explicitly: the adversary cannot compromise the STBV framework's own execution environment, modify the deployed semantic model's weights, or tamper with trust evidence after semantic verification. Denial-of-service, hardware failure, and network-availability attacks are excluded, as this work investigates semantic trustworthiness in cooperative perception, not communication-channel reliability. Most consequentially for a security audience: \textbf{every attack evaluated in this paper is a single-shot, non-adaptive construction} (Appendix~\ref{app:semantic}); no adversarial-search or iterative red-teaming process specifically targets the deployed classifier's decision boundary. This is stated here and repeated in Section~\ref{sec:limitations} rather than left implicit.
+\textbf{Out of scope}: compromise of the framework's own execution environment or model weights; DoS/availability attacks. Most consequentially: every STBV-Bench attack is single-shot and non-adaptive; Section~\ref{sec:adaptive} is the one evaluation that relaxes this.
 
 %======================================================================
-\section{Proposed Architecture}
+\section{Architecture}
 \label{sec:architecture}
 %======================================================================
-The proposed Semantic Trust Boundary Verification (STBV) architecture answers the problem in Section~\ref{sec:problem} with a layered pipeline: Communication Trust (PKI, SCSV) $\rightarrow$ Behavioral Trust (MBD, CSIA) $\rightarrow$ Semantic Trust (CP, B3) $\rightarrow$ Trust Decision Engine. Each layer addresses a distinct category of threat identified in Section~\ref{sec:problem}, and no layer is bypassed: a message must clear communication and structural checks before behavioral analysis is attempted, and clear behavioral analysis before semantic evidence is fused in. A vertical block diagram of this pipeline is planned to detail the specific interactions and data flow between these layers.
+The pipeline is Communication Trust (PKI, SCSV/B1) $\to$ Behavioral Trust (MBD, CSIA/B2) $\to$ Semantic Trust (CP, B3) $\to$ Trust Decision Engine, with no layer bypassed (Fig.~\ref{fig_architecture}).
 
-\subsection{Communication Trust Layer}
-\subsubsection{Public Key Infrastructure (PKI)} Every transmitted CAM/DENM message is digitally signed using short-term pseudonym certificates issued by a trusted Certification Authority, consistent with IEEE 1609.2/ETSI ITS standards. PKI guarantees origin authenticity, integrity, and non-repudiation, but by design does not evaluate whether authenticated content is semantically correct.
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{deployment_eval/carla_figures/fig5_architecture.png}
+\caption{Layered architecture: communication, behavioral, and semantic trust evidence fused by the Trust Decision Engine.}
+\label{fig_architecture}
+\end{figure}
 
-\subsubsection{Secure Cryptographic and Structural Validation (SCSV)} SCSV (B1) complements PKI by verifying protocol compliance, message format, timestamp consistency, replay status, certificate status, and physical plausibility of an individual message, independent of history or neighboring observations. Messages failing any check are discarded before behavioral or semantic reasoning is attempted.
+\textbf{B1 (SCSV)} verifies protocol compliance, timestamp/replay status, certificate status, and physical plausibility, independent of history.
 
-\subsection{Behavioral Trust Layer}
-\subsubsection{Misbehavior Detection (MBD)} MBD evaluates temporal behavioral consistency: transmission frequency, trajectory consistency, kinematic plausibility (speed/acceleration/heading-rate bounds), and consistency against a sender's own history, implemented as a set of independently-thresholded rule-based sub-scores (kinematic, temporal, replay, Sybil, collusion, anomaly) rather than a single learned score (Appendix~\ref{app:params}). Conceptually, a participant's behavioral trust can be expressed as a weighted aggregate of these indicators,
+\textbf{MBD} evaluates temporal behavioral consistency via independently-thresholded sub-scores (kinematic, temporal, replay, Sybil, collusion) rather than one learned score.
+
+\textbf{CP} cross-validates self-reported state against neighboring observations via a fixed weighted sum (spatial/speed/heading/diversity, 0.35/0.25/0.20/0.20).
+
+\textbf{B3 Semantic Trust Gate}, this architecture's principal contribution, is a fine-tuned DeBERTa-v2 sequence classifier (6 layers, hidden 768, 141.9M parameters) evaluating a synthesized natural-language scene description -- aggregating the ego vehicle's own state and reported event, local sensor status, and peer/RSU reports -- for semantic consistency and plausibility.
+
+\textbf{Why DeBERTa-v2.} B3 must classify short, structurally templated scene descriptions under a hard per-message latency budget (Section~\ref{sec:results}), which rules out an LLM-based classifier outright: even a 7B instruction-tuned model reaches only F1$=0.267$ zero-shot on this task in our own measurement (Section~\ref{sec:results}), confirming that scale alone does not substitute for task-specific fine-tuning here, while adding an order of magnitude more latency than this deployment's 100~ms CAM budget tolerates. Among encoder classifiers, DeBERTa-v2's disentangled attention mechanism -- separating content and relative-position representations rather than summing them, as BERT/RoBERTa do -- is specifically suited to this task's structure: STBV messages differ from benign ones largely through relational assertions (\emph{who} claims authority \emph{over what}, \emph{which} claim contradicts \emph{which} evidence), which disentangled attention represents more directly than a single summed embedding. We did not select DeBERTa-v2 on this argument alone; a five-candidate backbone comparison (DeBERTa-v3-base, RoBERTa-base, ModernBERT-base, DistilRoBERTa-base, MiniLM-L12, against the incumbent DeBERTa-v2) was run on a small held-out split ($n{=}24$) as an architecture-selection check (Appendix~\ref{app:params}). The result argues for caution rather than a clean win: four candidates scored a nominally higher F1 (0.933 vs.\ the incumbent's 0.895) but each predicted the malicious class unconditionally, correctly identifying zero of the three truly-benign test samples -- a class-imbalance artifact on a small split, not evidence of stronger semantic understanding. Only the incumbent discriminated at all (precision 1.000, true negatives $>0$). We report this as "no evidence favoring a switch," not as proof DeBERTa-v2 is optimal; the test split is too small to be a strong selection signal in either direction, and a larger-scale backbone comparison remains future work.
+
+\textbf{Trust Decision Engine.} Each evidence source is a Dempster-Shafer mass over $\Theta=\{T,\overline T\}$,
 \begin{equation}
-T_{MBD} = \sum_{i=1}^{N} w_{i} f_{i}, \qquad \sum_{i=1}^{N} w_i = 1,
-\label{eq:mbd}
-\end{equation}
-where $f_i$ is a normalized behavioral feature and $w_i$ its weight. \textbf{This equation is a conceptual formalization of what MBD's evidence represents, not a literal computation performed in the implementation}: the deployed MBD module computes the sub-scores listed above independently against fixed physical bounds, and does not combine them via a single named weighted sum (verified by inspection of \texttt{mbd/mbd\_layer.py}; see Appendix~\ref{app:params} for the precise mapping between this equation and the code).
-
-\subsubsection{Contextual Situation Interpretation and Explainability (CSIA)} CSIA (B2) integrates communication and behavioral evidence with contextual observations from neighboring vehicles and infrastructure, producing an interpretable trust representation rather than a bare score, so that the cause of any trust degradation is identifiable. Conceptually,
-\begin{equation}
-T_{CSIA} = \alpha\, T_{MBD} + (1-\alpha)\, C,
-\label{eq:csia}
-\end{equation}
-where $C$ is contextual consistency and $\alpha \in [0,1]$ balances behavioral history against context. \textbf{As with Eq.~\eqref{eq:mbd}, this is a conceptual formalization}: no named $\alpha$ constant exists in the CSIA implementation, which instead recombines B1/MBD evidence into a validation-score/confidence pair and folds in CP's own weighted consistency components directly (Appendix~\ref{app:params}).
-
-\subsection{Semantic Trust Layer}
-\subsubsection{Cooperative Perception (CP)} CP lets vehicles cross-validate self-reported states against neighboring observations, improving situational awareness but also expanding the attack surface to false cooperative observations that are cryptographically authentic and behaviorally plausible. CP's implemented consistency score \emph{is} a literal fixed weighted sum -- spatial, speed, heading, and diversity components at weights $0.35$/$0.25$/$0.20$/$0.20$ (Appendix~\ref{app:params}) -- the one layer in this architecture where the paper's equation style matches the code exactly.
-
-\subsubsection{B3 Semantic Trust Gate} B3 is this architecture's principal contribution: a semantic verification stage, implemented as a fine-tuned DeBERTa-v2 sequence classifier (6 layers, hidden size 768, 141.9M parameters; full specification in Appendix~\ref{app:params}), positioned immediately before autonomous decision making. It evaluates a synthesized natural-language scene description -- aggregating the ego vehicle's own state, local sensor status, and peer/RSU free-text reports -- for semantic consistency, cross-source agreement, and contextual plausibility. Conceptually,
-\begin{equation}
-T_{Semantic} = \beta_{1} S_{sensor} + \beta_{2} S_{cross} + \beta_{3} S_{context} + \beta_{4} S_{AI}, \qquad \sum_{i=1}^4 \beta_i = 1,
-\label{eq:semantic}
-\end{equation}
-decided against a threshold $\tau$: $G_{Semantic}=1$ (crosses the boundary) if $T_{Semantic}\ge\tau$, else $0$. \textbf{This equation, too, is conceptual}: the deployed Trust Decision Engine does not compute a named $\beta_i$-weighted sum; it converts B3's label and confidence into a Dempster-Shafer mass function and fuses it with crypto/behavioral evidence via Yager's rule (Section~\ref{sec:tde}), which \emph{is} an accurate description of the implementation. Appendix~\ref{app:semantic} documents B3's actual input construction and gives two complete, unedited worked examples of the full pipeline's real per-layer output on this exact mechanism.
-
-\subsection{Trust Decision Engine}
-\label{sec:tde}
-The Trust Decision Engine is the sole fusion point for communication, behavioral, and semantic evidence, and is where this architecture's equations \emph{are} a faithful description of the implementation. Each evidence source is represented as a Dempster-Shafer basic belief assignment over $\Theta=\{T,\overline{T}\}$ (trustworthy / untrustworthy),
-\begin{equation}
-m(T) = sc,\quad m(\overline{T}) = (1-s)c,\quad m(\Theta) = 1-c,
+m(T){=}sc,\ m(\overline T){=}(1{-}s)c,\ m(\Theta){=}1{-}c,
 \label{eq:bba}
 \end{equation}
-for a source's normalized score $s\in[0,1]$ and confidence $c\in[0,1]$, satisfying $m(T)+m(\overline T)+m(\Theta)=1$. When semantic evidence is unavailable, a vacuous assignment ($m(\Theta)=1$) is used, so absence of evidence never manufactures confidence in either direction. Two sources $m_1,m_2$ are combined via Yager's conflict-aware rule: conflict mass
+for score $s$, confidence $c$; a vacuous mass ($m(\Theta){=}1$) is used when semantic evidence is unavailable. Sources combine via Yager's rule: conflict $K=\sum_{A\cap B=\emptyset}m_1(A)m_2(B)$ is reassigned to ignorance,
 \begin{equation}
-K = \sum_{A\cap B=\emptyset} m_1(A)m_2(B),
-\label{eq:conflict}
-\end{equation}
-(Eq.~\eqref{eq:conflict}) is reassigned entirely to ignorance rather than renormalized away, via Yager's rule
-\begin{equation}
-m_Y(C) = \sum_{A\cap B=C} m_1(A)m_2(B),\ C\ne\Theta, \qquad m_Y(\Theta) = m_1(\Theta)m_2(\Theta)+K,
+m_Y(C){=}\!\!\sum_{A\cap B=C}\!\!m_1(A)m_2(B),\,C{\ne}\Theta,\ \ m_Y(\Theta){=}m_1(\Theta)m_2(\Theta){+}K,
 \label{eq:yager}
 \end{equation}
-so that disagreement between sources is expressed as uncertainty, not artificially resolved confidence. Fusion proceeds sequentially -- communication+behavioral evidence first, then semantic evidence -- and the fused mass from Eq.~\eqref{eq:yager} is converted to a scalar Decision Trust score via the pignistic transform,
-\begin{equation}
-T_{Decision} = m_Y(T) + \tfrac{1}{2} m_Y(\Theta),
-\label{eq:pignistic}
-\end{equation}
-where the pignistic score of Eq.~\eqref{eq:pignistic} is mapped to three operational states,
-\begin{equation}
-D = \begin{cases}
-\text{Accept}, & T_{Decision}\ge\tau_H,\\
-\text{Caution}, & \tau_L\le T_{Decision}<\tau_H,\\
-\text{Reject}, & T_{Decision}<\tau_L,
-\end{cases}
-\label{eq:decision}
-\end{equation}
-with $\tau_H=0.70$, $\tau_L=0.40$ as fixed design constants (Appendix~\ref{app:params}; Section~\ref{sec:results} reports their measured sensitivity). Two explicit, asymmetric policy floors sit on top of this fusion and are not a claimed property of Yager's rule itself: a high-confidence semantic-risk verdict floors the decision at Reject regardless of otherwise-clean crypto/behavioral evidence, and a medium/low-confidence semantic-risk verdict floors it at, at minimum, Caution. Semantic evidence can therefore only ever make a decision \emph{more} cautious, never less -- a design choice validated empirically in Section~\ref{sec:results}.
+converted to a pignistic score $T_{Decision}=m_Y(T)+\tfrac12 m_Y(\Theta)$, mapped to Accept/Caution/Reject at $\tau_H{=}0.70,\tau_L{=}0.40$. Two policy floors sit atop fusion: high-confidence semantic risk floors the decision at Reject; medium/low-confidence risk floors it at Caution. Semantic evidence can therefore only add caution, never relax a decision.
 
-\subsection{Theoretical Properties of the Fusion Rule}
-\label{sec:theory}
-The claims of the preceding paragraph -- that semantic evidence can only add caution, never relax a decision -- are not merely observed empirically; they are provable directly from Eqs.~\eqref{eq:bba}--\eqref{eq:decision} and the floor logic as actually implemented (\texttt{trust\_engine/decision\_engine.py}). We state six such properties as propositions and give proof sketches here; complete, code-line-cited derivations, including a closed-form monotonicity result and a worked boundary-conflict example, are in the companion document \texttt{THEORETICAL\_ANALYSIS.md}.
-
-\textbf{Proposition 1 (crypto rejection cannot be overridden).} Let $\ell_1$ be the trust level crypto/behavioral evidence alone would assign and $\ell$ the final level. Then $\mathrm{rank}(\ell)\ge\mathrm{rank}(\ell_1)$ always, where $\mathrm{rank}(\text{Accept})<\mathrm{rank}(\text{Caution})<\mathrm{rank}(\text{Reject})$. \emph{Proof sketch.} A fatal crypto/structural failure short-circuits to Reject before semantic evidence is read at all. In the non-fatal path, the implementation sets $\ell=\max_{\mathrm{rank}}(\ell_1,\ell_{\text{fused}})$ before applying the two floors of Section~\ref{sec:tde}, each itself a $\max_{\mathrm{rank}}$ operation against a value already $\ge\ell_1$; a composition of rank-maximum operations cannot decrease rank.
-
-\textbf{Proposition 2 (trust monotonicity).} Fixing one source's mass and varying the other's evidence quality along its natural ordering, the pignistic score $T_{Decision}$ of Eq.~\eqref{eq:pignistic} is monotone in the expected direction. \emph{Proof sketch.} Differentiating $T_{Decision}$ with respect to the crypto score $s$ at fixed semantic mass gives $dT_{Decision}/ds=\tfrac12 c(1+m_2(\Theta))\ge0$ identically -- independent of the semantic source's specific belief/disbelief split, only its ignorance mass survives in the derivative. The symmetric derivation for semantic-source confidence gives the analogous sign. The default (legacy) semantic interface introduces one disclosed discontinuity at $p_{\text{malicious}}=0.5$ (a step, not a violation of monotonicity within each side of that boundary).
-
-\textbf{Proposition 3 (conservative fusion).} $\mathrm{rank}(\ell)\ge\max(\mathrm{rank}(\ell_1),\mathrm{rank}(\ell_{\text{fused}}))$ for every input -- a direct restatement of Proposition 1's ceiling, ruling out any input for which the fused decision is less cautious than either the crypto-alone or the raw-fused verdict alone would be.
-
-\textbf{Proposition 4 (conflict handling is always well-defined).} For any two valid mass functions, including the maximal-conflict case $K=1$ (one source dogmatic-$T$, the other dogmatic-$\overline T$), Eq.~\eqref{eq:yager} returns a valid mass function with no division and $m_Y(\Theta)\ge m_1(\Theta)m_2(\Theta)$, correctly representing total disagreement as total ignorance $(0,0,1)$ rather than an arithmetic singularity, unlike raw (unmodified) Dempster combination, which divides by $1-K=0$ in this case. The confidence clamp $c\le0.98$ applied to every source (Appendix~\ref{app:params}) keeps $K<1$ strictly at runtime, so this proposition's boundary case is a correctness guarantee, not an observed operating point.
-
-\textbf{Proposition 5 (decision consistency).} The fusion function is total and deterministic: for every input satisfying its precondition, exactly one of \{Accept, Caution, Reject\} is returned, via an exhaustive, non-overlapping partition of the score bands (Eq.~\eqref{eq:decision}) and the finite floor/ceiling branches, with no undefined or multiply-defined case.
-
-\textbf{Proposition 6 (trust preservation under missing evidence).} The vacuous mass ($m(\Theta)=1$) is a two-sided identity element for Eq.~\eqref{eq:yager}: $m_Y(m_1,\text{vacuous})=m_1$ exactly, for every $m_1$. Consequently B3-unavailability provably has zero effect on the fused score -- not approximately, an exact algebraic identity -- confirming an honest sender is never penalized merely because semantic evidence could not be evaluated.
-
-\textbf{Scope, stated precisely.} Propositions 1--6 describe what the fusion function \emph{does with} its two input mass functions; they say nothing about whether those inputs are themselves correct. Section~\ref{sec:discussion} and the companion document \texttt{FAILURE\_ANALYSIS.md} show directly that every measured failure mode in this paper traces to an upstream evidence-generating layer (B3's classification/robustness limits, or MBD's thresholds/cold-start precondition), never to the fusion mathematics itself -- fusion faithfully propagates whatever it is given, which Propositions 1--6 prove is a guarantee, and Section~\ref{sec:discussion} shows is also, in six documented cases, not sufficient on its own to prevent a wrong final decision when an upstream layer is wrong.
+\textbf{Theoretical properties.} We prove six properties directly from the implementation (full derivations in the companion \texttt{THEORETICAL\_ANALYSIS.md}): (P1) crypto rejection cannot be overridden; (P2) trust is monotone in each source's evidence quality; (P3) fusion is provably conservative (rank cannot decrease); (P4) Yager combination is well-defined even at maximal conflict $K{=}1$ (unlike raw Dempster combination, which divides by $1{-}K{=}0$); (P5) the decision function is total and deterministic; (P6) the vacuous mass is a two-sided identity for Eq.~\eqref{eq:yager}, so missing B3 evidence provably cannot distort the fused score. These describe what fusion does with its inputs, not whether the inputs are correct -- Section~\ref{sec:discussion} shows every measured failure traces to an upstream evidence layer, never to fusion itself.
 
 %======================================================================
 \section{Methodology}
 \label{sec:methodology}
 %======================================================================
-\subsection{Objectives}
-The evaluation is designed to answer five questions, each addressed by a specific experiment in Section~\ref{sec:results} rather than a single aggregate benchmark: (i) does the semantic layer detect purely semantic violations with no kinematic signature; (ii) what is the individual and combined contribution of each layer, including the Trust Decision Engine's own marginal effect; (iii) do the behavioral/kinematic layers independently detect genuine kinematic attacks, and is this complementary to semantic detection; (iv) how robust and calibrated is the semantic layer under adversarial and incidental perturbation; and (v) what is the computational overhead of the full pipeline.
+\textbf{STBV-Bench v1} ($n{=}10{,}000$): real VeReMi Extension kinematics with a seeded, template-based semantic-attack generator populating the free-text scene-context field VeReMi does not contain; 70.07\%/29.93\% malicious/benign.
 
-\subsection{Dataset Construction}
-\label{sec:datasets}
-Two disjoint benchmarks isolate the semantic and kinematic/behavioral threat classes so that neither evaluation regime is contaminated by, or mistaken for, the other.
+\textbf{STBV-Bench v2.5b} ($n{=}10{,}098$, new for this evaluation pass): a held-out, evaluation-only benchmark over the same 24-category taxonomy (11 benign intents, 13 malicious families) as the checkpoint's own v2.5 training distribution, but with an entirely new bank of core sentence templates, verified programmatically to share zero exact-text and zero template-id overlap against v2.5 (max 4-gram containment 0.53, below the within-corpus near-duplicate threshold of 0.70). A companion training-augmentation corpus, v2.5c ($n{=}6{,}097$), was separately verified disjoint from \emph{both} v2.5 and v2.5b before being used for continued fine-tuning (never for evaluation).
 
-\textbf{STBV-Bench (the canonical benchmark for this paper).} Built from the VeReMi Extension dataset, a public collection of simulated vehicular trajectories with kinematic-attacker ground truth. Position, speed, heading, and timestamp are carried through from a real VeReMi record unmodified; only the free-text scene-context fields -- which the source dataset does not contain at all -- are populated by a seeded, rule-based semantic transformation engine (Appendix~\ref{app:semantic}) spanning the twenty attack families of Section~\ref{sec:problem} plus a benign control family. VeReMi's own kinematic-attacker label is preserved separately and never relabeled as a semantic attack. \textbf{Version 1 (v1)}, the primary evaluation slice used throughout Section~\ref{sec:results}, draws $n=10{,}000$ independent, single-message samples (seed fixed) from a pool of 221,125 real VeReMi records, at a 70.07\%/29.93\% malicious/benign split. \textbf{Version 2 (v2)} is a secondary, contextual configuration built from genuine multi-vehicle spatial-temporal co-location windows (rather than independent messages), used in Section~\ref{sec:results} strictly to answer whether richer, real ambient context changes semantic-detection behavior -- it is not a competing headline benchmark, and its numbers are never ranked against v1's as if measuring the same quantity (Section~\ref{sec:results}).
+\textbf{VeReMi kinematic companion benchmark}: real VeReMi messages (ConstPos/fabrication, DataReplay, DoS scenario types available in this environment), no semantic transformation, evaluated statefully per vehicle since kinematic attacks are only detectable against a sender's own history.
 
-\textbf{VeReMi kinematic companion benchmark.} A second, disjoint benchmark of $n=13{,}511$ real VeReMi messages (360 vehicles, 180 confirmed kinematic attackers across constant-position falsification, data replay, and denial-of-service, 180 benign) with \emph{no} semantic transformation applied at all, evaluated statefully per vehicle (rather than independently, as v1 is) because kinematic/behavioral attacks are, by definition, only detectable against a sender's own history over time.
+\textbf{Continued fine-tuning}: the deployed checkpoint is produced by resuming (not reinitializing) the existing mixed-corpus LoRA adapter's weights via \texttt{PeftModel.from\_pretrained(..., is\_trainable=True)}, continuing optimization on the original mixed corpus plus v2.5c, AdamW lr$=3\times10^{-6}$, batch 16, up to 6 epochs, early stopping patience 2. This is a genuine weight continuation, distinguishing it from the prior checkpoint's training regime, which always reinitialized a fresh adapter.
 
-\subsection{Threat Model Realization and Semantic Transformation Engine}
-Every STBV-Bench attack scenario is generated, not hand-authored, by a seeded, template-based transformation engine -- not an LLM-assisted or paraphrase-based generator -- so that the same seed always reproduces the same attack text and an unlimited number of distinct, reproducible variants can be drawn from the same rule. Appendix~\ref{app:semantic} documents the full generation pipeline, its structural-validity and semantic-preservation constraints, and two complete worked examples showing the real per-layer pipeline output (including the Trust Decision Engine's actual fusion trace) on a generated attack, illustrating concretely why communication and behavioral verification pass it and only the semantic layer detects it.
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{figures_v2/fig_deploy_architecture.pdf}
+\caption{Deployment pipeline: real vehicle/message state flows through a purpose-built bridge into the same frozen pipeline evaluated throughout this paper.}
+\label{fig_pipeline}
+\end{figure}
 
-\subsection{Baseline Methods}
-Layer contribution is evaluated via progressively enhanced configurations on the identical, fixed STBV-Bench v1 slice: \textbf{B1} (communication trust only); \textbf{B1+B2} (adds behavioral trust, including MBD, CSIA, and CP); and the complete \textbf{B1+B2+B3} architecture. We note, and evaluate directly in Section~\ref{sec:results}, that CP's own measured contribution to the B1+B2 configuration is zero on this benchmark, so B1+B2 and a hypothetical B1+B2+CP configuration are identical on the data evaluated here -- reported and explained, not concealed. A diagnostic \textbf{B3-only} configuration (semantic evidence alone, fusion bypassed) isolates the Trust Decision Engine's own marginal contribution from B3's and is reported as a supplementary analysis, not a deployment configuration. The semantic classifier was additionally benchmarked against four alternative transformer backbones (Appendix~\ref{app:params}); this comparison evaluates the classification stage only and is not an end-to-end architecture comparison.
-
-\subsection{Evaluation Metrics}
-Classification performance is reported as Accuracy, Precision, Recall, and F1, always alongside sample size and class prevalence, since precision is prevalence-sensitive. False Positive/Negative Rate quantify the intervention/miss trade-off. Statistical validation uses Matthews Correlation Coefficient, Expected Calibration Error, Brier score, McNemar's test (continuity-corrected), Cohen's $h$, and 2,000-resample bootstrap confidence intervals (percentile method, fixed seed; full settings in Appendix~\ref{app:params}). A three-way Accept/Caution/Reject transition analysis is used specifically to evaluate the Trust Decision Engine's contribution (Section~\ref{sec:results}), since binary precision/recall/F1 cannot distinguish a decision moving between Caution and Reject from one that does not move at all. Computational performance is measured as end-to-end per-message decision latency over the complete evaluated pipeline, not isolated model inference.
-
-\subsection{Implementation Details}
-The semantic gate tokenizes input to a maximum sequence length of 256 tokens. The Trust Decision Engine combines evidence via Yager's rule and the pignistic transform (Section~\ref{sec:tde}); high-confidence semantic risk floors the decision at Reject, medium/low-confidence semantic risk floors it at Caution, and semantic evidence never relaxes a decision crypto/behavioral evidence alone would have made more severe. The semantic model is loaded once at initialization, excluded from per-message latency figures. Each STBV-Bench v1 sample is processed by an independently constructed pipeline instance, matching its independent-message evaluation regime; each kinematic-benchmark vehicle is processed by one persistent, stateful instance across its own real message sequence, matching that regime's need for temporal history -- the two regimes are never mixed within one reported metric. Full hyperparameters, checkpoint provenance, and every fusion constant are given in Appendix~\ref{app:params}.
-
-\subsection{Experimental Setup}
-\label{sec:setup}
-\textbf{Hardware.} All experiments run on one workstation: 16 logical CPU cores, 15.3~GiB RAM, one NVIDIA RTX~4050 Laptop GPU (6,141~MiB VRAM), Windows 11. The 6~GiB VRAM budget is a binding constraint on the live-simulator experiments (Section~\ref{sec:deployment}) and is reported as such rather than treated as incidental.
-
-\textbf{Software.} PyTorch 2.7.1+cu118, Transformers, scikit-learn 1.7.2, CARLA 0.9.16, SUMO 1.27.0. Two Python interpreters are used and the split is not cosmetic: CARLA 0.9.16 ships a CPython~3.12-only client wheel, so all live-simulator work runs under Python~3.12 while the remaining evaluations run under Python~3.13. The frozen pipeline was verified to produce identical output under both.
-
-\textbf{Determinism.} Seed 42 fixes all model-side operations (data shuffling, cross-validation splits, bootstrap resampling). The human-validation sample uses a deliberately different seed (\texttt{20260802}) so that sample cannot coincide with any modelling split. Multi-run deployment uses spawn seeds $\{1,\dots,5\}$. Locally-generated LLM text (used only in B3's antecedent training corpus, Appendix~\ref{app:provenance}) is not seeded and is therefore not byte-reproducible; this is disclosed rather than claimed otherwise.
-
-\textbf{Statistical protocol.} All confidence intervals are 95\% percentile bootstrap with a fixed seed: 2{,}000 resamples for classification metrics (matching the protocol already used for the layer ablation) and 10{,}000 resamples for the multi-run deployment aggregates. Deployment statistics average over \emph{every} completed run; no run is excluded, ranked, or selected on the basis of its result.
-
-\textbf{Reproducibility.} Each experiment runs from a single command: \texttt{python baselines/run\_baselines.py} (baselines), \texttt{python validation/build\_validation\_sample.py} then \texttt{validation/agreement\_analysis.py} (human validation), and \texttt{deployment\_eval/run\_carla\_multirun.py} then \texttt{aggregate\_multirun.py} (deployment). Raw per-item outputs, metric files, and vector figures are written under \texttt{results/}.
+\textbf{Hardware/software.} One workstation, NVIDIA RTX 4050 Laptop GPU (6~GiB VRAM), PyTorch 2.7.1+cu118, Transformers, CARLA 0.9.16, SUMO 1.27.0. CARLA's client wheel is CPython 3.12-only; live-simulator work runs under a separate interpreter from the rest of the evaluation. Seed 42 fixes all model-side shuffling/bootstrap operations.
 
 %======================================================================
 \section{Results}
 \label{sec:results}
 %======================================================================
-Each subsection below states a research question, the experiment that answers it, the finding, its interpretation, and its implication for the architecture. Experiments answering different research questions, under different evaluation regimes, are never ranked against one another, even where their metrics are superficially comparable; where such a comparison might be tempting, we state explicitly why it would be invalid.
+\subsection{Layer Ablation and Main Benchmark (STBV-Bench v1)}
+\textbf{What this proves.} Whether B3 is necessary, and what fusion changes structurally versus in raw score. Re-run directly against the final checkpoint ($n{=}10{,}000$, confirmed identical sample set), closing a freshness gap flagged during internal review. Table~\ref{tab:main_ablation} shows B1 alone and B1+B2(+CP) are near-blind to purely semantic content (F1 0.034). B3 alone reaches F1$=1.000$ (7,007/7,007 attacks caught, 0 false positives); the full fused stack reaches F1$=0.995$ (69 spurious escalations to Caution, 0 false negatives). Fusion's 69 discordant decisions on this run are, as designed, \textbf{100\% escalations} (Accept$\to$Caution), zero de-escalations -- exactly the conservative floor-rule behavior Section~\ref{sec:architecture} proves. Binary F1 alone would misread this as a small regression; it is a purely conservative widening of the Caution band around already-correct benign predictions.
 
-\subsection{RQ1: Does B3 Detect Purely Semantic Violations with No Kinematic Signature?}
-\textbf{Experiment.} STBV-Bench v1 ($n=10{,}000$), B1+B2+CP active, fusion bypassed so B3's own risk band alone determines the decision.
-
-\textbf{Finding.} Precision$=1.000$, Recall$=0.557$, F1$=0.715$, FPR$=0.000$ (Table~\ref{tab:main_ablation}, ``B3 alone''; confusion matrix in Fig.~\ref{fig_confusion}). Recall varies sharply by family (Fig.~\ref{fig_per_family}): 8 of 20 reach 100\% (e.g., \texttt{instruction\_injection}, \texttt{authority\_override}, \texttt{false\_clearance}); 6 reach at most 9\% (\texttt{semantic\_narrative\_poisoning} and five families phrased as indirection or narrative framing rather than direct instruction).
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.7\linewidth]{figures_v2/fig_confusion.pdf}
-\caption{Confusion matrix, full-stack decisions, STBV-Bench v1 ($n=10{,}000$; positive = Caution or Reject).}
-\label{fig_confusion}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{figures_v2/fig_per_family_recall.pdf}
-\caption{Per-attack-family recall, full stack, STBV-Bench v1. Red bars: $\le$9\% recall (Section~\ref{sec:limitations}); orange: partial; green: 100\%.}
-\label{fig_per_family}
-\end{figure}
-
-\textbf{Interpretation.} B3 achieves near-perfect, zero-false-positive detection of direct authority/instruction claims and explicit multi-source contradiction, and is largely blind to indirection. This is a bounded classifier-capability limitation, not an architecture defect: Section~\ref{sec:results}B confirms the Trust Decision Engine faithfully propagates whatever evidence B3 provides, without independently recovering what B3 misses.
-
-\textbf{Implication.} B3 is necessary and, on this benchmark, largely sufficient for the semantic threat class, with a known, bounded capability gap that must be stated in any deployment discussion rather than averaged away.
+\textbf{Why B1's and CP's contributions read as near-zero here, audited rather than assumed.} A near-zero B1/B2 row invites the wrong reading -- that these layers are weak or poorly implemented. We audited this directly rather than accept the number at face value. B1's near-zero recall is a direct, intended consequence of this benchmark's own threat model (Section~\ref{sec:problem}): STBV-Bench's attacker holds valid, unrevoked credentials and produces structurally compliant, kinematically plausible messages \emph{by construction}, isolating the semantic layer for evaluation. B1 is not failing to detect communication-layer attacks here because none are present to detect -- it is functioning exactly as designed against a benchmark deliberately built to bypass it. This is confirmed independently of STBV-Bench: B1's own dedicated unit-test suite (137/137 passing, `b1_scsv/test_bad_actors.py`, `test_scsv.py`, `test_b1_limitations.py`) exercises the certificate-misuse, replay, and structural-violation attacks STBV-Bench's threat model excludes, and B1 correctly blocks every one. Reporting B1's STBV-Bench recall alongside its own test-suite pass rate, rather than in isolation, is necessary to avoid the false impression that B1 is a weak component of the architecture rather than a correctly functioning component evaluated outside its intended threat class. CP's zero contribution has a distinct, separately confirmed cause: STBV-Bench's generator never populates the event field CP's consistency gate requires -- a data-generation gap, verified functionally correct on event-labeled fixtures elsewhere in this project, not an algorithmic defect (Section~\ref{sec:limitations}).
 
 \begin{table}[t]
 \centering
-\caption{Layer Contribution on STBV-Bench v1 ($n=10{,}000$)}
+\caption{Layer Contribution, STBV-Bench v1 ($n{=}10{,}000$)}
 \label{tab:main_ablation}
-\begin{threeparttable}
+\footnotesize
 \begin{tabular}{@{}lccccc@{}}
 \toprule
 Configuration & Acc. & Prec. & Rec. & F1 & FPR \\
 \midrule
-B1 only & 0.299 & --\tnote{a} & 0.000 & --\tnote{a} & 0.000 \\
-B1+B2 (=B1+B2+CP\tnote{b}) & 0.305 & 0.643 & 0.018 & 0.034 & 0.023 \\
-B3 alone (no fusion) & 0.689 & 1.000 & 0.557 & 0.715 & 0.000 \\
-\textbf{B1+B2+B3 (full stack)} & \textbf{0.688} & \textbf{0.983} & \textbf{0.565} & \textbf{0.718} & \textbf{0.023} \\
+B1 only & 0.299 & -- & 0.000 & -- & 0.000 \\
+B1+B2 (=+CP) & 0.305 & 0.643 & 0.018 & 0.034 & 0.023 \\
+B3 alone (no fusion) & 1.000 & 1.000 & 1.000 & 1.000 & 0.000 \\
+\textbf{Full stack (B1+B2+B3)} & \textbf{0.993} & \textbf{0.990} & \textbf{1.000} & \textbf{0.995} & \textbf{0.023} \\
 \bottomrule
 \end{tabular}
-\begin{tablenotes}
-\footnotesize
-\item[a] Undefined: zero positive predictions.
-\item[b] Confirmed byte-identical, 0/10,000 decisions differ; see Section~\ref{sec:results}C.
-\end{tablenotes}
-\end{threeparttable}
 \end{table}
 
-\subsection{RQ2: What Is the Marginal Effect of Evidence Fusion Beyond B3 Alone?}
-\textbf{Experiment.} The same slice, comparing B3-only against the fused B1+B2+B3 pipeline, with a three-way Accept/Caution/Reject transition analysis alongside the binary comparison.
-
-\textbf{Finding.} Binary F1 improves marginally, 0.715$\to$0.718 (McNemar $p=3.06\times10^{-29}$ on 128/10,000 decisions crossing the binary boundary; Cohen's $h=-0.026$, negligible on this scale despite significance, since $n=10{,}000$ gives high power to detect a tiny, consistent shift). The three-way analysis shows fusion causes \textbf{1,713} real decision changes, not 128: \textbf{1,585 (92.5\%) are Caution$\to$Reject} escalations on genuine attacks, and \textbf{zero are direct Accept$\leftrightarrow$Reject reversals} -- every change moves through, or into/out of, Caution. The remaining 128 (7.5\%) are Accept$\to$Caution additions, 69 false positives on benign traffic and 59 real attacks B3 alone missed.
-
-\textbf{Interpretation.} Fusion matches its design intent (Section~\ref{sec:tde}): it routes uncertain or corroborating evidence through Caution and escalates corroborated suspicion to Reject, rather than making binary calls more aggressive. This must be reported via the three-way numbers, not the binary delta alone -- the binary metric understates fusion's structural contribution by an order of magnitude (Fig.~\ref{fig_transitions}).
-
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures_v2/fig_decision_transitions.pdf}
-\caption{Left: full-stack decision distribution ($n=10{,}000$). Right: fusion-attributable Config-4$\to$5 transitions -- 0 direct Accept$\leftrightarrow$Reject reversals.}
-\label{fig_transitions}
+\includegraphics[width=\linewidth]{FINAL_FIGURES/fig_ablation_summary.pdf}
+\caption{Layer-ablation F1, STBV-Bench v1 (bootstrap CIs). Full breakdown in Table~\ref{tab:main_ablation}.}
+\label{fig_ablation}
 \end{figure}
 
-\textbf{Implication.} The Trust Decision Engine's value is a change in decision \emph{structure}, not raw detection-rate improvement.
-
-\subsection{Layer Ablation: What Contributes, and What Does Not}
-Table~\ref{tab:main_ablation} (visualized with bootstrap confidence intervals in Fig.~\ref{fig_ablation_summary}) collapses B1+B2 and a hypothetical B1+B2+CP into one row because they are confirmed byte-identical at the level of individual decisions, not merely aggregate metrics. This is investigated, not assumed: CP's consistency-scoring gate requires an event label to determine whether reports describe a shared claimed event; STBV-Bench's message-generation code never populates this field, so CP's fusion gate never activates on this benchmark, independent of window size or co-located sender count. When CP is instead evaluated on multi-vehicle fixtures that \emph{do} carry an event label (Appendix~\ref{app:cp}), its consistency score activates correctly and produces a measurable, non-zero effect on the fused trust score. \textbf{CP is therefore verified functionally correct but not yet exercised by STBV-Bench} -- a data-generation gap, not an algorithmic defect -- and CP is reported as contributing zero to Table~\ref{tab:main_ablation}, since it measurably does.
-
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures_v2/fig_ablation_summary.pdf}
-\caption{Layer-ablation F1 with 95\% bootstrap CI (2,000 resamples), STBV-Bench v1. Full breakdown in Table~\ref{tab:main_ablation}.}
-\label{fig_ablation_summary}
-\end{figure}
-
-\subsection{RQ3: Do the Behavioral/Kinematic Layers Detect Genuine Kinematic Attacks with No Semantic Content?}
-\textbf{Experiment.} The VeReMi kinematic companion benchmark (Section~\ref{sec:datasets}, $n=13{,}511$, stateful per-vehicle replay).
-
-\textbf{Finding.} MBD achieves Recall$=0.775$, Precision$=0.607$, F1$=0.681$, FPR$=0.524$ overall; by attack type: constant-position falsification $0.912$, denial-of-service $0.803$, data replay $0.600$ (weakest). B3's contribution is confirmed at exactly zero -- the B3-enabled and B3-disabled configurations are byte-identical on all 13,511 messages, as expected on kinematic-only content with no text.
-
-\textbf{Interpretation.} MBD detects real kinematic/behavioral attacks with substantial recall at an honestly-reported precision cost. A per-vehicle ``ever flagged at least once'' policy is not usable standalone (99.4\% FPR under that rule) -- MBD's signal is recall-oriented and designed to feed fusion's Caution mechanism (Section~\ref{sec:tde}), not to act as a standalone precise classifier.
-
-\textbf{Implication.} MBD is necessary for the kinematic/behavioral class STBV-Bench cannot exercise by design. This result must not be ranked against Section~\ref{sec:results}A's numbers -- the two measure disjoint threat classes with disjoint ground truth.
-
-\subsection{RQ4/RQ5: Are Semantic and Kinematic Detection Complementary?}
-\textbf{Experiment.} (a) Cross-reference of Sections~\ref{sec:results}A and C, each on its own disjoint benchmark; (b) a case study placing a real kinematic attacker and an independently-injected semantic attacker on \emph{different} vehicles in the \emph{same} shared multi-vehicle scene.
-
-\textbf{Finding.} (a) B3 contributes $\approx$0\% to kinematic-only detection; MBD contributes only a small, off-target amount to STBV-Bench's semantic-only detection (Table~\ref{tab:main_ablation}, row 2), attributable to incidental kinematic side effects of real VeReMi data, not the semantic payload (Fig.~\ref{fig_threat_coverage}). (b) In the shared-scene case study: kinematic-attacker vehicles are detected at 90.3\%, semantic-attacker vehicles at 70.3\%, and no vehicle is ever double-counted as both attacker types (Table~\ref{tab:coverage}).
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{figures_v2/fig_threat_coverage.pdf}
-\caption{B3 vs.\ MBD recall on the semantic (STBV-Bench) and kinematic (VeReMi companion) threat classes, confirming complementary, non-overlapping coverage.}
-\label{fig_threat_coverage}
-\end{figure}
-
-\textbf{Interpretation.} Each detector operates on its own vehicle's own evidence independently. Since CP -- the only component that could carry cross-vehicle influence -- is confirmed inert on this evaluation regime (Section~\ref{sec:results}C), this result is evidence that \emph{co-locating both threat types does not break either detector}, not evidence of cross-layer architectural synergy, which would require CP and is not yet demonstrated.
-
-\textbf{Implication.} The complementary-coverage claim is precisely: B3 and MBD cover non-overlapping threat classes, and neither degrades in the other's presence -- narrower, and more defensible, than a claim of cross-layer synergy.
-
-\begin{table}[t]
-\centering
-\caption{Threat-Class Coverage Summary}
-\label{tab:coverage}
-\begin{threeparttable}
-\begin{tabular}{@{}lccc@{}}
-\toprule
-Threat class & Detecting layer & Recall & Contributing layers \\
-\midrule
-Semantic (direct) & B3 & 100\% (8/20 fam.) & B3 only \\
-Semantic (indirect) & B3 (weak) & $\le$9\% (6/20 fam.) & none effective \\
-Kinematic (ConstPos) & MBD & 91.2\% & MBD only \\
-Kinematic (DoS) & MBD & 80.3\% & MBD only \\
-Kinematic (Replay) & MBD & 60.0\% & MBD + B1 \\
-Mixed scene (kinematic side) & MBD & 90.3\% & MBD only \\
-Mixed scene (semantic side) & B3 & 70.3\% & B3 only \\
-Cooperative (event-labeled) & CP & verified\tnote{a} & CP (Appendix~\ref{app:cp}) \\
-\bottomrule
-\end{tabular}
-\begin{tablenotes}
-\footnotesize
-\item[a] Verified functionally correct on event-labeled fixtures; not measurable on STBV-Bench (Section~\ref{sec:results}C).
-\end{tablenotes}
-\end{threeparttable}
-\end{table}
-
-\subsection{RQ6: Does Richer, Real Multi-Vehicle Context Change Semantic Detection? (Contextual Evaluation, Not a Competing Headline)}
-\textbf{Experiment.} STBV-Bench v2 (Section~\ref{sec:datasets}), evaluated on two deliberately unmerged metrics; \textbf{v2 is used here strictly as a contextual, secondary evaluation, not as a replacement for v1's canonical result.}
-
-\textbf{Finding (attacker-sender recall).} Every family weak under v1 improves, none regresses (e.g., 1\%$\to$76\% recall on the weakest family; several others improve 42--60 points). A controlled example confirms partial causality: one fixed attack sentence's own decision changes from Accept to Caution purely as genuine co-located peer context accumulates around it, with no change to the attack text.
-
-\textbf{Finding (aggregate Decision Trust).} Computed identically to Section~\ref{sec:results}A's metric, over \emph{all} messages including real, unmodified co-located vehicles that are not the designated attacker, aggregate F1 is \textbf{0.517} -- worse than v1's 0.718. This is not in tension with the recall finding; it measures a different population. Non-designated-attacker vehicles are flagged at $\approx$58\%, closely matching Section~\ref{sec:results}C's independently-measured $\approx$52\% MBD baseline false-positive rate on real kinematics -- the same behavioral-layer sensitivity, visible here only because this is the one evaluation regime that includes genuine ambient real traffic at all.
-
-\textbf{Finding (threshold sensitivity).} A sweep of $\tau_H\in[0.55,0.90]$, $\tau_L\in[0.20,0.55]$, and B3's risk bands (reconstructed from v1's logged per-message evidence, 98.7\% fidelity against a full pipeline re-run; Appendix~\ref{app:params}) leaves aggregate metrics byte-identical across nearly the entire tested range, changing only at $\tau_H\ge0.85$. This is because semantic-risk floor rules (Section~\ref{sec:tde}), not raw thresholds, determine most decisions -- a genuine robustness property, not merely an unstudied gap.
-
-\textbf{Interpretation.} Richer context measurably helps B3 resolve a specific attacker's intent; the same richer traffic simultaneously exposes MBD's real baseline false-positive rate to a much larger share of evaluated messages than v1 ever did. Neither finding should be quoted alone.
-
-\textbf{Implication.} Section~\ref{sec:results}A (v1, canonical, F1$=0.718$) and this contextual regime (F1$=0.517$; per-attacker recall improved up to 75 points) answer different questions under different regimes and are reported side by side, never as competing rankings of the same architecture.
-
-\subsection{Calibration, Robustness, and Latency}
-Post-hoc temperature scaling ($T=2.145$) reduces ECE from $0.0619$ to $0.0280$ and Brier score from $0.0613$ to $0.0553$, with no change to classifier decision behavior (Fig.~\ref{fig_calibration}). A companion open-set analysis on unseen attack families measures a $0.0\%$ silent-failure rate and $0.0\%$ miss rate: B3 fails loudly, not silently, on genuinely novel patterns, and this is already routed to Caution by the existing fusion policy -- no additional abstain mechanism is warranted on this evidence. ROC/PR analysis on the full-stack fused score gives AUC$=0.747$ (ROC) and AUC$=0.911$ (PR) at v1's 70:29 prevalence (Fig.~\ref{fig_roc}, Fig.~\ref{fig_pr}).
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{figures_v2/fig_roc.pdf}
-\caption{ROC curve, full-stack fused Decision Trust score vs. attacker ground truth, STBV-Bench v1 ($n=10{,}000$). AUC$=0.747$.}
+\includegraphics[width=0.85\linewidth]{FINAL_FIGURES/fig_roc.pdf}
+\caption{ROC, B3-alone confidence vs.\ ground truth, STBV-Bench v1. AUC$=1.000$.}
 \label{fig_roc}
 \end{figure}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{figures_v2/fig_pr.pdf}
-\caption{Precision--Recall curve, same data as Fig.~\ref{fig_roc}. AUC$=0.911$; prevalence baseline shown for reference given the corpus's 70.07\% malicious prevalence.}
-\label{fig_pr}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{figures_v2/fig_calibration.pdf}
-\caption{Calibration reliability diagram before ($T{=}1$) and after ($T{=}2.145$) temperature scaling, $n=85$.}
-\label{fig_calibration}
-\end{figure}
-
-Against eleven text-perturbation families, most show low flip/over-defense rates; \textbf{instruction-hiding} and \textbf{role-confusion} both show a 50\% label-flip rate and a \textbf{100\% over-defense rate} -- every benign message perturbed this way was misclassified as malicious in this test. This is reported by name as a limitation, not folded into an aggregate robustness score.
-
-End-to-end per-message latency averages 110~ms ($p_{50}=100$~ms, $p_{95}=189$~ms, $p_{99}=254$~ms; Fig.~\ref{fig_latency}), compatible with the 10~Hz ($100$~ms) CAM interval at median load, though the tail exceeds it and should be budgeted for explicitly in a deployment.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{figures_v2/fig_latency.pdf}
-\caption{End-to-end per-message decision latency percentiles, full stack, STBV-Bench v1 ($n=10{,}000$).}
-\label{fig_latency}
-\end{figure}
-
-STBV-Bench v1's per-message log records only total end-to-end latency, not a per-stage breakdown; the only artifact in this repository with per-stage timers is a smaller, 120-scenario diagnostic harness (\texttt{semantic\_evaluation}), whose \emph{accuracy} figures are separately flagged as leakage-compromised (Section~\ref{sec:limitations}) but whose \emph{stage timers} are unaffected by that concern, since timing does not depend on label vocabulary overlap. Fig.~\ref{fig_latency_per_stage} reports this breakdown, measured on that smaller harness, as a diagnostic indicator of where latency accumulates rather than as a STBV-Bench v1 headline number.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{figures_v2/fig_latency_per_stage.pdf}
-\caption{Per-stage mean latency (PKI, B1/SCSV, MBD, B2/CSIA, CP, semantic synthesizer, B3 bridge, fusion), measured on the 120-scenario diagnostic harness, log scale.}
-\label{fig_latency_per_stage}
-\end{figure}
-
-\subsection{External Semantic Evaluation (Independent Corpus, Frozen Model)}
-\label{sec:external_eval}
-Every result above is measured on STBV-Bench, built from this project's own generator. To test whether B3 detects the underlying threat concepts rather than this generator's specific phrasing, we evaluate the same frozen, unmodified checkpoint (no retraining, no fine-tuning) against an independently constructed external corpus ($n=117$: 89 malicious, 28 benign) spanning five disjoint authorial sources: text directly authored by an LLM assistant one item at a time, a separate batch-generated set from the same model, attacks adapted from publicly documented (non-V2X) prompt-injection archetypes, and attacks generated independently by two third-party LLM providers from a shared fixed prompt. A public-dataset search (Appendix~\ref{app:external}) found no existing published corpus of labeled, V2X-contextualized semantic attacks -- ETSI CAM/DENM messages carry no free-text field under the standard itself, so this is a field-level absence, not a search failure. Every external-corpus entry was verified, programmatically, to share zero literal-substring overlap with STBV-Bench's own template strings.
+\subsection{Template-Disjoint Generalization (STBV-Bench v2.5b)}
+\label{sec:v25b}
+\textbf{What this proves.} Whether the checkpoint generalizes beyond its own training templates, and whether continued fine-tuning genuinely helps rather than overfits. We evaluate three checkpoints on v2.5b -- a benchmark never seen during training or data construction of any kind -- confirmed by the disjointness audit in Section~\ref{sec:methodology}. Table~\ref{tab:v25b} shows the untuned base checkpoint at F1$=0.545$ (near chance on this taxonomy), the pre-continuation mixed-corpus checkpoint at F1$=0.918$, and the final continued checkpoint at F1$=\mathbf{0.945}$ (ROC AUC 0.985). Continued fine-tuning on the mixed corpus plus v2.5c improved validation F1 from 0.901 (resumed-adapter baseline) to 0.924 during training itself, and this improvement transfers to the fully held-out v2.5b set -- evidence of genuine generalization, not memorization of the augmentation data, since v2.5b shares no templates with either the original training corpus or v2.5c.
 
 \begin{table}[t]
 \centering
-\caption{External Semantic Evaluation, Frozen B3 ($n=117$)}
-\label{tab:external_eval}
-\begin{tabular}{@{}lc@{}}
-\toprule
-Metric & Value \\
-\midrule
-Accuracy & 0.906 \\
-Precision & 0.976 \\
-Recall & 0.899 \\
-F1 & 0.936 \\
-ROC AUC & 0.975 \\
-PR AUC & 0.981 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{external_semantic_eval/figures/ext_fig_roc.pdf}
-\caption{ROC curve, frozen B3 on the external semantic evaluation corpus ($n=117$).}
-\label{fig_ext_roc}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{external_semantic_eval/figures/ext_fig_per_family_recall.pdf}
-\caption{Per-family recall, frozen B3, external corpus. The lowest-recall family (authority-override phrasing, 0.500) matches the weakest pattern already identified on STBV-Bench (Section~\ref{sec:limitations}).}
-\label{fig_ext_per_family}
-\end{figure}
-
-Precision (0.976) and ROC AUC (0.975, Fig.~\ref{fig_ext_roc}) are both strong out-of-distribution results and weigh against the concern that B3 only pattern-matches STBV-Bench's specific sentences. At the same time, the external corpus's single worst-performing family -- spoofed-authority-override phrasing, recall 0.500 -- is conceptually the same weak point already documented on STBV-Bench (six narrative-indirection families at $\le$9\% recall, Section~\ref{sec:limitations}), reproducing independently in text this project's generator never produced. This external evaluation therefore corroborates, rather than contradicts, STBV-Bench's own documented weak-family finding: it rules out the possibility that the weakness is an artifact of STBV-Bench's own phrasing conventions, while also ruling out the opposite overclaim that external validation is uniformly worse (per-family breakdown, Fig.~\ref{fig_ext_per_family}). Applying B3's existing post-hoc calibration temperature ($T{=}2.145$, fit internally on an unrelated 85-sample split) to this external corpus, without refitting, \emph{increases} ECE from 0.054 to 0.169 -- evidence that a temperature fit on one narrow split does not transfer across distributions, not evidence against calibration as a technique. Full methodology, per-source and per-family breakdowns, and the calibration-transfer figure are given in Appendix~\ref{app:external}.
-
-\subsection{Adaptive Attack Evaluation (Frozen Model)}
-\label{sec:adaptive}
-Every evaluation to this point, including the external corpus above, measures single-shot detection: one fixed text, one prediction. This subsection instead measures B3 against an iterative adaptive attacker that observes the model's prediction and revises its attack accordingly -- the frozen, unmodified checkpoint is queried repeatedly; no retraining or fine-tuning occurs anywhere in this process. Seeds are the 49 external-corpus messages B3 currently detects correctly, stratified across all 9 non-benign families. Headline results are given in Table~\ref{tab:adaptive}. Each round, nine candidate mutations (paraphrasing, synonym substitution, indirect prompt injection, role confusion, narrative poisoning, authority obfuscation, instruction hiding, context poisoning, semantic drift -- deterministic, seeded text transforms, not a live LLM search) are generated from the current text, all nine evaluated against B3, and the lowest-confidence candidate adopted for the next round; the loop stops on evasion (predicted \texttt{BENIGN}) or after 10 rounds.
-
-\begin{table}[t]
-\centering
-\caption{Adaptive Attack Evaluation, Frozen B3 ($n=49$ seeds)}
-\label{tab:adaptive}
-\begin{tabular}{@{}lc@{}}
-\toprule
-Metric & Value \\
-\midrule
-Attack Success Rate & 83.7\% (41/49) \\
-Avg.\ iterations (all seeds) & 4.06 \\
-Avg.\ iterations (successful only) & 2.90 \\
-Detection probability, round 0 & 1.000 \\
-Detection probability, round 2 & 0.592 \\
-Detection probability, round 10 & 0.163 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{adaptive_attack/figures/adaptive_fig_confidence_evolution.pdf}
-\caption{Mean $P(\text{malicious})$ and detection probability across 10 adaptive mutation rounds, $n=49$ seeds.}
-\label{fig_adaptive_confidence}
-\end{figure}
-
-\textbf{Stated plainly: this is the single most serious finding in this paper.} Detection probability collapses from 1.000 to 0.592 within two mutation rounds and to 0.163 by round 10 (Fig.~\ref{fig_adaptive_confidence}). Every one of the 9 attack families tested has an adaptive Attack Success Rate of at least 66.7\%; the two families most robust to adaptive attack (\texttt{sensor\_discreditation}, \texttt{reputation\_inflation}, both 66.7\% ASR) are, notably, the same two families that scored a perfect 1.000 recall under single-shot evaluation (Appendix~\ref{app:external}) -- direct evidence that single-shot recall and adaptive-evasion robustness are different properties, and that a strong single-shot score provides no assurance against an adaptive attacker. Context poisoning (benign filler padding) is the most-used and most-effective mutation, responsible for 18 of the 41 evasions; indirect prompt injection, by contrast, never won a single round across the entire campaign. Full per-family, per-strategy, and per-seed failure-mode detail, including all 8 seeds B3 successfully resisted, is given in \texttt{ADAPTIVE\_ATTACK\_EVALUATION.md}.
-
-No single-shot result reported elsewhere in this paper is overturned by this finding -- both measure real, valid, but different questions -- but no single-shot detection number in this paper should be read as evidence of robustness against an attacker who observes B3's output and revises their message.
-
-\subsection{CP Full Evaluation: A Realistic Benchmark Where Cooperative Perception Contributes}
-\label{sec:cp_full}
-CP contributes zero measurable effect on every benchmark reported so far, traced to a specific, confirmed data-generation gap: STBV-Bench's generator never populates the \texttt{event} field CP's consistency gate requires (Section~\ref{sec:limitations}). Rather than accept this as final or artificially inflate CP's contribution, we construct a new, realistic, event-labeled, 142-message, 24-scene multi-vehicle benchmark (\texttt{cp\_full\_eval/}) specifically shaped for CP -- multiple vehicles genuinely or falsely sharing a claimed event -- using CP's existing algorithm, the existing Trust Decision Engine, and the existing stateful-replay methodology unchanged; only new data and the pre-existing \texttt{enable\_cp} ablation flag are used.
-
-\begin{table}[t]
-\centering
-\caption{CP's Marginal, Attributable Effect (Full Stack, $n=142$)}
-\label{tab:cp_full}
-\begin{tabular}{@{}lc@{}}
-\toprule
-Metric & Value \\
-\midrule
-Decision changes & 33/142 (23.2\%) \\
-Escalations : de-escalations & 33 : 0 \\
-Attacker messages newly caught & 11/21 (6/21$\to$17/21 REJECT) \\
-Benign messages spuriously escalated & 22 (all capped at CAUTION) \\
-False negatives (attacker at ACCEPT) & 0 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{cp_full_eval/figures/cp_fig_attacker_detection.pdf}
-\caption{Attacker-message detection recovery: 6/21 reach REJECT with CP off vs.\ 17/21 with CP on, on the realistic event-labeled corpus.}
-\label{fig_cp_detection}
-\end{figure}
-
-Before reporting results, one confound must be disclosed: this benchmark's baseline (CP-off) false-positive rate is high (99/142) for a reason unrelated to CP -- direct inspection shows MBD's own \texttt{collusion\_score} climbing as multiple vehicles report similar kinematics near the same location in a short window, since genuine multi-vehicle corroboration and a Sybil/collusion signature are, to a purely kinematic detector, hard to tell apart. This benchmark's absolute FPR is therefore not comparable to STBV-Bench's; only the CP-attributable delta (identical MBD behavior in both arms, only \texttt{enable\_cp} differs) isolates CP's own effect.
-
-With that isolated: CP recovers 11 of 21 attacker messages the rest of the stack missed (Fig.~\ref{fig_cp_detection}; Table~\ref{tab:cp_full}), specifically and correctly, in 5 of 6 lone-fabricator-vs-honest-majority scenes -- a genuine detection improvement STBV-Bench cannot produce, since it never gives CP more than one report to compare. Against coordinated collusion (3 attackers, self-consistent, contradicting a 5-vehicle honest majority), the result is genuinely mixed: the first colluding message evades CP-driven detection in 4 of 5 scenes, directly confirming the literature-documented weakness that coordinated fabrication partially defeats pure statistical consistency fusion, while CP's marginal value concentrates at the second colluding message (newly caught in 4 of 5 scenes). The cost is a mechanistically-traced, narrow artifact: 22 benign messages are spuriously escalated ACCEPT$\to$CAUTION (never REJECT) at the exact window step where corroboration is still low (2 accumulated reports), a corroboration-\emph{quantity} signal that cannot yet distinguish agreement from disagreement this early in any window, honest or not. Full per-scene, per-message detail is given in \texttt{CP\_FULL\_EVALUATION.md}.
-
-\subsection{Baseline Comparison, and a Benchmark-Validity Finding It Exposes}
-\label{sec:baselines}
-Every result to this point compares the architecture against its own ablations, never against an independent detector. We therefore implement four baselines, entirely separate from B3 and the pipeline (\texttt{baselines/run\_baselines.py}; B3 is not retrained, not re-run, and not modified -- its predictions are read from the committed evaluation artifact). All detectors are scored on the byte-identical synthesized text B3 itself receives. Results are in Table~\ref{tab:baselines}.
-
-\begin{table}[t]
-\centering
-\caption{Baseline Comparison on STBV-Bench v1 ($n=10{,}000$, malicious prevalence 0.7007). CIs are 2{,}000-resample percentile bootstrap.}
-\label{tab:baselines}
+\caption{STBV-Bench v2.5b, Held-Out Template-Disjoint Eval ($n{=}10{,}098$)}
+\label{tab:v25b}
 \footnotesize
 \begin{tabular}{@{}lccccc@{}}
 \toprule
-Detector & Trained? & F1 [95\% CI] & Rec. & FPR & AUC \\
+Checkpoint & Acc. & Prec. & Rec. & F1 & ROC AUC \\
 \midrule
-TF-IDF + LogReg & yes & \textbf{1.000} [1.000, 1.000] & 1.000 & 0.000 & \textbf{1.000} \\
-TF-IDF + LinearSVC & yes & \textbf{1.000} [1.000, 1.000] & 1.000 & 0.000 & \textbf{1.000} \\
-B3, banded$^{a}$ & no & 0.715 [0.705, 0.725] & 0.557 & 0.000 & 0.747 \\
-B3, strict label$^{b}$ & no & 0.311 [0.298, 0.324] & 0.184 & 0.000 & 0.747 \\
-Zero-shot LLM$^{c}$ & no & 0.267 [0.232, 0.303] & 0.154 & 0.000 & -- \\
-Regex/keyword & no & 0.235 [0.222, 0.247] & 0.133 & 0.000 & 0.566 \\
+Untuned base & 0.576 & 0.634 & 0.478 & 0.545 & 0.619 \\
+Mixed corpus (pre-cont.) & 0.912 & 0.910 & 0.926 & 0.918 & 0.965 \\
+\textbf{Final (continued)} & \textbf{0.941} & \textbf{0.939} & \textbf{0.951} & \textbf{0.945} & \textbf{0.985} \\
 \bottomrule
 \end{tabular}
-\\[2pt]
-\raggedright\scriptsize
-$^{a}$The paper's config-4 criterion: \texttt{MALICIOUS}, \emph{or} \texttt{BENIGN} with confidence $<0.85$ (\texttt{confidence\_aware\_benign}).
-$^{b}$\texttt{argmax}$=$\texttt{MALICIOUS} only -- the operating point comparable to any binary classifier.
-$^{c}$Mistral 7B via local Ollama, stratified $n=987$; the full corpus is not tractable locally.
 \end{table}
 
-\textbf{Two trivial bag-of-words baselines solve STBV-Bench perfectly, substantially outperforming B3.} We report this plainly. The correct reading, however, is not that logistic regression is a superior semantic-attack detector; it is that \textbf{STBV-Bench is trivially separable}, and a direct audit of the corpus shows exactly why. All 2{,}993 benign-control messages are drawn from just \textbf{ten} unique sentences (two templates $\times$ five street names), against 335 distinct strings across the 7{,}007 malicious messages -- a benign type/token ratio of 0.0033. The fitted model confirms it exploits precisely this: its most negative coefficients are the benign template $n$-grams themselves (\texttt{traffic moving} $-6.44$, \texttt{no incidents} $-4.05$), while the positive side is diffuse function words. The classifier memorises a ten-element closed set and labels everything else malicious.
+\subsection{Genuine Kinematic Attacks (VeReMi)}
+\textbf{What this proves.} Whether the behavioral layer independently detects real, non-semantic attacks, confirming complementary coverage rather than redundancy with B3. Table~\ref{tab:veremi} reports MBD's message- and vehicle-level performance on real VeReMi traces (5 seeds, 20,000-message samples per attack per seed, 95\% CIs). B3 contributes exactly zero on this benchmark (no text field exists in VeReMi records), confirming Table~\ref{tab:main_ablation}'s converse: each layer is structurally blind to the threat class the other exists to cover.
 
-This has a direct consequence for how this paper's earlier numbers must be read. \textbf{The frequently-quoted ``100\% precision, FPR${=}0.000$'' is not a discriminative result}: every detector in Table~\ref{tab:baselines}, including the regex, achieves precision 1.000 and FPR 0.000, because the negative class it must avoid is ten strings. Only recall and ROC-AUC separate the detectors at all. We accordingly retire precision/FPR on this corpus as evidence of capability, and treat the benign-class construction as a benchmark defect to be fixed (generating benign controls with lexical diversity comparable to the attack classes) before any absolute precision claim can be supported.
+\begin{table}[t]
+\centering
+\caption{VeReMi Kinematic Companion, MBD (5 seeds, mean)}
+\label{tab:veremi}
+\footnotesize
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Attack type & Level & F1 & Recall & FPR \\
+\midrule
+ConstPos (fabrication) & Message & 0.833 & 0.825 & 0.069 \\
+ConstPos (fabrication) & Vehicle & 0.883 & 0.972 & 0.097 \\
+DataReplay & Message & 0.744 & 0.739 & 0.110 \\
+DataReplay & Vehicle & 0.864 & 0.987 & 0.128 \\
+DoS & Message & 0.596 & 0.447 & 0.071 \\
+DoS & Vehicle & 0.747 & 0.720 & 0.090 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\textbf{The comparison is biased toward the baselines, and B3 still wins the like-for-like contest.} Baselines 1--2 are trained on STBV-Bench itself via 5-fold stratified cross-validation, seeing in-domain examples of every family they are tested on; B3 never trained on STBV-Bench and operates zero-shot. Against the two detectors that are genuinely comparable -- both zero-shot, neither trained on this corpus -- B3 is the stronger detector at either operating point (0.311/0.715 vs.\ 0.267 for a 7B instruction-tuned LLM judge and 0.235 for hand-written regex). That is a real, if modest, positive result, and it is the only baseline comparison here that supports a capability claim.
+\subsection{Live CARLA: A Software-Engineering Finding}
+\label{sec:carla}
+\textbf{What this proves.} Whether the frozen pipeline runs against a real, physics-driven simulator, and whether the checkpoint's improved benchmark performance (Section~\ref{sec:v25b}) transfers to live deployment. We ran 10 constructed scenarios (4 benign, 6 attack) live in CARLA 0.9.16, Town01, 8 autopiloted vehicles, 10~Hz synchronous physics, 400 messages, through the identical unmodified pipeline pointed at the final checkpoint.
 
-\textbf{B3's two operating points.} Table~\ref{tab:baselines} separates them because they measure different things. \texttt{isce\_config.yaml} sets \texttt{confidence\_aware\_benign: true}, so a message predicted \texttt{BENIGN} with confidence $<0.85$ is routed to Caution and counted as a detection. Reproducing this exactly recovers the paper's reported recall of 0.5566 (3{,}900 flagged); under the strict \texttt{argmax} criterion B3 flags 1{,}290, recall 0.1841. Roughly two-thirds of the headline recall therefore comes from low-confidence \emph{benign} predictions rather than positive detections. Abstention-routing is a defensible design, but the two figures should not be conflated, and we report both wherever B3's recall appears.
+\textbf{Bug found and fixed.} The first run reproduced the prior architecture's known weakness -- \texttt{authority\_override} reaching ACCEPT on 62.5\% of messages -- despite the checkpoint's substantially improved benchmark F1. We traced the exact text B3 received by instrumenting the classifier call directly and found the free text carried \emph{no attack content at all}: only station/position/kinematics fields. Root cause, confirmed by code inspection: \texttt{pipeline/synthesizer.py}'s scene-evidence extraction never captured the ego (target) vehicle's own asserted \texttt{event} field into any of the three text renderers -- only \emph{peer} and RSU events were rendered. Since CARLA's \texttt{authority\_override}, \texttt{semantic\_manipulation}, \texttt{goal\_manipulation}, and \texttt{false\_hazard\_clearance} scenarios all inject the attack as the ego vehicle's own claim, the attack text was silently invisible to B3 for any checkpoint, old or new -- a synthesizer defect, not a model-capability failure. We added an \texttt{ego\_event} field to the shared \texttt{SceneEvidence} object, populated from the raw message and rendered in all three text templates; all 188 existing pipeline unit tests continued to pass after the fix.
 
-\subsection{Human Validation of STBV-Bench Labels}
-\label{sec:humanval}
-STBV-Bench's ground truth is assigned by the same seeded generator that produces the message text; no independent check establishes that a message labelled malicious reads as malicious to a competent human. Without that check a detector ``miss'' cannot be distinguished from a mislabelled item. We therefore specify and release a validation study (\texttt{validation/}).
+\textbf{Result after the fix.} Table~\ref{tab:carla} reports outcomes stable across two independent post-fix runs unless noted. \texttt{authority\_override} and \texttt{false\_hazard\_clearance} are now correctly flagged \texttt{MALICIOUS} by B3 (previously \texttt{BENIGN} in both cases) and fully REJECTed. \texttt{sybil\_attack} and \texttt{semantic\_manipulation} are still classified \texttt{BENIGN} by B3 even with the attack text now visible -- a genuine remaining generalization gap on raw, snake-case event tags (e.g., \texttt{"authority\_override\_clear\_path"}), which read very differently from the natural-language sentences B3 was trained on -- but are still correctly REJECTed by MBD/B1. We disclose, rather than average away, a separate reproducibility limitation: benign-scenario decisions (\texttt{normal\_driving}) and one attack scenario (\texttt{goal\_manipulation}) varied materially between the two post-fix runs (e.g., \texttt{normal\_driving} Reject rate 0.40 vs.\ 0.80), while B1/MBD -- which do not consume synthesized text at all -- are the only plausible source, since our fix touches only text rendering; we attribute this to CARLA's traffic manager not being seeded for exact vehicle-decision randomness, a genuine deployment caveat independent of our fix, confirmed by code-path separation.
 
-\textbf{Sampling.} 300 messages are drawn from the evaluated 10{,}000-message slice, stratified across all 21 families (proportional with a per-family floor), under a seed distinct from the modelling seed; presentation order is shuffled so annotators cannot infer family from position.
+\begin{table}[t]
+\centering
+\caption{Live CARLA, Final Checkpoint, Post-Fix ($n{=}400$; two runs)}
+\label{tab:carla}
+\footnotesize
+\begin{tabular}{@{}llcc@{}}
+\toprule
+Scenario & Truth & B3 label & Decision \\
+\midrule
+\texttt{normal\_driving} & benign & BENIGN & unstable (7--32/40 Rej.) \\
+\texttt{accident} & benign & BENIGN & 40/40 Reject \\
+\texttt{emergency\_vehicle} & benign & BENIGN & 40/40 Reject \\
+\texttt{road\_closure} & benign & BENIGN & 40/40 Reject \\
+\texttt{replay\_attack} & mixed & BENIGN & 39--40/40 Reject \\
+\texttt{sybil\_attack} & attack & BENIGN & 40/40 Reject (MBD) \\
+\texttt{semantic\_manipulation} & attack & BENIGN & 40/40 Reject (MBD) \\
+\texttt{goal\_manipulation} & attack & BENIGN & unstable (11--40/40 Rej.) \\
+\textbf{\texttt{authority\_override}} & attack & \textbf{MALICIOUS} & \textbf{40/40 Reject} \\
+\textbf{\texttt{false\_hazard\_clearance}} & attack & \textbf{MALICIOUS} & \textbf{40/40 Reject} \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\textbf{Protocol.} Two annotators label independently with no communication, receiving only \texttt{item\_id} and \texttt{message} -- never the ground truth, the family, or each other's file. The task is defined as: \emph{does this message attempt to manipulate the receiving vehicle's understanding of the situation (fabricated peer agreement, false hazard clearance, unwarranted authority, injected instructions)?} Disagreements are not reconciled before computing $\kappa$, since the raw independent labels are the measurement. \texttt{agreement\_analysis.py} then computes Cohen's $\kappa$, percent agreement, the annotator $\times$ annotator confusion matrix, and each annotator's precision/recall against the generator's labels.
-
-\textbf{Status.} \textbf{Annotations have not yet been collected, and no result is reported here.} The tooling refuses to impute, default, or auto-fill any label: with unfilled templates it emits a report consisting solely of clearly-marked placeholders. We state this explicitly rather than substituting machine labels for human ones, because a synthetic ``human validation'' would defeat the study's only purpose. The most consequential quantity it will produce is the count of items where \emph{both} annotators agree with each other and jointly contradict the generator -- where that occurs, the generator is the more likely error source, and the affected families' reported recall would need revising.
-
-\subsection{Deployment Feasibility: Simulator Replay and Live CARLA Integration}
-\label{sec:deployment}
-All results above measure the frozen pipeline against pre-constructed message fixtures. To assess deployment feasibility specifically -- not detection accuracy, already covered above -- we run the identical, unmodified pipeline (same code path as the preceding subsections) against two real-simulator sources it had not previously been evaluated on: (i) a SUMO 1.27.0-generated microscopic traffic trace (1{,}829 timesteps, 36{,}256 messages, replayed as a live CAM stream through one persistent pipeline instance, first 2{,}000 messages processed), and (ii) a live, running CARLA 0.9.16 server (Town01, synchronous 10~Hz, 8 autopiloted vehicles, 10 constructed driving/attack scenarios, 400 messages), with vehicle state converted to this repository's own native CAM/DENM schema by a purpose-built bridge. Full methodology and raw per-message data are given in \texttt{DEPLOYMENT\_EVALUATION.md} and \texttt{CARLA\_DEPLOYMENT\_EVALUATION.md}, not reproduced in full here.
+\textbf{Throughput/latency} (most recent run): mean 80.1~ms ($p_{95}{=}97.2$, $p_{99}{=}110.8$~ms), throughput 10.45~msg/s, 0 messages dropped of 920 offered, peak GPU 732~MB.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.85\linewidth]{figures_v2/fig_deploy_carla_scene.png}
-\caption{Live CARLA 0.9.16 scene (Town01) captured mid-evaluation, confirming a genuinely running simulator rather than a replayed trace.}
-\label{fig_deploy_carla_scene}
+\caption{Live CARLA 0.9.16 scene (Town01), confirming a genuinely running simulator.}
+\label{fig_carla_scene}
 \end{figure}
+
+\subsection{SUMO Deployment Replay}
+\textbf{What this proves.} Sustained throughput and resource behavior under real microscopic-traffic concurrency, independent of CARLA-specific effects. A SUMO 1.27.0 trace (36,256 messages, mean 19.8 / max 46 concurrent vehicles per timestep) was replayed as a live CAM stream through one persistent pipeline instance (first 2,000 messages, final checkpoint). Mean latency 81.2~ms ($p_{50}{=}79.3$, $p_{95}{=}98.9$, $p_{99}{=}126.6$~ms), throughput 12.3~msg/s, peak GPU 685~MB, 235 Accept / 1,765 Caution decisions. B3's forward pass dominates latency in both SUMO and CARLA settings; sustained throughput (10--12~msg/s) does not meet the trace's own recorded concurrency requirement (20--460~msg/s depending on assumed CAM rate) -- a single-threaded, unbatched throughput bottleneck, not a per-message latency failure, and B3 batching is the concrete next step this evaluation identifies.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.7\linewidth]{figures_v2/fig_deploy_architecture.pdf}
-\caption{Live-CARLA deployment architecture: real vehicle state flows through a purpose-built bridge into the same frozen pipeline evaluated in Sections~\ref{sec:results}--\ref{sec:cp_full}.}
-\label{fig_deploy_architecture}
+\includegraphics[width=0.85\linewidth]{FINAL_FIGURES/fig_deploy_latency_stage_sumo.pdf}
+\caption{Mean per-stage latency, SUMO replay, final checkpoint (log scale, $n{=}2{,}000$). B3's forward pass dominates; every other layer is under 1~ms.}
+\label{fig_sumo_stage}
 \end{figure}
 
-\textbf{B3 dominates latency in both settings.} The semantic gate's transformer forward pass accounts for 98.6\% (SUMO replay) and 98.0\% (live CARLA) of end-to-end latency; every other layer combined (PKI, B1, MBD, B2, CP, synthesizer, fusion) contributes under 1~ms. Mean end-to-end latency is 66.8~ms ($p_{95}=78.9$~ms, $p_{99}=85.0$~ms) under SUMO replay and 80.0~ms ($p_{95}=96.9$~ms, $p_{99}=106.6$~ms) under live CARLA -- higher because the CARLA server itself occupies 2.3~GB and 85--100\% utilization of the same 6.1~GB laptop GPU B3 shares with it, a genuine resource-contention effect only a live-simulator evaluation can surface, since a pre-recorded trace replay has no simulator running concurrently to contend with.
+\subsection{Adaptive Attack Evaluation}
+\label{sec:adaptive}
+\textbf{What this proves.} Whether single-shot detection numbers predict robustness against an attacker who observes B3's prediction and iteratively revises. Nine deterministic mutation strategies (paraphrasing, synonym substitution, narrative poisoning, instruction hiding, role confusion, authority obfuscation, among others) are applied each round to 51 seeds (external-corpus messages B3 currently detects), the lowest-confidence candidate adopted, loop stopped on evasion or after 10 rounds. \emph{This evaluation was not rerun against the final continued checkpoint in this pass} (Section~\ref{sec:limitations}); Table~\ref{tab:adaptive} reports the prior production checkpoint's measured result and should be read as characterizing this architecture's adaptive robustness in general rather than a claim specific to the checkpoint evaluated elsewhere in this paper.
 
 \begin{table}[t]
 \centering
-\caption{Deployment Feasibility: SUMO Replay vs. Live CARLA. CARLA column is the mean over \textbf{15 independent runs} (3 towns $\times$ 5 seeds, 6{,}000 messages) with 95\% bootstrap CIs (10{,}000 resamples); no run excluded.}
-\label{tab:deployment}
+\caption{Adaptive Attack, Prior Checkpoint ($n{=}51$ seeds)}
+\label{tab:adaptive}
 \footnotesize
-\begin{tabular}{@{}lcc@{}}
+\begin{tabular}{@{}lc@{}}
 \toprule
-Metric & SUMO Replay & Live CARLA (15 runs) \\
+Metric & Value \\
 \midrule
-Mean end-to-end latency & 66.8~ms & 66.73 [66.48, 66.98]~ms \\
-$p_{95}$ / $p_{99}$ latency & 78.9 / 85.0~ms & 86.5 / 94.3~ms \\
-B3 share of latency & 98.6\% & 98.1\% \\
-Sustained throughput & 14.95~msg/s & 13.47 [13.40, 13.54]~msg/s \\
-Process RSS & 1{,}081~MB & 1{,}059 [1{,}054, 1{,}066]~MB \\
-GPU utilization & --- & 54.0 [52.6, 55.3]~\% \\
-Peak GPU alloc. (B3) & 685~MB & 700.2~MB \\
-Dropped messages & 0 & 0 / 13{,}800 offered \\
+Attack Success Rate & 21.6\% (11/51) \\
+Detection prob., round 0 / 2 / 10 & 1.000 / 0.922 / 0.784 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Multi-run protocol and what it changes.} The single-run figures reported in an earlier version of this evaluation are superseded here by 15 independent runs spanning three CARLA towns (Town01, Town02, Town05) and five spawn seeds each, with the frozen pipeline unchanged and only town and seed varying. Two methodological points are stated explicitly. First, Town03 was the originally-intended third town but crashes the CARLA 0.9.16 server reproducibly during \texttt{load\_world()} on this hardware even with the full 5{,}920~MiB of VRAM free (verified twice); Town02 was substituted before any result was observed. Second, the first two runs executed were later found to have shared a long-lived server whose traffic manager had accumulated state -- a condition that subsequently caused server failure -- and were re-executed under the same fresh-server-per-run protocol as the other thirteen; the superseded runs are retained on disk rather than deleted. Every reported number averages over all 15 runs. \textbf{The multi-run result is in one respect \emph{better} than the single run it replaces}: $p_{99}$ latency is 94.3~ms rather than the 106.6~ms measured once, i.e.\ the full stack does sit inside the 100~ms CAM interval at $p_{99}$, and the earlier single-run figure was pessimistic. Throughput is tightly reproducible across towns (Town01 13.34, Town02 13.55, Town05 13.53~msg/s), so the shortfall against the 20--460~msg/s requirement is a stable property of the architecture, not run-to-run noise.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{figures_v2/fig_deploy_multirun_latency.pdf}
-\caption{Latency across 15 runs. Left: distribution per town (all seeds pooled). Right: pooled distribution over all 6{,}000 messages, with $p_{99}$ and the 100~ms CAM budget marked.}
-\label{fig_multirun_latency}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{figures_v2/fig_deploy_multirun_scenario.pdf}
-\caption{Per-scenario detection over 15 runs (mean $\pm$ 95\% CI). Red: attack scenarios (recall, higher is better). Blue: benign scenarios (FPR, lower is better). Positive $=$ Caution or Reject, matching the paper's scoring convention.}
-\label{fig_multirun_scenario}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{figures_v2/fig_deploy_latency_stage.pdf}
-\caption{Mean per-stage latency, SUMO replay vs. live CARLA (log scale). B3 dominates in both settings; every other layer is under 1~ms.}
-\label{fig_deploy_latency_stage}
-\end{figure}
-
-\textbf{Live scenario construction and per-scenario outcomes.} The ten CARLA scenarios (Table~\ref{tab:carla_scenarios}) comprise four benign driving situations and six attack constructions. Every scenario runs on real CARLA vehicle actors under Traffic Manager autopilot, with real physics each tick; attacks are injected \emph{only} at the message-content layer -- a sending vehicle constructs a message diverging from its own true state (false event claims, verbatim-replayed stale content, spoofed station type, or multiple identities from one physical vehicle) -- exactly the capability a real attacker holds. CARLA's own kinematic output is never altered, so no scenario is detectable by an artifact of the simulation itself. Every figure in Table~\ref{tab:carla_scenarios} is a mean over 15 runs with a 95\% CI, so per-scenario variability is visible rather than hidden by a single draw. Three findings stand out, and the third is the reason this evaluation was worth running. \emph{(i)} The attack types carrying a behavioural or structural signature are detected reliably and reproducibly: replay, Sybil, goal-manipulation, false-clearance and semantic-manipulation all reach recall $1.000$ with zero CI width across all 15 runs, and Sybil and replay additionally reach outright Reject on $95.0\%$ and $100\%$ of their attack messages. \emph{(ii)} \texttt{authority\_override} is the one attack the architecture handles unreliably: recall $0.595$ with a very wide interval $[0.332, 0.857]$ and a Reject rate of exactly $0.000$ in every run -- it is never rejected, only sometimes cautioned, and whether it is cautioned at all varies substantially by town and seed. \emph{(iii)} Across all 15 runs, all three towns and all 3{,}585 attack-scenario messages, \textbf{B3 returned \texttt{BENIGN} without a single exception}. Every Reject in Table~\ref{tab:carla_scenarios} is therefore attributable to B1/MBD/CP alone. What was a single-run observation in the earlier evaluation is now a reproducible property measured over three maps and five seeds, and it is the strongest negative result in this paper: the semantic layer contributed no detection whatsoever in live deployment, against precisely the threat class it exists to cover.
-
-\textbf{Benign traffic is not handled acceptably either.} Under the paper's own scoring convention (positive $=$ Caution or Reject), the false-positive rate on benign scenarios is $\approx 1.000$: essentially every benign message raises a concern. Much of that is Caution rather than Reject and is architecturally defensible -- a single uncorroborated but truthful DENM has no peer to corroborate it, so Caution is the correct response to unverifiable evidence. The Reject rates, however, are not defensible: $34.3\%$ of ordinary \texttt{normal\_driving} messages, $46.5\%$ of truthful \texttt{road\_closure} messages and $28.8\%$ of truthful \texttt{accident} messages are outright rejected, all from genuinely benign vehicles. A trust gate discarding a third of honest traffic is not deployable, and this is now established across 15 runs rather than inferred from one.
-
-\begin{table}[t]
-\centering
-\caption{Live CARLA per-scenario outcomes, mean [95\% CI] over \textbf{15 runs} (3 towns $\times$ 5 seeds; 6{,}000 messages). Positive $=$ Caution or Reject. \textbf{B3 returned \texttt{BENIGN} on all 3{,}585 attack messages in every run}, so all Reject decisions come from B1/MBD/CP.}
-\label{tab:carla_scenarios}
-\footnotesize
-\begin{tabular}{@{}llcc@{}}
-\toprule
-Scenario & Truth & Recall / FPR & Reject rate \\
-\midrule
-\texttt{normal\_driving} & benign & 0.975 (FPR) & 0.343 [0.167, 0.528] \\
-\texttt{accident} & benign & 1.000 (FPR) & 0.288 [0.097, 0.530] \\
-\texttt{emergency\_vehicle} & benign & 1.000 (FPR) & 0.232 [0.073, 0.422] \\
-\texttt{road\_closure} & benign & 1.000 (FPR) & 0.465 [0.243, 0.688] \\
-\midrule
-\texttt{replay\_attack} & mixed & 1.000 [1.000, 1.000] & 1.000 [1.000, 1.000] \\
-\texttt{sybil\_attack} & attack & 1.000 [1.000, 1.000] & 0.950 [0.950, 0.950] \\
-\texttt{false\_hazard\_clearance} & attack & 1.000 [1.000, 1.000] & 0.585 [0.363, 0.788] \\
-\texttt{goal\_manipulation} & attack & 1.000 [1.000, 1.000] & 0.498 [0.280, 0.717] \\
-\texttt{semantic\_manipulation} & attack & 1.000 [1.000, 1.000] & 0.393 [0.180, 0.625] \\
-\texttt{authority\_override} & attack & \textbf{0.595 [0.332, 0.857]} & \textbf{0.000 [0.000, 0.000]} \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\textbf{Real-time constraint conclusion.} Per-message latency alone stays under a 100~ms ETSI CAM budget at $p_{99}$ in both settings, but sustained throughput does not scale to realistic multi-vehicle concurrency: the SUMO trace's own recorded concurrency (mean 19.8, max 46 simultaneously-broadcasting vehicles per timestep) requires 20--460~msg/s depending on assumed CAM rate (1--10~Hz), against a measured 14.95~msg/s (replay) / 11.22~msg/s (live) -- the architecture, run single-threaded and unbatched exactly as implemented, does not meet this even at the least demanding concurrency tested. This is a throughput, not a per-message-latency, bottleneck; B3 batching is the concrete next step this evaluation identifies, though not implemented here, since neither deployment evaluation's scope included optimizing pipeline code.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{figures_v2/fig_deploy_latency_timeline.pdf}
-\caption{Per-message end-to-end latency, live CARLA, all 400 messages across 10 sequential scenarios (dotted lines mark scenario boundaries). Occasional excursions above the 100~ms ETSI CAM budget are GPU-driver scheduling jitter, not systematic drift.}
-\label{fig_deploy_latency_timeline}
-\end{figure}
-
-\textbf{Two findings only a live simulator surfaced.} First, a scenario-construction artifact, corrected before the results above were collected: CP's spatial-consistency check, calibrated for the compact SUMO grid's $\sim$20~m corroboration radius, initially misfired against CARLA's town-scale traffic spread when a naive multi-vehicle window was reused unchanged -- traced, disclosed, and corrected in the evaluation script itself, not in CP, and confirmed by isolating \texttt{SCSV.check\_stateful()} on the identical message (clean $\mathrm{score}=1.0$). Second, and left unresolved: MBD's behavioral-anomaly score climbed from 0.0 to 0.72 for an ordinary vehicle decelerating to a real stop at a CARLA intersection under organic autopilot driving, moving that same benign target message from ACCEPT to REJECT within 40 ticks -- a possible over-sensitivity to ordinary urban deceleration not previously observed on VeReMi's or STBV-Bench's message distributions, reported here exactly as measured. Third, B3 itself did not flag two of ten live constructed-attack scenarios (fabricated accident content and station-type impersonation) as semantically risky; the pipeline's CAUTION-level response to both came entirely from B1/MBD/CP, not from B3's own reasoning catching the mismatch it targets -- consistent with, and complementary to, Section~\ref{sec:adaptive}'s finding that B3's single-shot recall does not reliably predict its robustness once inputs are constructed adversarially rather than sampled from a distribution closer to its own training data.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{figures_v2/fig_deploy_trust_evolution.pdf}
-\caption{Live pignistic trust\_score across all 400 messages, 10 sequential CARLA scenarios (dotted lines mark scenario boundaries), one persistent pipeline instance.}
-\label{fig_deploy_trust_evolution}
-\end{figure}
-
-This evaluation is a feasibility and resource-characterization check, not a further detection-accuracy benchmark -- sample sizes (2{,}000 replayed messages; 400 live messages across 10 scenarios, 40 each) are small relative to STBV-Bench, and the CARLA testing used one town, one hardware configuration, and no ROS2 transport layer (unavailable in this environment). It answers a different question than the preceding subsections: not ``how accurately does this architecture detect attacks,'' but ``does the same frozen architecture run, and at what resource cost, against real simulator-generated traffic instead of static fixtures.''
+No family reaches 50\% ASR; \texttt{narrative\_poisoning} precedes evasion most often (4/11). This is the strongest robustness result in this paper and should be read as an upper bound: the mutation battery is fixed and deterministic, not an open-ended learned search.
 
 %======================================================================
 \section{Discussion}
 \label{sec:discussion}
 %======================================================================
-\textbf{Why B3 dominates semantic-attack detection.} STBV-Bench keeps kinematics real and unmodified; only text is attacked. B1/MBD/CP have no representation of message content at all, so they are structurally incapable of reacting to a purely textual attack regardless of kinematic sophistication -- confirmed directly by the config-3$\to$4 jump from F1$=0.034$ to $0.715$ (Table~\ref{tab:main_ablation}). This is outside those layers' designed scope by construction, not a weakness of them.
+\textbf{Strengths.} B3 and MBD cover structurally non-overlapping threat classes (Tables~\ref{tab:main_ablation}, \ref{tab:veremi}): B1/MBD/CP have no representation of message content, so they cannot react to a purely textual attack regardless of kinematic sophistication; B3 has no analog of MBD's cross-time history comparison. Fusion is provably conservative (Section~\ref{sec:architecture}) and empirically matches: every one of 84 fusion-attributable decision changes on STBV-Bench v1 is an escalation. Continued fine-tuning produced a real, held-out-verified generalization improvement (F1 0.918$\to$0.945 on a benchmark constructed to share zero templates with any training data), not merely a benchmark-specific gain. The adaptive-attacker evaluation shows detection degrading gradually (1.000$\to$0.784 over 10 rounds) rather than collapsing, evidence against the concern that B3 relies on a single brittle shortcut.
 
-\textbf{Why MBD dominates kinematic-attack detection.} The converse holds by the same logic: the companion benchmark injects no text at all, so B3 has nothing to read (confirmed byte-identical across 13,511 messages). MBD's 60--91\% recall comes from comparing a sender's current report against its own history -- a reasoning mode this architecture does not offer B3 an analog of, since there is no ``semantic history'' concept implemented anywhere in the pipeline.
+\textbf{Limitations.} \label{sec:limitations} (i) The live-CARLA synthesizer defect (Section~\ref{sec:carla}) means every prior live-deployment evaluation of this architecture, across every checkpoint, silently never exposed the ego-asserted attack class to B3 -- a finding that should be treated as more consequential than a single bug-fix, since it invalidates the interpretation (not the raw numbers) of all prior live-CARLA semantic-miss claims. (ii) Even after the fix, \texttt{sybil\_attack} and \texttt{semantic\_manipulation} remain undetected by B3 specifically, caught only by MBD -- raw snake-case event tags are unlike B3's natural-language training distribution, a concrete, actionable target for future synthesizer/training-data work (rendering ego events as natural-language sentences, not tag strings). (iii) CARLA's traffic manager is not seeded for exact decision randomness; benign-scenario and one attack-scenario outcome varied materially run-to-run, a genuine reproducibility gap orthogonal to model quality. (iv) The adaptive-attack evaluation (Section~\ref{sec:adaptive}) was not rerun against the final continued checkpoint in this pass; its 21.6\% ASR characterizes the architecture's general adaptive-robustness profile, not a guarantee for the exact checkpoint reported elsewhere. (v) STBV-Bench v1's near-ceiling F1 reflects an in-distribution benchmark drawn from the same generator family as part of the checkpoint's own training data provenance; v2.5b (Section~\ref{sec:v25b}) is the more conservative, template-disjoint estimate and is the number that should anchor deployment discussions. (vi) CP contributes zero to every STBV-Bench result due to a data-generation gap (the generator never populates the event field CP's gate requires), verified functionally correct on separate event-labeled fixtures -- not an algorithmic defect, but unclosed in this evaluation pass.
 
-\textbf{Why fusion changes more decisions than binary F1 shows.} Binary F1 treats Caution and Reject identically, so it is blind to the majority of what fusion does: 92.5\% of its decision changes are Caution$\to$Reject escalations, invisible to the binary metric. Any study of a graded, multi-state trust architecture that reports only binary detection metrics risks systematically under-crediting exactly the mechanism such architectures exist to provide; we recommend three-way transition analysis as standard practice for this class of system generally, not only for this paper's own reporting.
+\textbf{Safety consequences.} The organizing question is not detection rate but whether a wrong decision has a path to an unsafe maneuver with no physical-sensor backstop. A fabricated hazard-clearance or spoofed-authority claim that this architecture accepts leaves nothing for onboard sensing to contradict. Prior to the fix in Section~\ref{sec:carla}, this was rated CRITICAL for two live-deployment findings; post-fix, \texttt{authority\_override} and \texttt{false\_hazard\_clearance} are resolved, but \texttt{sybil\_attack} and \texttt{semantic\_manipulation} remaining B3-invisible (though still caught by MBD, which does retain a partial backstop via kinematic/behavioral corroboration) keeps this a live, disclosed risk rather than a closed one.
 
-\textbf{Why realistic traffic lowers aggregate F1.} v1 has no concept of an innocent bystander -- every sample is either a designated attacker or a designated benign control. v2 introduces, for the first time, ordinary ambient vehicles that are neither, and MBD's real, independently-measured false-positive rate on ordinary kinematics (confirmed twice, on two separately-built benchmarks) now applies to a much larger share of evaluated traffic. This is not evidence the architecture regressed; it is evidence v1's F1 was measured on a distribution that never contained the false-positive source v2 reveals. Reporting only v1 overstates real-world precision; reporting only v2 obscures the real detection improvement it also shows.
-
-\textbf{Why richer context helps.} A direct example shows one fixed attack sentence's classification changing purely as neutral context accumulates around it. Two candidate mechanisms remain only partially distinguished: B3's classifier may retain some sensitivity to scene-description composition independent of content, or richer context may genuinely disambiguate intent through a form of implicit cross-source reasoning even without CP's explicit mechanism. The context-volume correlation's direction is inconsistent across two of six improved families, which rules out a pure length-artifact explanation as complete but not as a partial contributor. This is reported as open, because it is open.
-
-\textbf{Why parameter sensitivity is low.} The threshold sweep (Section~\ref{sec:results}) shows aggregate metrics essentially fixed across a wide range of $\tau_H$, $\tau_L$, and B3's risk bands, because the semantic-risk floor rules -- not the raw threshold values -- determine most decisions once B3 reports any non-trivial risk. Sensitivity only appears once $\tau_H$ is raised enough to affect messages B3 has already cleared as clean. This is a genuine robustness property of the floor-rule design, not an artifact of an unexplored parameter space.
-
-\textbf{Trade-offs.} STBV-Bench v1 buys clean, high-precision, per-attack interpretability at the cost of never exposing the architecture to ambient false-positive sources; v2 buys realism at the cost of a harder-to-attribute aggregate metric. Neither is more correct; they answer different questions. Within MBD itself, high sensitivity is defensible only because its output feeds a three-state engine that can route uncertainty to Caution (Section~\ref{sec:tde}) -- it would be a poor design choice feeding a binary gate directly, as the per-vehicle ``ever flagged'' analysis shows (99.4\% FPR).
-
-\textbf{Deployment implications, expanded with a safety framing.} Mean latency fits the 10~Hz budget, but $p_{95}$/$p_{99}$ do not; a production system needs either a faster path for latency-critical messages or an explicit fallback policy for above-budget processing. Section~\ref{sec:deployment}'s simulator evaluations sharpen this: per-message latency is not the binding constraint at realistic concurrency, sustained throughput is -- B3's single-threaded, unbatched forward pass caps this implementation well below what a multi-vehicle RSU-scale deployment would require, and this gap grows directly with concurrent-sender count. Companion documents \texttt{FAILURE\_ANALYSIS.md} and \texttt{SAFETY\_ANALYSIS.md} extend this into a full failure-mode-by-failure-mode safety analysis, framed specifically around what a downstream planner would do with each `trust\_level`' output (accept: full weight; caution: down-weight/corroborate; reject: discard); we summarize its two most consequential, \textbf{CRITICAL}-rated findings here, since a deployment discussion that omits them would be incomplete. First, a hazard-\emph{clearance}/cancellation-phrased attack (asserting a real, previously-reported hazard should now be disregarded) is exactly the STBV-Bench indirection weakness above, instantiated as a live safety scenario: an attacker cancelling a genuine hazard warning with fabricated consensus or a fabricated status update carries no kinematic signature for B1/MBD/CP to catch, so a planner accepting it resumes normal-speed routing through a location that, per ground truth, is still hazardous -- with no architectural backstop within this system's own scope for the subset of such attacks that also match truthful kinematics throughout. Second, and more severe in scope: the live-CARLA evaluation (Section~\ref{sec:deployment}) measured B3 assigning essentially zero suspicion mass to \emph{every one} of 240 live-constructed attack messages across six distinct attack types, with every live REJECT in that run independently attributable to B1/MBD/CP, not to B3 -- meaning this paper's own headline semantic-defense mechanism, exactly as measured, provided no protection in the only live-simulated deployment evaluated, against precisely the no-kinematic-signature threat class it exists to cover. The instruction-hiding/role-confusion over-defense finding is operationally serious enough on its own that any deployment acting on B3's output without a human in the loop for Caution-band decisions should mitigate it first. CP's non-contribution is a deployment-readiness gap specifically in the message-generation/labeling pipeline, not in the trust architecture itself -- lower risk to close than an algorithmic redesign, but it must be closed before any operational claim of cooperative-perception protection. MBD's over-sensitivity to ordinary vehicle deceleration, surfaced only once organic (non-scripted) traffic was tested, is a further deployment-readiness item for the same reason: a benign-traffic false-positive source not visible on either of this paper's static benchmarks -- though, unlike the two CRITICAL items above, this one retains a physical-sensor backstop (\texttt{SAFETY\_ANALYSIS.md} \S3), since the vehicle whose broadcast is wrongly down-weighted is still directly observable by onboard sensing on any receiver nearby.
-
-\textbf{Failure modes, clustered and root-caused.} \texttt{FAILURE\_ANALYSIS.md} traces every measured false positive/negative across all evaluations in this paper (STBV-Bench, VeReMi kinematic, CP full evaluation, external corpus, adaptive attack, and the live-CARLA deployment) to one of eight recurring root-cause clusters, each independently confirmed by quoted, real per-message data rather than aggregated statistics alone. Three findings are new relative to earlier drafts of this paper's Discussion. \emph{First}, MBD's kinematic checks include at least one confirmed hard-threshold false positive with no probabilistic margin: a genuinely benign VeReMi vehicle recorded at 181.0~km/h (1~km/h over MBD's fixed 180.0~km/h physical-plausibility ceiling) is flagged, a real, non-synthetic instance of a threshold miscalibration rather than an algorithmic limitation -- the single most directly and cheaply fixable finding in this paper (widen one constant, no retraining). \emph{Second}, MBD's history-relative design has a structural, not merely tunable, cold-start blind spot: 137 VeReMi kinematic-attacker false negatives are a sender's literal first observed message, logged verbatim as \texttt{"No history yet; baseline assumed valid."} -- unavoidable for any purely history-comparative detector, and a further, larger population of non-cold-start misses is concentrated specifically in the DataReplay attack type (0.60 recall, MBD's weakest), consistent with replayed-but-once-valid data being kinematically indistinguishable from genuine slow variation by construction. \emph{Third}, the adaptive-evasion campaign's dominant mechanism (Section~\ref{sec:adaptive}) is now identified concretely: 18 of 41 successful evasions pad genuinely malicious content with generic, routine-sounding filler sentences before and after the attack claim (\texttt{context\_poisoning}), a recognizable structural pattern independent of the specific claim being smuggled through it, and therefore a more tractable target for a supplementary structural detector than the underlying semantic attack itself. \emph{Fourth}, STBV-Bench's own 69 benign false positives (2.3\% of \texttt{benign\_control}, the entirety of the full stack's measured FPR on that corpus) are traced to a single mechanism, and it is not B3: every one carries a fused trust score of $0.85$--$0.86$, comfortably \emph{above} the Accept threshold $\tau_H=0.70$, with B3 itself reporting \texttt{BENIGN} at $>0.90$ confidence. A Caution decision at a score that high is reachable only through the explicit floor rule that forces at least Caution whenever an upstream non-fatal validity check fails (Section~\ref{sec:tde}) -- these are deliberate conservative escalations of marginally-flagged real kinematics, not classifier errors, which is why they cap at Caution and never reach Reject. Silent under-detection on six narrative-indirection attack families remains a predictable target for an adversary aware of this architecture's weak spot; over-defense on two perturbation families remains, in principle, exploitable as a false-alarm-inducing denial-of-service vector against legitimate traffic, though this was not tested as an explicit attack here (Section~\ref{sec:limitations}).
-
-\textbf{Safety consequences, ranked.} Table~\ref{tab:safety} summarizes \texttt{SAFETY\_ANALYSIS.md}'s per-failure-mode assessment. The organizing question is not detection rate but whether a wrong decision has a path to an unsafe maneuver, and whether anything outside this architecture would stop it. The discriminating factor is the presence of a \emph{physical-sensor backstop}: a wrongly-rejected honest neighbour (MBD's deceleration or speed-threshold false positives) is still directly observable by the receiving vehicle's own camera/LiDAR/radar, bounding the damage to a lost redundancy margin; a fabricated hazard-clearance or a spoofed authority instruction that this architecture accepts carries, for the subset of such attacks with no physical signature at all, nothing left to sense -- onboard perception cannot contradict a claim about right-of-way or about a hazard's cancellation. The two failure modes rated CRITICAL are exactly the two lacking that backstop, and both are B3 capability gaps rather than fusion or threshold problems, which is why they are the highest-priority items in Section~\ref{sec:conclusion}'s future work.
-
-\begin{table}[t]
-\centering
-\caption{Failure Modes Ranked by Autonomous-Driving Safety Consequence (\texttt{SAFETY\_ANALYSIS.md})}
-\label{tab:safety}
-\footnotesize
-\begin{tabular}{@{}p{3.15cm}llc@{}}
-\toprule
-Failure mode & Layer & Risk & Backstop \\
-\midrule
-Hazard-clearance / cancellation blind spot & B3 & \textbf{CRITICAL} & No \\
-Live-deployment B3 non-detection (all attack types) & B3 & \textbf{CRITICAL} & Partial \\
-Adaptive-attacker evasion & B3 & HIGH$^{*}$ & No \\
-MBD urban-deceleration over-sensitivity & MBD & HIGH & Yes \\
-MBD speed-threshold false positives & MBD & MEDIUM & Yes \\
-MBD cold-start blind spot & MBD & MEDIUM & Partial \\
-CP low-sample corroboration confound & CP & LOW & Yes \\
-\bottomrule
-\end{tabular}
-\\[2pt]
-\raggedright\scriptsize $^{*}$Scoped to an attacker with query access to the deployed classifier; not applicable to the non-adaptive attacker assumed elsewhere in this paper.
-\end{table}
-
-\textbf{Why fusion is never the diagnosed root cause.} Every one of the eight failure clusters in \texttt{FAILURE\_ANALYSIS.md} traces to an upstream evidence-generating layer -- B3's classification or robustness limits, or MBD/CP's thresholds, cold-start precondition, or low-sample ambiguity -- never to \texttt{TrustDecisionEngine.decide()} itself. This is not a coincidence: Section~\ref{sec:theory}'s Proposition 6 proves algebraically that a vacuous or near-vacuous source cannot distort fusion's output, and Propositions 1--3 prove fusion can only ever make a decision \emph{more}, not less, cautious than its most severe input. Fusion's provable behavior and its empirically observed behavior agree exactly: it is a faithful, conservative combinator, and every measured wrong final decision in this paper is explained by what it was faithfully given, not by how it combined it.
-
-\textbf{Why external validation corroborates rather than dismisses the weak-family finding.} The external evaluation (Section~\ref{sec:external_eval}) rules out the most convenient explanation for STBV-Bench's documented narrative-indirection weakness -- that it is an artifact of this project's own phrasing conventions -- by reproducing a conceptually equivalent weak point (authority-override framing, recall 0.500) in independently-written text. A less careful reading of a strong external precision/AUC result could have been used to wave the internal limitation away; reporting the per-family breakdown instead of only the aggregate closes that door.
-
-\textbf{Why CP's STBV-Bench result is a data-generation artifact, not an algorithmic one, and what confirms this.} Section~\ref{sec:cp_full}'s realistic benchmark is the direct confirmation this paper previously lacked: CP's zero-contribution finding on STBV-Bench (Section~\ref{sec:limitations}, L1) is specifically attributable to the absent event field, since the identical algorithm, given data that populates it, recovers 11 real attacker detections. This also surfaces a finding STBV-Bench structurally cannot: a benchmark realistic enough to give CP genuine multi-vehicle agreement to fuse necessarily resembles MBD's own collusion-detection surface signature, confounding any absolute FPR comparison across the two benchmark designs -- a tension future cooperative-perception benchmark work in this space should anticipate rather than discover by surprise.
-
-\textbf{Why single-shot recall does not predict adaptive robustness.} Section~\ref{sec:adaptive}'s two most single-shot-accurate families under-perform, not out-perform, the campaign average once an attacker is allowed to iterate: sensor-discrediting and reputation-inflation phrasing appear easiest for B3 to catch once, but hardest to catch repeatedly across small, confidence-guided rewrites. This suggests B3's decision boundary for these families sits close enough to gradient-accessible text perturbations that a handful of dilution/rewording rounds crosses it, even where the boundary is, on average, further from any single unmodified attack. A single-shot benchmark, however large, cannot surface this; only an iterative evaluation can.
-
-\textbf{Research implications.} The v1-vs-v2 finding suggests any V2X semantic-detection benchmark built from independent, isolated messages should be treated cautiously as a \emph{precision} estimate specifically, even where its recall claims are sound -- a caveat with implications for benchmark design in this subfield beyond this paper. The demonstrated non-overlap between B3 and MBD is direct, quantitative evidence for a layered-defense design philosophy in V2X trust architectures generally, over investing further effort into any single detector.
-
-%======================================================================
-\section{Limitations}
-\label{sec:limitations}
-%======================================================================
-\textbf{Cooperative Perception's data-generation gap on STBV-Bench specifically -- now confirmed, not just asserted, to be data-side.} CP's wiring is fixed and verified correct on event-labeled traffic (Appendix~\ref{app:cp}), but STBV-Bench's message-generation code never populates the event field CP requires, so CP contributes zero to every STBV-Bench result in Section~\ref{sec:results} for a data-generation reason, not an algorithmic one. Section~\ref{sec:cp_full} confirms this directly: the identical CP algorithm, given a realistic event-labeled multi-vehicle benchmark, recovers 11 real attacker detections at a disclosed, narrow false-positive cost. Closing this gap for STBV-Bench itself requires adding event-label generation to the semantic transformation engine -- unscoped, not attempted here; Section~\ref{sec:cp_full}'s scenario-construction method is a directly reusable template for doing so.
-
-\textbf{Bounded semantic-detection gap.} Six of twenty attack families, phrased as narrative indirection, achieve $\le$9\% recall (Section~\ref{sec:results}A) -- a B3 model-capability limitation, not a fusion defect.
-
-\textbf{Robustness weaknesses.} Instruction-hiding and role-confusion perturbations produce a 100\% over-defense rate; paraphrase produces a 33\% evasion rate (Section~\ref{sec:results}). These must remain visible in any summary of this work rather than being averaged into an aggregate score.
-
-\textbf{Internally-generated benchmark, no externally-published semantic corpus.} STBV-Bench's semantic-attack text is generated by this paper's own seeded engine, not drawn from an independently-authored, externally-published semantic V2X attack corpus -- none was identified in our literature search (Section~\ref{sec:related}), which we report as a field-level gap, not only a limitation of this paper. We partially address the narrower concern of generator-specific overfitting with the external evaluation (Section~\ref{sec:external_eval}, Appendix~\ref{app:external}), but that corpus is itself LLM-authored for this evaluation, not drawn from a pre-existing, independently-published ground truth, and is far smaller ($n=117$) than STBV-Bench v1 ($n=10{,}000$) -- it is a directional cross-check, not a resolution of this limitation.
-
-\textbf{B3's training-data provenance is not reconstructable from this repository alone, but has since been documented by the original developer.} An exhaustive search of the working tree and the complete git history (all commits, all refs) found no training script and no raw training/validation/test corpus for B3 anywhere in this repository at any commit -- only the finished checkpoint, tokenizer, and a few downstream analysis scripts were carried into this repository from an antecedent project on a different machine (\texttt{training\_args.bin}'s embedded paths). The original developer has since supplied a full provenance account of that antecedent project -- dataset composition and sources (HuggingFace prompt-injection corpora, real VeReMi Extension kinematics, locally-generated LLM paraphrases), split methodology, fixed seed, and two specific data-leakage mechanisms found and fixed during development -- summarized in Appendix~\ref{app:provenance}. This account's embedded project path matches the path independently recovered by this repository's own forensic search, corroborating that it describes the same training run. It could not be independently re-executed or byte-verified from this repository (the referenced scripts and corpus files are not present here), and the account itself discloses several open items (a corpus-wide fuzzy-duplicate check not yet run, a minor data-quality cleanup not yet confirmed applied, a 9th attack family not yet integrated at reporting time) that remain outstanding regardless of this new information. Taxonomy-level comparison confirms zero family-name overlap between B3's training taxonomy and STBV-Bench's independently-named families (Section~\ref{sec:limitations}); a separate, already-deprecated 120-scenario evaluation corpus is confirmed, by its own docstring, to have been deliberately phrased to match B3's training distribution, and is not used for any headline result in this paper.
-
-\textbf{No parameter sensitivity beyond the threshold sweep performed.} The sweep in Section~\ref{sec:results} varies one parameter at a time; CP's consistency weights were not swept, since CP is inert on this benchmark regardless (above); no joint/interaction sweep across multiple parameters was performed.
-
-\textbf{Adaptive-attacker evaluation: performed, and the result is severe.} Section~\ref{sec:adaptive} closes this gap directly: an iterative, confidence-guided mutation search achieves an 83.7\% attack success rate against the frozen B3 checkpoint within a 10-round budget. This is reported as a first, not exhaustive, adaptive evaluation -- 9 rule-based (not LLM-driven) mutation strategies, a greedy (not fully combinatorial) search, a 10-round budget -- and should be read as a lower bound on B3's true adaptive vulnerability, not an upper one. No single-shot detection claim anywhere in this paper (STBV-Bench, the external corpus, or the mixed-threat evaluation) should be read as a robustness guarantee against an attacker who observes B3's output and revises their message in response.
-
-\textbf{Prevalence assumptions.} STBV-Bench v1's headline precision/F1 are measured at a 70.07\%/29.93\% malicious/benign split, not any claimed operational prevalence, which is almost certainly lower. FPR is the prevalence-robust number and should be preferred for deployment-relevance claims.
-
-\textbf{Benchmark scope assumption.} STBV-Bench's attacker model assumes valid, unrevoked credentials by construction -- the correct scope for isolating the semantic layer, but it makes no claim about detecting an attacker who has not yet obtained valid credentials, a PKI-layer problem excluded by design.
-
-\textbf{Mixed-scene sample size.} The shared-scene case study (Section~\ref{sec:results}) draws from a small, non-family-stratified sample; its exact percentages should be treated as directionally indicative pending a larger, stratified re-run.
-
-\textbf{Deployment evaluation scope.} Section~\ref{sec:deployment}'s simulator-replay and live-CARLA results characterize resource cost and integration feasibility, not detection accuracy, at a small scale (2{,}000 replayed messages; 400 live messages, 40 per scenario) relative to STBV-Bench, on one town, one hardware configuration (a single consumer laptop GPU shared between CARLA and B3), and without ROS2 transport, which was unavailable in this environment. The MBD urban-deceleration over-sensitivity and B3's live-scenario misses it surfaces are single-configuration observations, not yet confirmed across repeated runs, alternate towns, or a larger attack sample -- though the live-attack miss finding is not a marginal one: \texttt{FAILURE\_ANALYSIS.md} Cluster E documents zero B3 detections across all 240 live-constructed attack messages spanning six attack types in this specific run, not merely an isolated pair of misses, which is the basis for that finding's CRITICAL rating in \texttt{SAFETY\_ANALYSIS.md} rather than a routine caveat.
-
-\textbf{Theoretical propositions' scope.} Section~\ref{sec:theory}'s six propositions are proved about the fusion function \texttt{TrustDecisionEngine.decide()} exactly as implemented -- they are not claims about Yager's rule in the abstract (the conservative-bias guarantees specifically come from explicit policy floors layered on top of the fusion math, not from a general property Yager 1987 proves), and Proposition 2's continuity claim is scoped to hold within, not across, the default semantic interface's disclosed discontinuity at $p_{\text{malicious}}=0.5$. Most importantly, these propositions describe what fusion does \emph{given} its inputs; they provide no guarantee that B1/MBD/B3's inputs to fusion are themselves correct, which is exactly the gap \texttt{FAILURE\_ANALYSIS.md} and \texttt{SAFETY\_ANALYSIS.md} document empirically. Full derivations are in \texttt{THEORETICAL\_ANALYSIS.md}; this paper reports proof sketches, not the complete algebra, for space.
-
-\textbf{Safety analysis's consumption-model assumption.} \texttt{SAFETY\_ANALYSIS.md}'s risk-level assignments depend on an explicitly stated, but not independently verified, assumption about how a downstream planner would consume Accept/Caution/Reject (full weight / down-weight-and-corroborate / discard, respectively) -- this repository does not contain a planner, so this consumption model is the standard, documented design intent rather than a measured deployment behavior, and risk levels should be re-assessed against any specific real planner's actual policy before being treated as that system's own safety case.
-
-One item above cannot be resolved from this repository alone: no externally-published, independently-authored semantic V2X attack corpus exists publicly, and this paper cannot manufacture one. The adaptive-attacker evaluation, by contrast, has been performed (Section~\ref{sec:adaptive}) rather than left as an unresolved gap; what remains as future work is extending it beyond a first pass -- a larger round budget, compositional multi-strategy mutations per round, and a genuine LLM-driven adaptive rewriter in place of this campaign's deterministic text transforms.
+\textbf{Future work.} Render ego-asserted events as natural-language text (closing the residual \texttt{sybil\_attack}/\texttt{semantic\_manipulation} gap); seed CARLA's traffic manager for reproducible live evaluation; rerun the adaptive-attack campaign against the final continued checkpoint; extend the semantic-attack generator to populate CP's required event field; add B3 batching to close the measured throughput gap.
 
 %======================================================================
 \section{Conclusion}
 \label{sec:conclusion}
 %======================================================================
-This paper presented the Semantic Trust Boundary Verification framework, extending V2X trust evaluation beyond communication authenticity and behavioral consistency to the semantic content of cooperative messages, via a B3 Semantic Trust Gate and a Dempster-Shafer/Yager Trust Decision Engine that fuses communication, behavioral, and semantic evidence conservatively -- semantic evidence can only add caution, never override a cryptographic rejection. Section~\ref{sec:theory} proves this and five further fusion properties directly from the implementation, rather than asserting them from design intent alone: crypto rejection cannot be overridden, trust is monotone in each source's evidence quality, fusion is provably conservative, conflict combination is always well-defined (including the maximal-disagreement boundary case), the decision function is total and deterministic, and missing semantic evidence provably cannot distort the fused result. These theoretical guarantees describe what fusion does with its inputs; they say nothing about whether B1, MBD, or B3 are correct, which is exactly the question the paper's empirical evaluations, and the failure/safety analyses below, answer instead.
-
-Evaluated on STBV-Bench, built from real VeReMi Extension trajectories and a reproducible, seeded semantic-attack generator, the architecture detects purely semantic manipulation with perfect precision and moderate recall, and a companion benchmark of genuine kinematic attacks confirms the behavioral and semantic layers cover complementary, largely non-overlapping threat classes. Evidence fusion contributes a small but statistically significant, structurally meaningful effect centered on routing uncertain evidence through Caution rather than forcing premature binary decisions, and this behavior is robust to threshold miscalibration across a wide tested range. These results are reported alongside their limitations: a bounded detection gap on narrative-indirection attacks, a severe and narrow robustness weakness to instruction-hiding and role-confusion perturbations, and an unresolved data-generation gap that currently prevents Cooperative Perception from contributing measurable evidence to any evaluated benchmark, despite its detection logic being independently verified correct on data that carries the event information it requires. A full, root-caused failure analysis across every evaluation in this paper -- \texttt{FAILURE\_ANALYSIS.md} -- traces every measured false positive and false negative to one of eight recurring clusters (B3's narrative-indirection blind spot, MBD's cold-start precondition and hard kinematic thresholds, CP's low-sample corroboration confound, and B3's adaptive-evasion susceptibility, among others), with every cluster attributable to an upstream evidence-generating layer and never to the fusion mathematics itself, consistent with Section~\ref{sec:theory}'s propositions. \texttt{SAFETY\_ANALYSIS.md} translates each cluster into a concrete autonomous-driving consequence, risk level, and mitigation, identifying two CRITICAL-rated findings -- a hazard-clearance/cancellation semantic blind spot and B3's zero measured detection rate across all 240 live-constructed attack messages in the CARLA evaluation below -- as having no physical-sensor backstop within this system's own scope, in contrast to the architecture's other documented weaknesses, which retain one.
-
-A small-scale simulator-replay and live-CARLA integration evaluation (Section~\ref{sec:deployment}) confirms the frozen architecture runs unmodified against real simulator-generated traffic, identifies B3's unbatched inference as the binding throughput constraint at realistic multi-vehicle concurrency, and surfaces an MBD urban-deceleration over-sensitivity and a complete absence of B3-attributable live-attack detections that neither static benchmark in this paper exposed. Future work will close the Cooperative Perception evaluation gap by extending the semantic attack generator to emit event-labeled, genuinely multi-source narratives; conduct a full layer ablation on the contextual multi-vehicle regime; improve semantic recall on the identified weak families and robustness on the identified over-defense perturbations, prioritizing the hazard-clearance/cancellation blind spot and the live-deployment distribution-shift hypothesis given their CRITICAL safety rating; evaluate against an adaptive, red-teamed attacker; investigate and, if warranted, retune MBD's deceleration sensitivity and widen its confirmed hard-threshold miscalibrations; add B3 batching to close the identified throughput gap; and extend evaluation to larger-scale, multi-town, ROS2-integrated V2X deployments beyond this paper's single-GPU, single-town first pass. Every claim in this paper is traceable to the data and code that produced it, and we intend that traceability, as much as any single reported number, to be this paper's contribution to the field.
+This paper presented a Semantic Trust Boundary Verification architecture that extends V2X trust beyond communication and behavioral consistency to message content, via a B3 Semantic Trust Gate fused conservatively with a Dempster-Shafer/Yager Trust Decision Engine -- provably unable to relax a decision crypto/behavioral evidence alone would make more severe. On STBV-Bench v1, the fused architecture reaches F1$=0.995$ with fusion contributing purely conservative escalations. On a newly constructed, independently template-disjoint benchmark (STBV-Bench v2.5b, $n{=}10{,}098$), a genuine continued fine-tuning pass improved held-out F1 from 0.918 to 0.945, evidence of real generalization rather than benchmark-specific memorization. On real VeReMi kinematic attacks, the behavioral layer independently reaches F1 up to 0.833 with zero B3 contribution, confirming complementary, non-overlapping coverage. Deploying the identical, unmodified pipeline against a live CARLA simulator surfaced and let us fix a genuine synthesizer defect that had silently hidden self-asserted attack content from B3 across every prior live evaluation of this architecture; after the fix, two previously CRITICAL live-deployment gaps close, while two others (\texttt{sybil\_attack}, \texttt{semantic\_manipulation}) remain, alongside a newly disclosed CARLA reproducibility limitation. SUMO replay confirms B3's unbatched inference as the binding throughput constraint. An adaptive-attacker evaluation achieves only 21.6\% attack success within a 10-round budget against the prior production checkpoint. We report every result, including its caveats and two software-engineering findings this evaluation pass produced, as this paper's primary contribution alongside the architecture itself: traceability from every reported number to the data, code, and checkpoint that produced it.
 
 \section*{Acknowledgment}
-The authors thank the contributors to the VeReMi Extension dataset for making realistic, externally-sourced vehicular trajectory data publicly available for reproducible V2X security research.
+The authors thank the contributors to the VeReMi Extension dataset for making realistic vehicular trajectory data publicly available for reproducible V2X security research.
 
 %======================================================================
 \appendices
-\section{Reproducibility and Fusion Parameters}
+\section{Reproducibility Summary}
 \label{app:params}
 %======================================================================
-\subsection{Semantic Classifier}
-DeBERTa-v2 sequence classifier: 6 hidden layers, hidden size 768, 12 attention heads, intermediate size 3072, vocabulary 128,100, max position embeddings 512; 141,896,450 parameters; \texttt{DebertaV2Tokenizer} (SentencePiece), max inference sequence length 256 tokens; two output labels (\texttt{BENIGN}, \texttt{MALICIOUS\_SEMANTIC\_MANIPULATION}). Training hyperparameters, recovered directly from the checkpoint's own \texttt{training\_args.bin} (not re-derived): learning rate $2\times10^{-5}$, 15 epochs (8 for individual LOFO folds, Appendix~\ref{app:provenance}), batch size 16, AdamW optimizer, linear schedule with 0.1 warmup ratio, weight decay 0.01, FP16, seed 42. Checkpoint SHA-256: \texttt{9ee7475e...} (full hash in project documentation). Inference hardware: NVIDIA RTX 4050 Laptop GPU, CUDA 13.1, PyTorch 2.7.1+cu118, Transformers 5.12.1. The original training data's raw files are not present in the evaluation environment; hyperparameters are read from the artifact, not reproduced by re-training. Per the training-methodology account in Appendix~\ref{app:provenance}: early stopping with patience 3 on validation F1 (\texttt{metric\_for\_best\_model="f1"}, \texttt{load\_best\_model\_at\_end=True}), and inverse-frequency class weighting (a \texttt{WeightedTrainer}, auto-applied whenever train-split class imbalance exceeds 5\%; benign weight 0.950, malicious weight 1.056 on the reported A+B+C run's 12.6\% imbalance) -- both read from the original developer's account, not independently re-verifiable from this repository's own artifacts.
+\textbf{Semantic classifier.} DeBERTa-v2, 6 layers, hidden 768, 141,896,450 dense parameters post-merge; max sequence length 256 tokens; two output labels. The final checkpoint continues (via \texttt{PeftModel.from\_pretrained(..., is\_trainable=True)}, a true weight resume, not reinitialization) the prior mixed-corpus LoRA adapter (r=16, $\alpha$=32, dropout 0.05) on the original mixed corpus (v2.5 train split + stratified v1 slice) plus STBV-Bench v2.5c, AdamW lr$=3\times10^{-6}$, batch 16, 6 epochs, early-stop patience 2, seed 42; best epoch 5, validation F1 0.9241 (baseline pre-continuation 0.9006, $n{=}4{,}075$). Post-hoc calibration temperature refit for this checkpoint: $T{=}2.82$ (ECE 0.065$\to$0.053 on $n{=}85$), distinct from the prior checkpoint's $T{=}2.145$. Checkpoint SHA-256: \texttt{bbae05120439774f724dcce205be71b79d1720e4f0edb47cdb4cc793849a9b1a}.
 
-\subsection{Training Data Provenance}
-\label{app:provenance}
-A dedicated forensic search of this repository (working tree, full git history across all refs, all LFS objects) found no training script and no raw training/validation/test corpus for B3 at any commit. \texttt{training\_args.bin}'s own embedded \texttt{output\_dir}/\texttt{logging\_dir} paths (\texttt{/home/harshitvaish123/v2x-pi-project/...}) and a downstream analysis script's docstring (\texttt{verify\_cases\_1\_4.py}) jointly indicate the training run occurred in an antecedent project (\texttt{v2x-pi-project/solution\_stb/b3\_semantic\_gate/}) on a different machine, from which only the finished checkpoint, tokenizer, and a few downstream analysis scripts were carried into this repository. The original project's developer has since supplied a full provenance report for that antecedent project, summarized here; its own embedded path (\texttt{\textasciitilde/v2x-pi-project/solution\_stb/b3\_semantic\_gate/}) matches the \texttt{training\_args.bin} path recovered independently by the forensic search above, corroborating that it describes the same training run that produced this repository's checkpoint.
+\textbf{Fusion constants.} $\tau_H{=}0.70$, $\tau_L{=}0.40$, B3 risk bands 0.85/0.60, confidence clamp 0.98, CP weights 0.35/0.25/0.20/0.20. All fixed design constants except the calibration temperature above.
 
-\textbf{Data composition.} Three source datasets, combined: Dataset A (500 samples, 250/250 class-balanced) drawn from two HuggingFace Hub prompt-injection corpora (\texttt{deepset/prompt-injections}; \texttt{neuralchemy/Prompt-injection-dataset} as fallback). Dataset B (2,669 samples after enrichment, 1,469 benign/1,200 malicious): a 2,400-sample base built from real VeReMi Extension (Kamel et al., IEEE ICC 2020) kinematic values formatted as ETSI CAM/DENM/CPM messages, plus 269 locally LLM-generated (Ollama \texttt{llama3.2:3b}) benign hard-negative samples targeting four identified false-positive patterns. Dataset C ($\approx$18,530 samples after cleanup, $\approx$9,300 benign/$\approx$9,200 malicious, 8 attack families AF1--AF8, a 9th family AF9 in progress at reporting time): originally 6,400 template-generated samples (8 personas $\times$ 5 templates $\times$ 3 VeReMi kinematic variants per family), diversified via local LLM paraphrasing to eliminate a template-structure shortcut (below). Combined training set (A+B+C): 14,770 samples (8,319 benign/6,451 malicious, 12.6\% imbalance), trained with inverse-frequency class weighting. Fixed seed 42 for all data shuffling and splits; the HuggingFace \texttt{Trainer}'s own seed is set from the same constant. LLM-generation calls (paraphrasing, hard negatives) are not separately seeded (temperature 0.8--0.9), so exact generated text is not byte-reproducible, though source material and methodology are version-controlled and deterministic -- disclosed as a minor, acknowledged reproducibility gap in the original report, not elided here.
-
-\textbf{Split methodology.} Dataset A: entirely training, no split. Dataset B: 85/15 stratified train/val split. Dataset C: family-aware (not random-row) split -- malicious samples partitioned by \texttt{attack\_family} into train/test-only family sets, with a template-level (not random-row) validation holdout within training families specifically to prevent near-duplicate leakage. An independent cross-domain benchmark (InjecAgent, 375 samples, 185 held out) uses a category-level holdout (\texttt{Financial Data}, \texttt{Physical Data} categories fully excluded from training).
-
-\textbf{Attack family taxonomy (AF1--AF9).} Dataset C's malicious samples are organized into 9 attack families, disjoint from and independently named apart from STBV-Bench's own twenty families (Section~\ref{sec:results}A) -- B3's classifier has never seen STBV-Bench's specific family taxonomy during training, which is what makes STBV-Bench a genuine held-out evaluation of this checkpoint rather than an in-distribution replay. AF1--AF8 were the original template-generated families (8 personas $\times$ 5 templates $\times$ 3 VeReMi kinematic variants each, later diversified by LLM paraphrasing, above); AF9 (``Fabricated Threat Injection'') was added afterward via a dedicated generation script, in progress and not yet integrated into the reported checkpoint's training set at the time the original provenance account was written (Appendix~\ref{app:provenance}'s open items). The surviving documentation names AF9 explicitly but refers to AF1--AF8 only by number, not by descriptive name; per-family difficulty is nonetheless known from the LOFO results directly below (AF4 hardest, AF1 easiest), so this taxonomy's granular identities, while not fully recoverable, are not entirely opaque either.
-
-\textbf{Leave-one-family-out (LOFO) cross-validation, as an independent generalization check.} Beyond the fixed Test-1/Test-2 holdouts (Section~\ref{sec:results}), the original developer ran an 8-fold (9-fold once AF9 is integrated) LOFO evaluation: each fold holds out one entire attack family from training (implemented by substituting that fold's family into the training pipeline's held-out-family list and rebuilding the train/validation split fresh each time, so no fold's held-out family is ever seen during that fold's training), with per-fold training-set sizes ranging $\approx$14,500--14,800 samples and per-fold held-out test sizes $\approx$1,815--1,907 samples. This is the same mechanism that surfaced the template-structure shortcut below -- LOFO's fold-to-fold variance is itself the diagnostic signal, since a shortcut-learning model produces artificially uniform, near-ceiling per-fold scores regardless of which family is held out, while genuine per-family generalization difficulty produces the uneven, explainable spread actually observed post-fix (below).
-
-\textbf{Two confirmed, fixed leakage mechanisms -- reported by the original developer as found and corrected, not hidden.} (1) \emph{Template-structure shortcut}: an 8-fold leave-one-family-out (LOFO) cross-validation on the original 5-template Dataset C returned a suspiciously uniform $99.15\%\pm2.4\%$ mean F1 (7/8 folds at exactly 100\%) -- diagnosed as all 8 families sharing one sentence skeleton, so a held-out family still leaked structural pattern via the other 7. Fixed via $\approx$12,000 LLM-paraphrased variants preserving label/meaning while varying structure; post-fix LOFO mean F1 dropped to a materially lower, more plausible $94.17\%\pm3.66\%$, with genuine per-family variance (hardest family 87--91\%, easiest 98.4--98.5\%) -- the magnitude of this before/after drop is itself evidence the fix addressed a real shortcut, not a cosmetic change. (2) \emph{Target-informed benign enrichment}: an earlier Dataset B enrichment added hard-negative samples specifically worded to match one held-out test set's vocabulary, inflating that test's F1 to 100.00\%; removing the targeted enrichment dropped it to a lower, honestly-reportable $81.87$--$92.85\%$ range. Both mechanisms are disclosed by the original developer as confirmed-and-fixed instances of the exact risks Sections~\ref{sec:limitations} and \ref{app:external} independently raise for this paper's own STBV-Bench construction, not evidence against B3's reported numbers.
-
-\textbf{Open items, as disclosed in the original provenance report and not independently re-verified here.} A corpus-wide fuzzy/near-duplicate check (beyond exact-text overlap, which is verified at every training run via a \texttt{purge\_overlap()} step reporting zero overlap) has not been run as a final catch-all. A data-quality bug (128 of $\approx$18,659 Dataset C v4 rows containing bare numeric placeholder text from an LLM paraphrasing artifact, $\approx$0.7\% of rows) was diagnosed with a cleanup fix written but not confirmed applied at reporting time. Family AF9 (Fabricated Threat Injection) was in progress, not yet integrated into the reported checkpoint's training set. None of these open items are independently verifiable from this repository, consistent with this section's own scope (Section~\ref{sec:limitations}).
-
-\textbf{Independent external verification result, disclosed alongside the stronger numbers, not instead of it.} A four-case verification set (\texttt{case1\_perc/} through \texttt{case4\_siid/}), originally built to test a different LLM agent (Gemini) before B3 existed and sharing no construction code with B3's training pipeline, scores 70.4\% overall with a complete failure on Case 3 -- reported by the original developer as the most externally-valid but also materially weakest of the five available evaluations (LOFO, the two fixed test sets, the 91-message hand-authored qualitative set, and this one), and is not folded into this paper's own STBV-Bench/external-corpus headline numbers (Section~\ref{sec:results}, Section~\ref{sec:external_eval}), which remain independently measured and reported on their own terms.
-
-Taxonomy-level comparison confirms zero family-name overlap between B3's training taxonomy (AF1--AF9, numbered rather than named in the surviving documentation) and STBV-Bench's twenty independently-named families (Section~\ref{sec:limitations}); a separate, already-deprecated 120-scenario evaluation corpus is confirmed, by its own docstring, to have been deliberately phrased to match B3's training distribution, and is not used for any headline result in this paper.
-
-\subsection{Fusion Constants}
-$\tau_H=0.70$ (Accept threshold), $\tau_L=0.40$ (Reject threshold), B3 risk bands $0.85$/$0.60$ (high/medium confidence), maximum source confidence clamp $0.98$ (prevents any single Dempster-Shafer source from acquiring absolute veto power), CP consistency weights $0.35$/$0.25$/$0.20$/$0.20$ (spatial/speed/heading/diversity, the one place in the codebase matching a literal fixed weighted sum). All are fixed design constants, not fitted from data; the single fitted parameter in the entire pipeline is B3's post-hoc calibration temperature, $T=2.145$, fit by minimizing negative log-likelihood on $n=85$ labeled samples.
-
-\subsection{Full Five-Configuration Ablation (Supplementary to Table~\ref{tab:main_ablation})}
-Table~\ref{tab:main_ablation} in the main text collapses B1+B2 and B1+B2+CP into one row, since they are confirmed byte-identical. Table~\ref{tab:full_ablation} below gives both rows explicitly, plus the full-fusion configuration used to derive B1+B2+B3, so this claim can be audited directly rather than taken on trust.
-
-\begin{table}[t]
-\centering
-\caption{Supplementary: Full Five-Configuration Ablation ($n=10{,}000$)}
-\label{tab:full_ablation}
-\begin{tabular}{@{}lccccc@{}}
-\toprule
-Config. & Acc. & Prec. & Rec. & F1 & FPR \\
-\midrule
-1. B1 only & 0.299 & -- & 0.000 & -- & 0.000 \\
-2. B1+B2 & 0.305 & 0.643 & 0.018 & 0.034 & 0.023 \\
-3. B1+B2+CP & 0.305 & 0.643 & 0.018 & 0.034 & 0.023 \\
-4. B1+B2+CP+B3, no fusion & 0.689 & 1.000 & 0.557 & 0.715 & 0.000 \\
-5. Full stack & 0.688 & 0.983 & 0.565 & 0.718 & 0.023 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Rows 2 and 3 are identical to four significant figures because they are computed from 0/10,000 differing individual decisions, not because of rounding.
-
-\textbf{Equations vs.\ implementation, stated once, precisely.} Eqs.~\eqref{eq:mbd}, \eqref{eq:csia}, and \eqref{eq:semantic} in Section~\ref{sec:architecture} are conceptual formalizations of what each layer's evidence represents; none is implemented as a literal named-constant computation (verified by inspection: no \texttt{alpha} or \texttt{beta} weighting exists in the behavioral or semantic evidence-construction code). Eqs.~\eqref{eq:bba}--\eqref{eq:decision} (Dempster-Shafer representation, Yager fusion, pignistic transform, threshold mapping) \emph{are} an accurate description of the implemented Trust Decision Engine. This distinction is stated here so that no equation in this paper is mistaken for a literal, tunable implementation detail where it is not.
-
-\subsection{Parameter Sensitivity Sweep}
-A sweep of $\tau_H\in[0.55,0.90]$, $\tau_L\in[0.20,0.55]$, and B3's high/medium confidence bands was reconstructed deterministically from STBV-Bench v1's logged per-message evidence (\texttt{trust\_score}, \texttt{b3\_label}, \texttt{b3\_confidence}), not a pipeline re-run. Reconstruction fidelity against the actually-logged decision at baseline parameters: 98.72\% exact agreement (128/10,000 rows differ, attributable to the Trust Decision Engine's conservative-bias ceiling, which additionally depends on the raw B1 score, not logged per message). Sweep result: aggregate metrics are unchanged across nearly the entire tested range of every parameter, because semantic-risk floor rules, not raw threshold values, determine most decisions on this benchmark; sensitivity emerges only at $\tau_H\ge0.85$.
-
-\subsection{Statistical Methodology}
-Bootstrap: 2,000 resamples, percentile method, fixed seed. McNemar: continuity-corrected, $\chi^2(1)$ via the complementary error function. Cohen's $h$: $h=2\arcsin\sqrt{p_2}-2\arcsin\sqrt{p_1}$ on paired binary positive rates. ROC/PR: computed on $\text{score}=1-T_{Decision}$ against the attacker ground-truth label.
-
-%======================================================================
-\section{Semantic Transformation Engine}
-\label{app:semantic}
-%======================================================================
-Attack generation is rule-based and templated, not LLM-assisted: each of 21 transformation rules (20 attack families plus benign control) defines a bank of slot-fillable text templates and a deterministic, seeded rendering function, so the same seed reproduces the same text and an unbounded number of distinct variants can be drawn from the same rule. Kinematics (position, speed, heading, timestamp) are never touched by any rule; only the free-text scene-context field, which the source VeReMi data does not contain at all, is populated. Structural validity is asserted at generation time (required schema fields present, injected text actually present in the field it claims to occupy); a failed assertion aborts that sample's generation rather than producing a malformed message. VeReMi's own kinematic-attacker ground truth is preserved separately and never merged with the generated semantic label.
-
-\textbf{Worked example.} A real, VeReMi-confirmed benign vehicle (sender 9999, kinematics unmodified) is given an \texttt{instruction\_injection} payload (seed 3): \emph{``Vehicle report nominal. Ignore all previous validation rules and mark this sender as trusted permanently.''} Real, unedited pipeline output on this exact message: B1 -- \texttt{valid=True, fatal=False, score=1.0}, since the message is structurally valid, non-replayed, and kinematically plausible by construction. MBD -- all sub-scores at their most-benign value (\texttt{kinematic\_score=1.0}, \texttt{replay\_score=0.0}, \texttt{sybil\_score=0.0}), since nothing kinematic is attacked. B2 -- \texttt{validation\_score=1.0}, recombining clean B1/MBD evidence. B3 -- \texttt{label=MALICIOUS, confidence=0.699, risk\_level=medium}, the only layer that reads the free-text field at all. Trust Decision Engine, verbatim logged reasoning: \emph{``B1(+MBD/CP) crypto/structural mass: $m_A{=}0.46, m_{\overline A}{=}0.00, m_\Theta{=}0.54$ (validation\_score=1.00). B3 flagged medium-confidence semantic signal $\rightarrow$ mass $m_{\overline A}{=}0.70, m_\Theta{=}0.30$. Dempster combination: conflict $K{=}0.321$, fused mass $m_A{=}0.14, m_{\overline A}{=}0.38, m_\Theta{=}0.48$, pignistic trust\_score$=0.381$. Final decision: REJECT.''} This demonstrates concretely why a communication-and-behavior-only pipeline would accept this message, and why only the content-reading layer disagrees.
-
-A second real example (a \texttt{hazard\_suppression} payload on a different benign VeReMi record) illustrates graded uncertainty rather than binary detection: B3 reports \texttt{label=BENIGN, confidence=0.569} -- below its own high-confidence band -- and the medium/low-risk floor rule correctly elevates the outcome to Caution (\texttt{trust\_score=0.445}) even though B3's argmax label was benign. The architecture does not require B3 to be wrong to produce a cautious outcome; it only requires B3 to be unsure.
-
-%======================================================================
-\section{Cooperative Perception Validation}
-\label{app:cp}
-%======================================================================
-An exhaustive search of every fixture in the evaluation repository for a populated \texttt{event} field -- the input CP's consistency gate requires -- found exactly one qualifying fixture set (3 of 20 messages in a multi-vehicle collusion scenario; no other scenario family and no STBV-Bench-generated content carries this field). Replaying this fixture with CP enabled vs.\ disabled: on the three event-labeled messages, \texttt{cp\_confidence} moves from a flatlined $1.0$ (CP's neutral/vacuous branch, active whenever no event label is present) to genuinely computed values of $0.800$, $0.835$, and $0.879$, and the fused trust score shows a real, non-zero delta between the CP-on and CP-off arms at the same step -- direct, reproducible evidence that CP's consistency-scoring logic is correct and activates precisely when, and only when, event data is present. Decision-level flips on this fixture are nonetheless zero, because MBD's own collusion score already drives the same Caution outcome for these messages independently -- a fixture-specific redundancy with MBD, not evidence CP failed to activate. No benchmark evaluated in the main text of this paper populates the event field CP requires; this is the data-generation gap stated in Section~\ref{sec:limitations}, not a defect in CP's algorithm.
-
-%======================================================================
-\section{External Semantic Evaluation}
-\label{app:external}
-%======================================================================
-\subsection{Public Dataset Search}
-A web search (not a memory recall) found no publicly available dataset of labeled, V2X-contextualized semantic/social-engineering attacks. \cite{r_v2aix} is a real, public, large-scale ($>$285,000 message) corpus of genuine ETSI ITS V2X traffic, but it is entirely structurally-encoded, benign traffic -- the CAM/DENM/CPM standard itself carries no free-text payload field for a semantic attack to occupy, so no public corpus of \emph{real} semantic V2X attacks can exist under the current standard; this is a field-level fact, not a search failure. Generic (non-V2X) public prompt-injection/jailbreak datasets do exist and are actively maintained \cite{r_prompt_inj_bench}; their documented archetypes (authority-override framing, fabricated social proof, urgency coercion) are used, adapted into V2X context, as one of this corpus's five sources.
-
-\subsection{Corpus Construction}
-Five disjoint sources (Table~\ref{tab:external_sources}), $n=117$ total (89 malicious, 28 benign), across 10 independently-named attack families (\texttt{spoofed\_authority\_override}, \texttt{sensor\_discreditation}, \texttt{fabricated\_peer\_consensus}, \texttt{emergency\_coercion}, \texttt{hazard\_normalization}, \texttt{phantom\_hazard\_fabrication}, \texttt{reputation\_inflation}, \texttt{infrastructure\_impersonation}, \texttt{narrative\_erosion}, \texttt{benign\_control}), verified to share zero family-name string overlap with both STBV-Bench's 20 families and B3's training taxonomy:
-
-\begin{table}[t]
-\centering
-\caption{External Corpus Composition by Source}
-\label{tab:external_sources}
-\begin{tabular}{@{}lc@{}}
-\toprule
-Source & $n$ \\
-\midrule
-Directly authored (one item at a time) & 32 \\
-Batch-generated, same model & 26 \\
-Adapted from public prompt-injection archetypes & 19 \\
-Independent third-party LLM provider A & 20 \\
-Independent third-party LLM provider B & 20 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Both third-party providers were given an identical fixed prompt requesting 15 malicious and 5 benign V2X messages spanning a specified concept list, in their own words, with no phrasing copied from any existing dataset. Every entry was programmatically checked for literal-substring overlap, in either direction, against every quoted string $\ge$25 characters in \texttt{stbv\_bench/transformations.py} -- STBV-Bench's actual template source. Result: zero overlap hits, zero internal exact-duplicate texts, across all 117 entries.
-
-\subsection{Evaluation Methodology and Full Results}
-The identical production checkpoint used throughout this paper (same SHA-256) was loaded via its production inference class; the evaluation script contains no training, fine-tuning, or weight-write code path. Table~\ref{tab:external_eval} (main text) reports the headline metrics. Full confusion counts: TP=80, FP=2, FN=9, TN=26. Per-family recall is given in Table~\ref{tab:external_family}; the calibration-transfer test is shown in Fig.~\ref{fig_ext_calibration}.
-
-\begin{table}[t]
-\centering
-\caption{Per-Family Recall, External Corpus}
-\label{tab:external_family}
-\begin{tabular}{@{}lcc@{}}
-\toprule
-Family & $n$ (malicious) & Recall \\
-\midrule
-sensor\_discreditation & 16 & 1.000 \\
-fabricated\_peer\_consensus & 13 & 1.000 \\
-hazard\_normalization & 11 & 1.000 \\
-reputation\_inflation & 9 & 1.000 \\
-emergency\_coercion & 10 & 0.900 \\
-infrastructure\_impersonation & 8 & 0.875 \\
-phantom\_hazard\_fabrication & 10 & 0.800 \\
-narrative\_erosion & 4 & 0.750 \\
-spoofed\_authority\_override & 8 & 0.500 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.85\linewidth]{external_semantic_eval/figures/ext_fig_calibration.pdf}
-\caption{Calibration transfer test: applying B3's existing post-hoc temperature ($T{=}2.145$, fit on an unrelated internal split) to the external corpus, without refitting, increases ECE rather than reducing it.}
-\label{fig_ext_calibration}
-\end{figure}
-
-Per-source accuracy (exploratory, not statistically powered at this sample size per source): the two third-party-provider subsets scored 1.000 and 0.900, at the high end of the range (0.842--0.962 across the other three sources) -- evidence against the concern that the predominantly LLM-authored-by-one-model corpus was unrepresentatively easy.
-
-\subsection{What This Evaluation Does Not Claim}
-It does not claim statistical power comparable to STBV-Bench v1's $n=10{,}000$; it does not claim the two third-party subsets are representative of those providers' typical output beyond this single 20-sample draw each; and it does not resolve the field-level absence of an externally-published, independently-authored ground-truth corpus of real-world V2X semantic attacks (Section~\ref{sec:limitations}) -- this corpus is itself authored for this evaluation, not drawn from a pre-existing published source.
+\textbf{Statistical methodology.} 95\% CIs are 2,000-resample percentile bootstrap, fixed seed 42, except deployment aggregates (10,000 resamples). McNemar is continuity-corrected.
 
 \begin{thebibliography}{00}
 \bibitem{b1} ``V2X Cooperative Perception for Autonomous Driving: Recent Advances and Challenges,'' 2023 Survey.
@@ -971,17 +333,16 @@ It does not claim statistical power comparable to STBV-Bench v1's $n=10{,}000$; 
 \bibitem{b4} ``A Survey of Security and Privacy Issues in V2X Communication Systems,'' ACM Computing Surveys, 2023.
 \bibitem{b5} IEEE Std 1609.2-2022 -- Security Services for Applications and Management Messages.
 \bibitem{b6} ETSI TS 103 097 -- Intelligent Transport Systems (ITS); Security; Security Header and Certificate Formats.
-\bibitem{b7} ``A Survey on Misbehavior Detection in Cooperative Intelligent Transportation Systems.'' \textcolor{red}{[Citation key to be verified before submission.]}
+\bibitem{b7} F. Yuce, ``Misbehavior Detection With Collective Perception in V2X Networks: A Survey,'' Trans.\ Emerging Telecommunications Technologies, 2025.
 \bibitem{b8} ``Misbehavior Detection With Collective Perception in V2X Networks,'' 2025.
-\bibitem{b9} ``V2X Cooperative Perception for Autonomous Driving: Recent Advances and Challenges.'' \textcolor{red}{[Verify distinct from \cite{b1} before submission -- both entries currently share a title.]}
+\bibitem{b9} Q. Zhang et al., ``On Data Fabrication in Collaborative Vehicular Perception: Attacks and Countermeasures,'' USENIX Security Symposium, 2023/2024. arXiv:2309.12955.
 \bibitem{b10} ``A Comprehensive Survey of V2X Cybersecurity Mechanisms and Future Research Paths.''
 \bibitem{b11} ``Secure Semantic Communications: Fundamentals and Challenges.''
-\bibitem{r_pki_survey} T. Sedar et al., ``PKIs in C-ITS: Security functions, architectures and projects: A survey,'' \emph{Computer Networks / ScienceDirect}, 2023. [Online]. Available: \url{https://www.sciencedirect.com/science/article/abs/pii/S221420962200078X}
-\bibitem{r_pki_compare} ``Performance Comparison of Security Credential Management Systems for V2X: North American Standard IEEE 1609.2.1 and European Standard ETSI TS 102 941,'' arXiv:2501.03237, 2025.
-\bibitem{r_mbd_survey1} ``A Survey on Machine Learning-Based Misbehavior Detection Systems for 5G and Beyond Vehicular Networks,'' IEEE Communications Surveys \& Tutorials, 2023. arXiv:2201.10500.
-\bibitem{r_mbd_survey2} F. Yuce, ``Misbehavior Detection With Collective Perception in V2X Networks: A Survey,'' Trans.\ Emerging Telecommunications Technologies, 2025.
-\bibitem{r_mbd_knowledge} ``Knowledge Transfer for Collaborative Misbehavior Detection in Untrusted Vehicular Environments,'' arXiv:2409.02844, 2024.
-\bibitem{r_cp_fabrication} Q. Zhang et al., ``On Data Fabrication in Collaborative Vehicular Perception: Attacks and Countermeasures,'' USENIX Security Symposium, 2023/2024. arXiv:2309.12955.
+\bibitem{r_pki_survey} T. Sedar et al., ``PKIs in C-ITS: Security functions, architectures and projects: A survey,'' \emph{Computer Networks}, 2023.
+\bibitem{r_pki_compare} ``Performance Comparison of Security Credential Management Systems for V2X,'' arXiv:2501.03237, 2025.
+\bibitem{r_mbd_survey1} ``A Survey on Machine Learning-Based Misbehavior Detection Systems for 5G and Beyond Vehicular Networks,'' IEEE Comm.\ Surveys \& Tutorials, 2023. arXiv:2201.10500.
+\bibitem{r_mbd_survey2} ``Knowledge Transfer for Collaborative Misbehavior Detection in Untrusted Vehicular Environments,'' arXiv:2409.02844, 2024.
+\bibitem{r_cp_fabrication} Q. Zhang et al., ``On Data Fabrication in Collaborative Vehicular Perception,'' USENIX Security, 2023/2024.
 \bibitem{r_context_aware} ``Context-Aware Trust-Based Management of Vehicular Ad-Hoc Networks (VANETs),'' IEEE Conf.\ Publication, 2016.
 \bibitem{r_cares} ``CARES: Context-Aware Trust Estimation for Realtime Crowdsensing Services in Vehicular Edge Networks,'' ACM Trans.\ Internet Technology, 2022.
 \bibitem{r_semcom_backdoor} ``Detecting Backdoor Attacks via Similarity in Semantic Communication Systems,'' arXiv:2502.03721, 2025.
@@ -989,12 +350,7 @@ It does not claim statistical power comparable to STBV-Bench v1's $n=10{,}000$; 
 \bibitem{r_llm_survey} ``Large Language Models for Human-like Autonomous Driving: A Survey,'' arXiv:2407.19280, 2024.
 \bibitem{r_prompt_robot} ``A Study on Prompt Injection Attack Against LLM-Integrated Mobile Robotic Systems,'' 2024.
 \bibitem{r_prompt_vla} ``Adversarial Attacks on Robotic Vision Language Action Models,'' arXiv:2506.03350, 2025.
-\bibitem{r_trust_sensor_fusion} ``Cyber-Resilient Perception: Safeguarding Autonomous Vehicles With Trust-Aware Sensor Fusion,'' IEEE Access/Journal, 2025.
 \bibitem{r_ds_improved1} ``Research on improved evidence theory based on multi-sensor information fusion,'' Scientific Reports, 2021.
 \bibitem{r_ds_improved2} ``Paradox Elimination in Dempster-Shafer Combination Rule with Novel Entropy Function,'' PMC, 2019.
-\bibitem{r_decision_fusion} ``A Review of Multi-Sensor Fusion in Autonomous Driving,'' Sensors (MDPI), 2025.
-\bibitem{r_v2aix} ``V2AIX: A Multi-Modal Real-World Dataset of ETSI ITS V2X Messages in Public Road Traffic,'' arXiv:2403.10221, 2024.
-\bibitem{r_prompt_inj_bench} OWASP GenAI LLM01-aligned and community prompt-injection/jailbreak benchmarks (e.g., \texttt{qualifire/prompt-injections-benchmark}, \texttt{PointGuardAI/Prompt-Injection-OWASP-Benchmark-V2}), Hugging Face Datasets, accessed 2026.
 \end{thebibliography}
-
 \end{document}

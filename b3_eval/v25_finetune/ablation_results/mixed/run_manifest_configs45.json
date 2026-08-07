@@ -1,0 +1,7 @@
+{
+  "checkpoint": "mixed",
+  "model_path": "b3/solution_stb/b3_semantic_gate/model/semantic_gate_v3_mixed_lora_merged",
+  "bench": "C:\\semantic-trust-boundary-violation\\semantic-trust-boundary-violation\\data\\stbv_bench\\v1\\stbv_bench.jsonl",
+  "n_samples": 10000,
+  "total_seconds": 1472.6011153
+}

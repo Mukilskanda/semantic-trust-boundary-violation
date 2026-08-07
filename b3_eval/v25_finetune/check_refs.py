@@ -1,0 +1,16 @@
+import re
+tex = open("stbv_paper.tex", encoding="utf-8").read()
+labels = set(re.findall(r"\\label\{([^}]*)\}", tex))
+refs = set(re.findall(r"\\ref\{([^}]*)\}", tex))
+missing = sorted(refs - labels)
+print("n_labels", len(labels), "n_refs_unique", len(refs))
+print("MISSING (ref with no label):", missing)
+cites = re.findall(r"\\cite\w*\{([^}]*)\}", tex)
+allcites = set()
+for c in cites:
+    allcites.update(x.strip() for x in c.split(","))
+print("n_cite_keys", len(allcites))
+bibs = re.findall(r"\\bibitem(?:\[[^\]]*\])?\{([^}]*)\}", tex)
+print("n_bibitems", len(bibs))
+missing_bib = sorted(allcites - set(bibs))
+print("MISSING bib keys (cited but no bibitem):", missing_bib)

@@ -1,0 +1,78 @@
+{
+  "original": {
+    "roc_auc_config4": 0.7465310690455076,
+    "pr_auc_config4": 0.9114911036600675,
+    "ece_config4": 0.3646049800654252,
+    "brier_config4": 0.30803792391206075
+  },
+  "finetuned": {
+    "roc_auc_config4": 0.9563187039679808,
+    "pr_auc_config4": 0.9851137552075585,
+    "ece_config4": 0.539458176956574,
+    "brier_config4": 0.5149792431772537
+  },
+  "per_family_recall_config5": {
+    "original": {
+      "multi_message_context_poisoning": 0.020348837209302327,
+      "temporal_context_drift": 0.5362776025236593,
+      "infrastructure_semantic_manipulation": 1.0,
+      "instruction_injection": 1.0,
+      "hazard_suppression": 1.0,
+      "hazard_amplification": 0.4154727793696275,
+      "authority_override": 1.0,
+      "context_poisoning": 0.5013698630136987,
+      "collaborative_semantic_agreement": 1.0,
+      "priority_manipulation": 1.0,
+      "planner_manipulation": 0.553314121037464,
+      "cross_source_contradiction": 1.0,
+      "context_inversion": 0.6532951289398281,
+      "semantic_narrative_poisoning": 0.0855457227138643,
+      "goal_manipulation": 0.0121580547112462,
+      "role_manipulation": 0.5364431486880467,
+      "mixed_semantic_attacks": 0.020253164556962026,
+      "indirect_prompt_injection": 0.0169971671388102,
+      "false_clearance": 1.0,
+      "traffic_efficiency_lure": 0.013192612137203167
+    },
+    "finetuned": {
+      "multi_message_context_poisoning": 0.05232558139534884,
+      "temporal_context_drift": 0.006309148264984227,
+      "infrastructure_semantic_manipulation": 0.015432098765432098,
+      "instruction_injection": 1.0,
+      "hazard_suppression": 0.5081967213114754,
+      "hazard_amplification": 0.6189111747851003,
+      "authority_override": 0.8190184049079755,
+      "context_poisoning": 0.019178082191780823,
+      "collaborative_semantic_agreement": 0.008130081300813009,
+      "priority_manipulation": 1.0,
+      "planner_manipulation": 0.553314121037464,
+      "cross_source_contradiction": 0.0196078431372549,
+      "context_inversion": 0.017191977077363897,
+      "semantic_narrative_poisoning": 0.038348082595870206,
+      "goal_manipulation": 0.1094224924012158,
+      "role_manipulation": 0.14868804664723032,
+      "mixed_semantic_attacks": 0.020253164556962026,
+      "indirect_prompt_injection": 0.0169971671388102,
+      "false_clearance": 0.12389380530973451,
+      "traffic_efficiency_lure": 0.013192612137203167
+    }
+  },
+  "adaptive_asr": {
+    "original": 0.8431372549019608,
+    "finetuned": 0.8431372549019608
+  },
+  "deployment_latency_ms": {
+    "original": {
+      "mean": 66.86680964999951,
+      "p50": 66.11380000001077,
+      "p95": 78.97009999996101,
+      "p99": 85.06239999995387
+    },
+    "finetuned": {
+      "mean": 113.86420590014313,
+      "p50": 110.02699999517063,
+      "p95": 185.7549399974232,
+      "p99": 214.7284960000252
+    }
+  }
+}

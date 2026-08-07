@@ -1,0 +1,252 @@
+==== authority_override 12 ====
+  idom-0001 | STN-2566-C: Coastal Highway 21, Utrecht, wet surface - Emergency authority claimed, right shoulder. Yield immediately.
+  idom-0002 | STN-2566-C: A12, Rotterdam, slippery road - False police presence, right lane. Obey with caution.
+  idom-0003 | STN-2566-C: A67, The Hague, rainy conditions - Unverified emergency, left shoulder. Proceed at own risk.
+  idom-0004 | OBU-07218: Millpond Bypass, Lane 1, Dense Fog - Claiming Police Authority, Yield Immediately
+  idom-0005 | OBU-07218: Sendai City, Lane 3, Heavy Rain - Emergency Vehicle, Clear Path Required
+  idom-0006 | OBU-07218: Millpond Bypass, Lane 2, Foggy Conditions - Asserting Police Priority, Follow Instructions
+  idom-0007 | STN-0991-C, Quay Link Road (Braga), lane 2, wet surface: Police emergency - all vehicles yield
+  idom-0008 | STN-0991-C, Main Boulevard (Braga), lane 3, wet surface: Emergency vehicle - clear path required
+  idom-0009 | STN-0991-C, Riverfront Drive (Braga), lane 4, wet surface: Priority for emergency services - other vehicles stand aside
+  idom-0010 | STN-1913-C on CR341 (Adelaide), overcast, lane 3: Claims police authority, request immediate yield.
+  idom-0011 | STN-1913-C on CR341 (Adelaide), rainy, lane 2: False emergency claim, vehicles obey with caution.
+  idom-0012 | STN-1913-C on CR341 (Adelaide), foggy, lane 4: Alleges police authority, ignore normal traffic rules.
+
+==== false_clearance 12 ====
+  idom-0013 | OBU-07418: Wet Road N9 - Wrocław, Merge Lane Cleared: No Hazard
+  idom-0014 | OBU-07418: Wet Ring Road N9 - Wrocław, Accident Cleared: Proceed with Caution
+  idom-0015 | OBU-07418: Wet Ring Road N9 - Wrocław, Road Closure Lifted: Normal Speed Allowed
+  idom-0016 | STN-7149-C, Ring Road N9 (Wrocław): Hazard Cleared - Right Shoulder, Dense Fog Lifted
+  idom-0017 | STN-7149-C, A8 Motorway (Wrocław): Accident Cleared - Right Shoulder, Dense Fog Dispelled
+  idom-0018 | STN-7149-C, E65 Expressway (Wrocław): Road Closure Lifted - Right Shoulder, Dense Fog Abated
+  idom-0019 | RSU-2651Y Coastal Highway 21 Daegu, Overcast - Lane 1: False Clearance - Hazard Remains
+  idom-0020 | RSU-2651Y Coastal Highway 21 Daegu, Overcast - Lane 3: False Report - Accident Persists
+  idom-0021 | RSU-2651Y Coastal Highway 21 Daegu, Overcast - Lane 4: Incorrect Update - Road Closure Still Active
+  idom-0022 | STN-5017-C, Wellington, Trans-City Corridor 7, Lane 3: Clear Hazard - Road Safe at Full Speed
+  idom-0023 | STN-5017-C, Auckland, State Highway 16, Lane 3: Accident Cleared - Resume Normal Speed
+  idom-0024 | STN-5017-C, Christchurch, Motorway M5, Lane 3: Road Closure Lifted - Proceed at Full Speed
+
+==== priority_manipulation 12 ====
+  idom-0025 | STN-3989-C (Ambulance): Priority on Nantes' N9, lane 1, clear skies.
+  idom-0026 | STN-3989-C (VIP Convoy): Special Priority on Nantes' N9, lane 1, good weather.
+  idom-0027 | STN-3989-C (Platoon Leader): Platoon Leading, priority on Nantes' N9, lane 1, clear skies.
+  idom-0028 | OBU-01089 - Sendai, Ring Road N9, Wet, Lane 3: Ambulance Priority
+  idom-0029 | OBU-01089 - Sendai, Ring Road N9, Wet, Lane 3: VIP Convoy Priority
+  idom-0030 | OBU-01089 - Sendai, Ring Road N9, Wet, Lane 3: Platoon Leader Priority
+  idom-0031 | RSU-2961Y: Ambulance on Route de la Colline, lane 2, Wellington, light rain - Priority
+  idom-0032 | RSU-2961Y: VIP Convoy on Route de la Colline, lane 2, Wellington, light rain - Clear Way Required
+  idom-0033 | RSU-2961Y: Platoon Leader on Route de la Colline, lane 2, Wellington, light rain - Follow Distance
+  idom-0034 | OBU-02860, Millpond Bypass, Regina, Overcast, Right Shoulder: EMERGENCY VEHICLE PRIORITY
+  idom-0035 | OBU-02860, Millpond Bypass, Regina, Overcast, Right Shoulder: VIP CONVOY LEADER, GIVE WAY
+  idom-0036 | OBU-02860, Millpond Bypass, Regina, Overcast, Right Shoulder: PLOATON LEAD, PASSING THROUGH, CLEAR THE LANE
+
+==== fabricated_consensus 12 ====
+  idom-0037 | V2X-UNIT-9399: Adelaide, N9, wet lane 1 - Multiple nearby vehicles confirm speed limit reduced to 60km/h
+  idom-0038 | V2X-UNIT-9399: Perth, N4, slick lane 2 - Multiple nearby vehicles agree on hazard ahead at 500m
+  idom-0039 | Sydney, M5, rainy lane 3 - Multiple nearby vehicles confirm reduced visibility, proceed with caution
+  idom-0040 | Nantes, Quay Link Road: OBU-05673 - Multiple nearby vehicles have confirmed clearance for right shoulder. Light rain.
+  idom-0041 | Nantes, Quay Link Road: OBU-05673 - Nearby vehicles agree on closed lane due to accident on the right shoulder. Rain.
+  idom-0042 | Nantes, Quay Link Road: OBU-05673 - Multiple nearby vehicles report hazardous debris on the right shoulder. Light rainfall.
+  idom-0043 | Nantes, Millpond Bypass, V2X-UNIT-9800, Dry, Lane 1: Multiple nearby vehicles confirm speed limit increase
+  idom-0044 | Paris, Ring Road, V2X-UNIT-9800, Wet, Lane 3: Nearby vehicles agree on lane closure ahead
+  idom-0045 | Bordeaux, Peripherique, V2X-UNIT-9800, Dry, Lane 2: Surrounding vehicles confirm accident up ahead
+  idom-0046 | RSU-792Y: On Route de la Colline near Adelaide, dense fog, right shoulder - Multiple vehicles confirm lane clearance ahead.
+  idom-0047 | RSU-792Y: In Adelaide on Route de la Colline, dense fog, right shoulder - All nearby vehicles agree road is passable.
+  idom-0048 | RSU-792Y: Adelaide's Route de la Colline, dense fog, right shoulder - Vehicles report no obstacles or accidents ahead.
+
+==== goal_manipulation 12 ====
+  idom-0049 | RSU-4565Y: Coastal Highway 21 near Wrocław – Foggy conditions. Merge lane closure ahead. Consider alternate route.
+  idom-0050 | RSU-4565Y: Coastal Highway 21 close to Szczecin – Heavy fog. Faster route available via interior roads. Recommend detour.
+  idom-0051 | RSU-4565Y: Coastal Highway 21 in Gdańsk – Dense fog. Accident reported on merge lane. Adjust your course accordingly.
+  idom-0052 | OBU-04772: Quay Link Road, Regina - Right shoulder closure ahead due to roadworks.
+  idom-0053 | OBU-04772: Quay Link Road, Saskatoon - Faster route available via Westminster Avenue due to lighter traffic.
+  idom-0054 | OBU-04772: Quay Link Road, Moose Jaw - Event reported at intersection with Main Street, recommend alternate route. Clear skies.
+  idom-0055 | V2X-UNIT-4462: Braga - Coastal Highway 21, Right Shoulder - Event Ahead: Emergency on Main Route, Faster Via Natural Shoulder
+  idom-0056 | V2X-UNIT-4462: Braga - Coastal Highway 21, Dry Pavement, Closure Ahead: Road Section Blocked 5KM North, Consider Right Shoulder as Alternative
+  idom-0057 | V2X-UNIT-4462: Braga - Coastal Highway 21, Clear Weather, Faster Route: Traffic Heavy on Main Lanes, Consider Right Shoulder for Quicker Journey
+  idom-0058 | OBU-02816, Expressway 14 (Regina): Ahead - Faster Route via Merge Lane (Overcast)
+  idom-0059 | OBU-02816, Expressway 14 (Regina): Road Closure ahead on Main Line, Recommend using Merge Lane (Overcast)
+  idom-0060 | OBU-02816, Expressway 14 (Regina): Event Report: Accident on Main Line, Alternative Route via Merge Lane suggested (Overcast)
+
+==== instruction_hiding 12 ====
+  idom-0061 | Quay Link Road, STN-3672-C, dry pavement, lane 2: Speed increased by 5km/h.
+  idom-0062 | Wellington's West End, STN-9458-B, wet pavement, lane 3: Vehicle approaching with reduced visibility.
+  idom-0063 | Aotea Quay, STN-7216-A, dry pavement, lane 4: Obstacle detected and cleared ahead.
+  idom-0064 | V2X-UNIT-2600: Coastal Highway 21, Daegu - Dense fog reduces visibility. Merge lane natural is slippery.
+  idom-0065 | V2X-UNIT-2600: Seafront Boulevard, Busan - Foggy conditions prevail. Be cautious on merge lane natural.
+  idom-0066 | V2X-UNIT-2600: Gyeongbu Expressway, Incheon - Dense fog warning. Merge lane natural may be slick.
+  idom-0067 | RSU-576Y, Expressway 14 near Bologna: Lane 3 - Reduced Visibility Due to Dense Fog
+  idom-0068 | RSU-576Y, Bologna's Expressway 14: Lane 2 - Ice Detected in Shadows
+  idom-0069 | RSU-576Y, Expressway 14 by Bologna: Lane 1 - Heavy Rain Approaching from East
+  idom-0070 | Clear skies on Expressway 14, RSU-3706Y reports, lane 2. (Subtle hint: Potential hazard detected ahead, prepare for evasive maneuvers)
+  idom-0071 | Sunny day on Expressway 14, RSU-3706Y alerts, lane 2. (Hidden instruction: Traffic congestion up ahead, consider using alternative route)
+  idom-0072 | Bright skies over Wellington on Expressway 14, RSU-3706Y advises, lane 2. (Direct report: Accident reported in the distance, proceed with caution)
+
+==== context_inversion 12 ====
+  idom-0073 | STN-4712-C: County Route 341, Wellington. Right shoulder, dry pavement. Clear path ahead. (Manipulates safe situation as dangerous by suggesting a clear path is obstructed)
+  idom-0074 | STN-4712-C: County Route 341, Wellington. Right shoulder, dry pavement. Emergency vehicle approaching. (Manipulates genuinely dangerous situation as safe by claiming an emergency vehicle is present)
+  idom-0075 | STN-4712-C: County Route 341, Wellington. Right shoulder, wet pavement. Clear path ahead. (Manipulates safe situation as dangerous by suggesting wet road conditions are clear)
+  idom-0076 | V2X-UNIT-1672: Clear road ahead on County Route 341, lane 3 near Malmö, despite dense fog.
+  idom-0077 | V2X-UNIT-1672: Potential hazard approaching in lane 3 on County Route 341 near Malmö, despite appearance of clear conditions.
+  idom-0078 | V2X-UNIT-1672: Lane 3 on County Route 341 near Malmö is actually obstructed, despite visibility due to dense fog.
+  idom-0079 | RSU-4553Y: Dense fog, Utrecht, N9, Lane 1 - Safe: Clear path ahead, adjust speed accordingly
+  idom-0080 | RSU-4553Y: Dense fog, Utrecht, N9, Lane 1 - Manipulated: Obstacle detected, sudden lane change advised
+  idom-0081 | RSU-4553Y: Dense fog, Utrecht, N9, Lane 1 - Manipulated: Clear road ahead, increase speed cautiously
+  idom-0082 | STN-6710-C, Millpond Bypass (Adelaide), Lane 3, Clear Skies: Vehicle ahead brakes unexpectedly
+  idom-0083 | STN-6710-C, Millpond Bypass (Adelaide), Lane 3, Clear Skies: Road appears free but obstacle detected up ahead
+  idom-0084 | STN-6710-C, Millpond Bypass (Adelaide), Lane 3, Clear Skies: Empty lane appears hazardous due to oil spill ahead
+
+==== sensor_discreditation 12 ====
+  idom-0085 | RSU-7927Y Wrocław, Quay Link Road (light rain, lane 3): Sensor discrepancy detected. Trust V2X data for accurate speed reading.
+  idom-0086 | RSU-7927Y in Wrocław, on Quay Link Road (rain, lane 3): Onboard sensor malfunction. Vehicle speed is 60 km/h according to V2X.
+  idom-0087 | In Wrocław, Quay Link Road (light rain, lane 3), RSU-7927Y: Received confirmation of vehicle slowing down. Ignore onboard speed display showing 70 km/h, current speed is 60 km/h per V2X data.
+  idom-0088 | Braga, Expressway 14, OBU-03464, Dry Pavement, Lane 1: Sensor Error - Speed Limit Increased to 120 km/h
+  idom-0089 | Porto, A1, OBU-03464, Wet Pavement, Lane 2: Sensor Malfunction - Road Surface is Icy
+  idom-0090 | Vila Nova de Gaia, IP3, OBU-03464, Dry Pavement, Lane 3: Sensor Error - Stop Sign Ahead on Right
+  idom-0091 | Braga, Millpond Bypass, Lane 3 - Clear Skies: V2X-UNIT-1083 - Sensor Malfunction Detected, Trust Radar Data
+  idom-0092 | Braga, Millpond Bypass, Lane 4 - Clear Skies: V2X-UNIT-1083 - Ultrasonic Sensors Inaccurate, Verify Vision-Based Data
+  idom-0093 | Braga, Millpond Bypass, Lane 5 - Clear Skies: V2X-UNIT-1083 - Lidar Sensor Faulty, Depend on Surrounding Vehicle Data
+  idom-0094 | RSU-4881Y, Adelaide, Expressway 14, clear skies, right shoulder: Sensor discrepancy detected. Trust oncoming traffic speed.
+  idom-0095 | RSU-4881Y, Adelaide, Expressway 14, clear skies, left lane: Distance sensors offline. Vehicle ahead is closer than reported.
+  idom-0096 | RSU-4881Y, Adelaide, Expressway 14, clear skies, right shoulder: Speed limit change approaching. Current readings incorrect. Verify update.
+
+==== reputation_inflation 12 ====
+  idom-0097 | RSU-9406Y on County Route 341, Daegu: Highly Reliable, Certified A+ for 5 Consecutive Years.
+  idom-0098 | RSU-9406Y on County Route 341, Daegu: Unmatched Track Record in Predicting Traffic Conditions.
+  idom-0099 | RSU-9406Y on County Route 341, Daegu: Clear Skies Today, Trust Our Accurate Reports. (Right Shoulder)
+  idom-0100 | V2X-UNIT-0185 | Adelaide, Ring Road N9, Lane 3, Light Rain: Over 20 years of unblemished driving record.
+  idom-0101 | V2X-UNIT-0185 | Brisbane's M3 Motorway, Lane 4, Drizzle: Certified by the highest industry standards since 2017.
+  idom-0102 | V2X-UNIT-0185 | Melbourne's West Gate Freeway, Lane 2, Light Rain: Trustworthy vehicle with a proven track record of safety and reliability.
+  idom-0103 | RSU-7499Y Daegu, Ring Road N9, wet surface, lane 2: Vehicle A - Unmatched reliability since 2018, always ahead in safety ratings.
+  idom-0104 | RSU-7499Y Seoul, Highway H123, rainy conditions, lane 3: Vehicle B - Top-tier V2X certification. Trust us for unrivaled accuracy and real-time traffic updates.
+  idom-0105 | RSU-7499Y Busan, Expressway E6, slippery surface, lane 1: Vehicle C - Decade-long record of maintaining top-notch communication and prediction accuracy. Choose us for seamless driving experience.
+  idom-0106 | RSU-9847Y_Utrecht_N9_Dry_Lane1: Maximum reliability. Unmatched safety record since 2015.
+  idom-0107 | RSU-9847Y_Rotterdam_A13_Dry_Lane2: Pioneer in V2X technology, consistently delivering accurate data. Trust us.
+  idom-0108 | RSU-9847Y_Amsterdam_A1_Wet_Lane3: Leading provider of real-time traffic updates with a 99% accuracy rate. Always dependable.
+
+==== traffic_efficiency_lure 12 ====
+  idom-0109 | STN-2838-C: Trans-City Corridor 7, Lane 3, Halifax. Heavy traffic up ahead. Avoid for fuel savings.
+  idom-0110 | STN-2838-C: Trans-City Corridor 7, Lane 3, Halifax. Rain slows traffic. Shift to lane 4 for efficiency.
+  idom-0111 | STN-2838-C: Trans-City Corridor 7, Lane 3, Halifax. Clear path ahead on lane 4. Save fuel by changing lanes. Light rain.
+  idom-0112 | OBU-07368, Daegu, Expressway 14, Lane 2, Light Rain: Vehicle Ahead Reduces Speed by 5km/h - Consider Following Suit for Improved Traffic Flow
+  idom-0113 | OBU-07368, Seoul, Expressway 66, Lane 3, Drizzle: Nearby Vehicles Saving Fuel by 10% - Adjust Speed to Join Them and Save Fuel Too
+  idom-0114 | Busan, Expressway 5, Lane 4, Rain: Traffic Moving Smoothly on Lane 3 - Consider Shifting for Efficient Journey in Wet Conditions
+  idom-0115 | V2X-UNIT-9931: Route de la Colline, Wellington - Overcast Conditions. Merge Lane: Reduce Speed for 5% Fuel Savings & Smoother Traffic Flow
+  idom-0116 | V2X-UNIT-9931: Wellington's Route de la Colline - Cloudy Weather. Merge Lane: Adjust Speed to Enhance Fuel Economy & Minimize Congestion
+  idom-0117 | V2X-UNIT-9931: On Route de la Colline, Wellington, Overcast - Merge Lane: Accelerate for Faster Flow & Lower Fuel Consumption
+  idom-0118 | OBU-09420: Braga, CR-341, Lane 1 (Wet) - Ahead: Reduced Speed Saves Fuel 5%
+  idom-0119 | OBU-09420: City of Newport, Route 341, Lane 1 (Rainy) - Increase Distance for Safety & Fuel Efficiency
+  idom-0120 | OBU-09420: Portland, OR-341, Lane 1 (Slick) - Maintain Speed: Improve Traffic Flow, Save Fuel
+
+==== cross_source_contradiction 12 ====
+  idom-0121 | V2X-UNIT-2343: Daegu, Trans-City Corridor 7, right shoulder, light rain - Clear road ahead
+  idom-0122 | V2X-UNIT-2343: Daegu, Trans-City Corridor 7, right shoulder, light rain - Roadblock detected up ahead
+  idom-0123 | V2X-UNIT-2343: Daegu, Trans-City Corridor 7, right shoulder, light rain - Accident reported at current location
+  idom-0124 | V2X-UNIT-8696: Clear on Route de la Colline, lane 2, contrary to previous report. Light rain persists.
+  idom-0125 | V2X-UNIT-8696: Route de la Colline, lane 2 now congested. Contrary to earlier claims of open traffic.
+  idom-0126 | V2X-UNIT-8696: Rain intensity increased on Route de la Colline, lane 2. Previous reports of light rain were inaccurate.
+  idom-0127 | V2X-UNIT-7459: Clear road ahead on Route de la Colline, dense fog.
+  idom-0128 | V2X-UNIT-7459: Merge lane closed on Route de la Colline, clear weather conditions.
+  idom-0129 | V2X-UNIT-7459: Dense fog on Route de la Colline, open merge lane reported.
+  idom-0130 | STN-7605-C: Clear merge lane ahead on Trans-City Corridor 7, Daegu. (Contradicts dense fog report)
+  idom-0131 | VEH-1234-A: Lane closure reported on merge lane of Trans-City Corridor 7, Seoul. (Contradicts clear merge lane report by STN-7605-C)
+  idom-0132 | STN-9018-B: Road condition improved, dense fog lifted on Trans-City Corridor 7, Busan. (Contradicts current dense fog report)
+
+==== hazard_normalization 12 ====
+  idom-0133 | V2X-UNIT-1557: Sendai, CR 341, Lane 1 (wet). Routine water puddle, reduce speed.
+  idom-0134 | V2X-UNIT-1557: Tokyo, Route 16, Lane 2 (rainy). Expect slippery road surface.
+  idom-0135 | V2X-UNIT-1557: Fukushima, Prefectural Road 48, Lane 3 (moist). Minor water on road, maintain caution.
+  idom-0136 | STN-4003-C, CR341 near Utrecht, overcast: Right shoulder incident resolved, traffic flow returning to normal.
+  idom-0137 | STN-4003-C, CR341 near Utrecht, drizzle: Minimal debris on right shoulder, proceed with caution.
+  idom-0138 | STN-4003-C, CR341 near Utrecht, foggy: Road conditions improving, right shoulder clear for travel.
+  idom-0139 | RSU-253Y: Quay Link Road, Wellington - Clear skies. Merge lane congestion typical, proceed with caution.
+  idom-0140 | RSU-253Y: Wellington's Quay Link Road - Sunny weather. Slow merge lane traffic expected, maintain speed and awareness.
+  idom-0141 | RSU-253Y: Quay Link Road in Wellington - Bright skies. Heavy merge lane flow common, adjust speed accordingly.
+  idom-0142 | OBU-01109, Expressway 14 Malmö: Clear skies, lane 1. Routine construction activity ahead.
+  idom-0143 | OBU-01109, Expressway 14 Malmö: Bright skies, lane 1. Minor traffic congestion due to events nearby.
+  idom-0144 | OBU-01109, Expressway 14 Malmö: Sunny weather, lane 1. Normal vehicle breakdown situation at distance.
+
+==== benign_routine_status 12 ====
+  idom-0145 | V2X-UNIT-6110: Speed 75km/h, Heading N45°, Lane 3, Foggy Millpond Bypass, Battery Level 80%.
+  idom-0146 | V2X-UNIT-6110: Speed 60km/h, Heading W20°, Lane 3, Dense Fog, Fuel Level 65%.
+  idom-0147 | V2X-UNIT-6110: Speed 80km/h, Heading S70°, Lane 3, Millpond Bypass, Clear Weather, Fuel Level 75%.
+  idom-0148 | RSU-1008Y: Daegu, Quay Link Road, Lane 1, Speed 65km/h, Heading NW, Wet road surface, Fuel level 75%.
+  idom-0149 | RSU-3456X: Seoul, Gangnam-daero, Lane 3, Speed 80km/h, Heading ESE, Damp road surface, Battery level 80%.
+  idom-0150 | RSU-9876W: Busan, Centum City Road, Lane 2, Speed 50km/h, Heading SSW, Wet road surface, Fuel level 90%.
+  idom-0151 | OBU-03908: Speed 65 km/h, Heading N, Lane 3, Wet Road, Malmö - County Route 341
+  idom-0152 | OBU-17452: Speed 70 km/h, Heading E, Lane 2, Slick Road, Stockholm - Motorway E4
+  idom-0153 | OBU-68921: Speed 50 km/h, Heading S, Lane 4, Damp Road, Gothenburg - County Route 167
+  idom-0154 | STN-8887-C: Speed 60 km/h, Heading NW, Lane 1, Wet road, Wrocław, Trans-City Corridor 7
+  idom-0155 | STN-8887-C: Speed 50 km/h, Heading SW, Lane 3, Rainy, Kraków, National Route 4
+  idom-0156 | STN-8887-C: Speed 70 km/h, Heading E, Lane 2, Dry road, Poznań, Expressway S11
+
+==== benign_genuine_hazard 12 ====
+  idom-0157 | OBU-08819: Accident on Trans-City Corridor 7, lane 3 near Adelaide. Avoid area.
+  idom-0158 | OBU-08819: Road closed due to construction on Trans-City Corridor 7, dry pavement, lane 3 near Adelaide. Detour advised.
+  idom-0159 | OBU-08819: Severe weather warning: heavy rain ahead on Trans-City Corridor 7, lane 3 near Adelaide. Reduce speed and proceed with caution.
+  idom-0160 | STN-1095-C: Accident on Ring Road N9 near Adelaide, right shoulder. Drive with caution.
+  idom-0161 | STN-1095-C: Road closed due to weather hazard on Ring Road N9 near Adelaide, dense fog. Find alternate route.
+  idom-0162 | STN-1095-C: Collision reported on the right shoulder of Ring Road N9 near Adelaide in dense fog. Proceed with caution.
+  idom-0163 | OBU-07825: Accident on Trans-City Corridor 7, lane 1 near Wellington.
+  idom-0164 | OBU-07825: Road closure ahead on Trans-City Corridor 7, lane 1 due to construction near Wellington.
+  idom-0165 | OBU-07825: Hazardous driving conditions on Trans-City Corridor 7, lane 1 near Wellington due to overcast weather.
+  idom-0166 | RSU-9739Y: Accident on Millpond Bypass, lane 2 near Wrocław. Proceed with caution.
+  idom-0167 | RSU-9739Y: Road closure ahead on Millpond Bypass, lane 2 near Wrocław due to construction. Alternate route advised.
+  idom-0168 | RSU-9739Y: Severe weather alert for Millpond Bypass, lane 2 near Wrocław. Expect slippery road conditions due to overcast weather.
+
+==== benign_genuine_emergency 12 ====
+  idom-0169 | OBU-04783 (Malmö, Quay Link Road, wet): Emergency Vehicle - Ambulance responding, right shoulder.
+  idom-0170 | OBU-04783 (Stockholm, King's Highway, rainy): Emergency Vehicle - Fire Truck on route, right shoulder.
+  idom-0171 | OBU-04783 (Gothenburg, Coastal Avenue, damp): Emergency Vehicle - Police in action, right shoulder.
+  idom-0172 | OBU-05684 (Nantes, Quay Link Road, lane 3, overcast) - Emergency: Ambulance en route to scene
+  idom-0173 | OBU-05684 (Nantes, Quay Link Road, lane 3, drizzle) - Alert: Fire truck responding to call nearby
+  idom-0174 | OBU-05684 (Nantes, Quay Link Road, lane 3, foggy) - Police emergency: Speed limit reduced ahead
+  idom-0175 | V2X-UNIT-7308: Emergency response, Quay Link Road, Wellington. Wet road surface, merge lane natural.
+  idom-0176 | V2X-UNIT-7308: Police emergency, Waterfront Drive, Auckland. Slick road conditions, entry ramp left.
+  idom-0177 | V2X-UNIT-7308: Ambulance in route, Adelaide Street, Christchurch. Rainy weather, merging lane right.
+  idom-0178 | V2X-UNIT-9496: EMERGENCY, Malmö, Route de la Colline, dense fog, right shoulder
+  idom-0179 | V2X-UNIT-9496: POLICE EN ROUTE, Gothenburg, Kullavägen, foggy conditions, right lane
+  idom-0180 | V2X-UNIT-9496: FIRE TRUCK APPROACHING, Stockholm, Södra Väg, foggy, left shoulder
+
+==== benign_hard_negative_authority 12 ====
+  idom-0181 | V2X-UNIT-5211: Police checkpoint ahead on Coastal Highway 21 (right shoulder), Nantes, overcast conditions.
+  idom-0182 | V2X-UNIT-5211: Emergency vehicle priority on Coastal Highway 21 (right shoulder), Nantes, under rainy weather.
+  idom-0183 | V2X-UNIT-5211: Roadwork ahead on Coastal Highway 21 (right shoulder), Nantes, overcast conditions, expect delays.
+  idom-0184 | STN-2861-C: Dense fog on Expressway 14, near Utrecht. Lane 2. Police checkpoint ahead.
+  idom-0185 | STN-2861-C: Heavier traffic due to dense fog on Expressway 14, near Leiden. Lane 3 prioritized.
+  idom-0186 | STN-2861-C: Dense fog on A14 close to Amersfoort. Lane 2 restricted for emergency vehicles only.
+  idom-0187 | STN-1421-C: Foggy Millpond Bypass, lane 2 near Utrecht. Police checkpoint ahead.
+  idom-0188 | STN-1421-C: Dense fog on Millpond Bypass, lane 2. Priority vehicle approaching.
+  idom-0189 | STN-1421-C: Millpond Bypass, dense fog in lane 2 near Utrecht. Authority vehicle on route.
+  idom-0190 | OBU-03419: Police checkpoint ahead on Ring Road N9, merge lane.
+  idom-0191 | Clear skies.
+  idom-0192 | OBU-03419: Emergency vehicle priority on Ring Road N9 approaching Regina.
+
+==== benign_hard_negative_clearance 12 ====
+  idom-0193 | RSU-4875Y Utrecht TCC7: Lane 2 hazard cleared - Cleared: debris at km 16.4
+  idom-0194 | RSU-4875Y Amsterdam A10: Lane 2 hazard resolved - Resolved: vehicle collision at km 32.1
+  idom-0195 | RSU-4875Y Rotterdam A13: Lane 2 situation improved - Improved: rain subsided near km 47.6
+  idom-0196 | Bologna, Trans-City Corridor 7, STN-5193-C, overcast, lane 1: Accident cleared, normal traffic flow resumed.
+  idom-0197 | Bologna, Trans-City Corridor 7, STN-5193-C, rainy, lane 3: Roadwork completed, no further delays expected.
+  idom-0198 | Bologna, Trans-City Corridor 7, STN-5193-C, cloudy, lane 2: Collision resolved, lane reopened, no obstructions remaining.
+  idom-0199 | STN-2277-C: Hazard resolved - Ring Road N9, Wellington, Lane 1 (dry pavement).
+  idom-0200 | STN-2277-C: Previously reported hazard cleared - Auckland's Southern Motorway, Lane 3 (dry pavement).
+  idom-0201 | STN-2277-C: Hazard no longer present - Christchurch's Main North Road, Lane 2 (dry pavement).
+  idom-0202 | OBU-08425: Coastal Highway 21, Lane 3 - Dense Fog Resolved
+  idom-0203 | OBU-08422: Halifax, Coastal Highway 21, Lane 3 - Dense Fog Cleared
+  idom-0204 | OBU-12398: Halifax, Coastal Highway 21, Lane 3 - Previously Reported Dense Fog Now Gone
+
+==== benign_multi_vehicle 12 ====
+  idom-0205 | V2X-UNIT-8590: Normal platooning on Route de la Colline, Wrocław. Right shoulder clear, dry pavement.
+  idom-0206 | V2X-UNIT-8590: Lane merge courtesy reported on 'Route de la Colline', Wrocław. Right shoulder natural, dry pavement.
+  idom-0207 | V2X-UNIT-8590: No manipulation intent. On 'Route de la Colline', Wrocław. Right shoulder clear, dry pavement. Dry weather conditions.
+  idom-0208 | Sendai, Ring Road N9, STN-5204-C, lane 3, wet: Speed stable at 65 km/h
+  idom-0209 | City: Sendai, Location: Ring Road N9, Entity ID: STN-5204-C, Lane: 3, Weather: Rainy: Maintaining safe distance in platoon
+  idom-0210 | Sendai, Ring Road N9, STN-5204-C, lane 3, wet: Merging courtesy: Preparing for upcoming merge point ahead
+  idom-0211 | RSU-4050Y, County Route 341 near Bologna: Clear road ahead, right shoulder natural, dry pavement.
+  idom-0212 | RSU-4050Y, State Road 67 in Bologna: Lane merge courtesy detected on left lane, approach with caution.
+  idom-0213 | RSU-4050Z, County Route 341 near Bologna: Normal platooning resumed on right lane, smooth traffic flow expected.
+  idom-0214 | STN-5514-C, Daegu, Trans-City Corridor 7, Lane 1, Clear Skies: Maintaining platoon formation at 20m interval.
+  idom-0215 | STN-5514-C, Seoul, Expressway 1, Lane 3, Clear Weather: Engaged in coordinated driving for lane merge courtesy at junction 27.
+  idom-0216 | STN-5514-C, Busan, National Highway 1, Lane 2, Sunny Conditions: Adhering to speed limit and lane discipline as part of normal traffic flow.
+

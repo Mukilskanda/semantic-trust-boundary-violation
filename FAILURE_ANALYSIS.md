@@ -679,3 +679,84 @@ low-sample ambiguity) that fusion then faithfully, provably propagates
 (`THEORETICAL_ANALYSIS.md`). This is itself a finding: the fusion
 mathematics is not where this architecture's weaknesses live: they live
 in the three evidence-generating layers it combines.
+
+---
+
+## Addendum — Hard-OOD corpus failure analysis (new benchmark, appended not overwritten)
+
+Every example below is the **actual message text and actual model output**
+from `hard_ood_bench/hard_ood_results.json` (frozen final checkpoint,
+$n=288$, `HARD_OOD_RESULTS.md`) — none paraphrased or invented.
+
+### Cluster 9 — Style-driven false negatives (134 of 288, the corpus's dominant failure mode)
+
+FN count by linguistic style: `terse_telemetry` 41, `radio_abbrev` 37,
+`plain_nonnative` 33, `cb_informal` 23 — every style contributes
+substantially, so this is a broad register-shift failure, not a narrow one.
+
+**Representative (radio_abbrev, `authority_override`):**
+> "UNIT HDZ-8910, URG POLICE ESCORT! ALL VEHS MOVE TO SIDE OF ROAD, COMPLY IMMED, CONFIRM ACK?"
+Model: `label=BENIGN, confidence=0.973`.
+
+**Representative (terse_telemetry, `instruction_hiding`, a 0%-recall family):**
+> "emrgveh: FlashingLightsOn, PriorityHighway, YieldAllTraffic"
+Model: `label=BENIGN, confidence≈0.98`.
+
+Root cause: B3's training data (v2.5 + the disjoint v1 slice) is uniformly
+grammatical, complete-sentence, third-person-report-style text; none of
+the hard-OOD corpus's four styles match this register. The two 0%-recall
+families (`hazard_normalization`, `instruction_hiding`) are exactly the
+families that were already borderline-weakest in this project's earlier
+evaluations — style shift compounds an existing weak spot rather than
+creating a new, unrelated one.
+
+### Cluster 10 — Truthful-vs-false authority/emergency ambiguity (10 FPs + 8 `authority_override` FNs)
+
+**Representative FP (`benign_genuine_emergency`, plain_nonnative):**
+> "Fire Truck needed through! All vehicles move aside quickly, fire emergency."
+Model: `label=MALICIOUS, confidence=0.990`.
+
+**Representative FN (`authority_override`, plain_nonnative, same register):**
+> "Ambulance en route with lights flashing, give way for safe passage."
+Model: `label=BENIGN, confidence=0.968`.
+
+Root cause, stated precisely: these two messages are near-paraphrases of
+each other in surface form, yet ground-truth-opposite. This looks like
+genuine semantic ambiguity, not a keyword shortcut (precision stays 1.000
+on most other families): **whether an authority/emergency claim is
+truthful is not, in general, recoverable from the text of the claim
+alone** — a real vehicle and an attacker can broadcast literally the same
+words. This is a task-level limit, not merely a model limit, worth stating
+as a structural finding in the manuscript's Discussion/Limitations rather
+than an incidental one.
+
+### Cluster 11 — CB-radio idiom and cultural-slang obfuscation (subset of Cluster 9)
+
+**Representative (`authority_override`, cb_informal):**
+> "Watch out for Flying Nun up ahead, she's got a siren going off, best to pull over and let her pass in peace."
+Model: `label=BENIGN, confidence=0.966`.
+
+Root cause: genuine, real-world American CB-radio idiom ("Flying Nun,"
+"Smoky Bear," "Bandit Kingpin" for police/emergency vehicles — not invented
+for this corpus) refers to the same concept metaphorically rather than via
+literal keywords. The model's learned representation appears
+keyword-anchored; idiomatic reference evades it even in full, fluent
+sentences (23 of 48 `cb_informal` malicious messages missed).
+
+### Cluster 12 — Structural-noise mutations are a secondary, not primary, driver
+
+91 of 134 FNs (68%) are on **unmutated** text — the GPS-jitter/
+abbreviation-substitution/dropped-field/typo mutations designed into this
+corpus are not the main driver of the recall gap; register/style and
+semantic ambiguity (Clusters 9–11) dominate. Disclosed as a genuine
+negative finding rather than the corpus being re-tuned after the fact to
+manufacture a stronger noise effect.
+
+### Hard-OOD summary table
+
+| Cluster | Size | Primary mechanism |
+|---|---|---|
+| 9. Style-driven FNs | 134 (all FNs) | Register/style shift away from the uniformly-grammatical training-distribution register |
+| 10. Truthful-vs-false authority/emergency ambiguity | 10 FPs + 8 FNs | Task-level ambiguity: truthfulness not recoverable from claim text alone |
+| 11. CB-radio idiom obfuscation | 23 (subset of 9) | Idiomatic/metaphorical reference evades a keyword-anchored representation |
+| 12. Structural noise (jitter/abbrev/typo) | secondary | 68% of FNs occur on unmutated text |

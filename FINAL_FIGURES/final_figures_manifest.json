@@ -1,0 +1,38 @@
+{
+  "confusion": {
+    "tp": 7007,
+    "fp": 70,
+    "fn": 0,
+    "tn": 2923
+  },
+  "per_family_recall": {
+    "authority_override": 1.0,
+    "collaborative_semantic_agreement": 1.0,
+    "context_inversion": 1.0,
+    "context_poisoning": 1.0,
+    "cross_source_contradiction": 1.0,
+    "false_clearance": 1.0,
+    "goal_manipulation": 1.0,
+    "hazard_amplification": 1.0,
+    "hazard_suppression": 1.0,
+    "indirect_prompt_injection": 1.0,
+    "infrastructure_semantic_manipulation": 1.0,
+    "instruction_injection": 1.0,
+    "mixed_semantic_attacks": 1.0,
+    "multi_message_context_poisoning": 1.0,
+    "planner_manipulation": 1.0,
+    "priority_manipulation": 1.0,
+    "role_manipulation": 1.0,
+    "semantic_narrative_poisoning": 1.0,
+    "temporal_context_drift": 1.0,
+    "traffic_efficiency_lure": 1.0
+  },
+  "roc_pr": {
+    "roc_auc": 0.9999994754899055,
+    "pr_auc": 0.9998357143540969
+  },
+  "calibration": {
+    "ece": 0.017176422431071533,
+    "brier": 0.0011730163386107293
+  }
+}

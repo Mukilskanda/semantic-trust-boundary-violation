@@ -522,7 +522,14 @@ validation:
 # B3 Semantic Gate Model Configuration
 # ---------------------------------------------------------------------------
 b3_semantic_gate:
-  model_path: "b3/solution_stb/b3_semantic_gate/model/semantic_gate_v3"
+  model_path: "b3/solution_stb/b3_semantic_gate/model/semantic_gate_v3_mixed_lora_continued_merged"
+  # FINAL checkpoint: mixed-corpus LoRA adapter (semantic_gate_v3_mixed_lora)
+  # continued via true weight resume (train_lora_continue.py, not a fresh
+  # LoRA re-init) on the mixed corpus + STBV-Bench v2.5c (template-disjoint
+  # training-only augmentation). Val F1 0.9006->0.9241 during continuation;
+  # held-out STBV-Bench v2.5b F1 0.9176->0.9450 (b3_eval/v25_finetune/results/
+  # v25b_final_checkpoint_eval.json). Previous default (semantic_gate_v3,
+  # the untuned base) is preserved on disk, never overwritten.
   max_length: 256
   batch_size: 32
   device: null  # auto-detects cuda/cpu when null
@@ -534,4 +541,8 @@ b3_semantic_gate:
   enable_ensembling: true
   confidence_aware_benign: true
   enable_text_ensembling: true
-  temperature_scaling: 2.1446   # fitted via b3_eval/run_calibration.py; ECE 0.062->0.028
+  temperature_scaling: 2.82   # refitted for the final checkpoint via
+                               # b3_eval/v25_finetune/calibrate_final_checkpoint.py;
+                               # ECE 0.065->0.053 on calibration_split.jsonl (n=85).
+                               # NOT the base checkpoint's old value (2.1446) --
+                               # that was specific to the untuned model's logit scale.

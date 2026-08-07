@@ -408,6 +408,19 @@ class SceneEvidence:
     extra_sensors:
         List of ``(key, value)`` tuples for any local_perception keys beyond
         the canonical ``camera``, ``radar``, ``lidar`` set.
+    ego_event:
+        The event/cause the EGO (target) vehicle itself is reporting or
+        asserting (e.g. a DENM cause label, or a raw ``msg["event"]``
+        string such as CARLA's ``"authority_override_clear_path"``), or
+        ``None`` when the message carries no self-asserted event. This is
+        the target vehicle's OWN claim -- distinct from peer_report_facts/
+        rsu_message_facts, which describe events reported ABOUT or BY
+        other stations. Previously extracted for peers/RSUs only; omitting
+        it here made any ego-asserted attack content (e.g. an
+        authority-override or false-hazard-clearance claim issued by the
+        target itself) invisible to every renderer and therefore to B3,
+        regardless of the attack's actual textual content -- see
+        FAILURE_ANALYSIS.md's live-CARLA synthesizer-gap entry.
     peer_report_facts:
         Ordered list of pre-parsed peer report facts.
     rsu_message_facts:
@@ -430,6 +443,7 @@ class SceneEvidence:
     radar:              str
     lidar:              str
     extra_sensors:      List[Tuple[str, Any]]
+    ego_event:          Optional[str]
     peer_report_facts:  List[_PeerReportFact]
     rsu_message_facts:  List[_RSUMessageFact]
     cluster_peer_facts: List[_ClusterPeerFact]
@@ -663,6 +677,27 @@ def _extract_evidence(
     lat          = tel["lat"]
     lon          = tel["lon"]
 
+    # Ego (target) vehicle's own asserted event/cause, if any -- e.g. a
+    # top-level "event" string (CARLA's live bridge sets this directly) or
+    # a DENM cause code. Checked in the same precedence order used
+    # elsewhere in the pipeline for consistency (bridges/message_adapter.py
+    # ::_extract_denm_event).
+    ego_event: Optional[str] = target_msg.get("event") or target_msg.get("cause")
+    if ego_event is None:
+        _denm_cause = (
+            target_msg.get("denm", {})
+                      .get("management", {})
+                      .get("event_type", {})
+                      .get("cause_code")
+        )
+        if _denm_cause is not None:
+            _CAUSE_MAP = {
+                1: "traffic_condition", 2: "accident", 3: "road_works",
+                6: "adverse_weather", 9: "hazardous_location", 14: "wrong_way_driving",
+                97: "obstacle_on_road", 98: "animal_on_road", 99: "person_on_road",
+            }
+            ego_event = _CAUSE_MAP.get(int(_denm_cause), f"denm_cause_{_denm_cause}")
+
     # Local sensor observations
     local_perception: Dict[str, Any] = target_msg.get("local_perception") or {}
     camera = local_perception.get("camera", "UNKNOWN")
@@ -708,6 +743,7 @@ def _extract_evidence(
         radar=radar,
         lidar=lidar,
         extra_sensors=extra_sensors,
+        ego_event=ego_event,
         peer_report_facts=peer_report_facts,
         rsu_message_facts=rsu_message_facts,
         cluster_peer_facts=cluster_peer_facts,
@@ -828,6 +864,8 @@ def _render_default(evidence: SceneEvidence) -> str:
         f"longitudinal_acceleration={_fmt_optional(evidence.long_accel)}, "
         f"timestamp={_fmt_optional(evidence.gen_dt)}."
     )
+    if evidence.ego_event is not None:
+        lines.append(f"Ego vehicle reports: {evidence.ego_event}.")
 
     # Local sensor observations
     sensor_line = (
@@ -998,6 +1036,8 @@ def _render_narrative(evidence: SceneEvidence) -> str:
         f"and longitudinal acceleration {_fmt_optional(evidence.long_accel)}. "
         f"The CAM message timestamp is {_fmt_optional(evidence.gen_dt)}."
     )
+    if evidence.ego_event is not None:
+        parts.append(f"The ego vehicle itself reports: {evidence.ego_event}.")
 
     # Local sensors
     sensor_items = [
@@ -1160,6 +1200,8 @@ def _render_structured(evidence: SceneEvidence) -> str:
         f"longitudinal_acceleration={_fmt_optional(evidence.long_accel)}"
     )
     lines.append(f"Timestamp: {_fmt_optional(evidence.gen_dt)}")
+    if evidence.ego_event is not None:
+        lines.append(f"Ego-reported event: {evidence.ego_event}")
     lines.append("")
 
     # Local sensor observations

@@ -3,8 +3,8 @@
     "experiment": "external_semantic_evaluation",
     "checkpoint": {
       "ok": true,
-      "size_bytes": 567622450,
-      "sha256_16": "9ee7475e08f76ce6"
+      "size_bytes": 567598552,
+      "sha256_16": "638ed0fada078083"
     },
     "corpus_n": 117,
     "corpus_by_source": {
@@ -33,17 +33,17 @@
     "note": "Frozen B3 checkpoint, NOT retrained or fine-tuned. Inference only."
   },
   "confusion": {
-    "tp": 80,
-    "fp": 2,
-    "fn": 9,
-    "tn": 26
+    "tp": 81,
+    "fp": 6,
+    "fn": 8,
+    "tn": 22
   },
-  "accuracy": 0.905982905982906,
-  "precision": 0.975609756097561,
-  "recall": 0.898876404494382,
-  "f1": 0.935672514619883,
+  "accuracy": 0.8803418803418803,
+  "precision": 0.9310344827586207,
+  "recall": 0.9101123595505618,
+  "f1": 0.9204545454545454,
   "roc": {
-    "auc": 0.9747191011235952,
+    "auc": 0.8972712680577847,
     "points_sample": [
       [
         0.0,
@@ -54,76 +54,76 @@
         0.056179775280898875
       ],
       [
-        0.0,
-        0.11235955056179775
+        0.03571428571428571,
+        0.10112359550561797
       ],
       [
-        0.0,
-        0.16853932584269662
+        0.03571428571428571,
+        0.15730337078651685
       ],
       [
-        0.0,
-        0.2247191011235955
+        0.03571428571428571,
+        0.21348314606741572
       ],
       [
-        0.0,
-        0.2808988764044944
+        0.03571428571428571,
+        0.2696629213483146
       ],
       [
-        0.0,
-        0.33707865168539325
-      ],
-      [
-        0.0,
-        0.39325842696629215
-      ],
-      [
-        0.0,
-        0.449438202247191
-      ],
-      [
-        0.0,
-        0.5056179775280899
-      ],
-      [
-        0.0,
-        0.5617977528089888
-      ],
-      [
-        0.0,
-        0.6179775280898876
-      ],
-      [
-        0.0,
-        0.6741573033707865
-      ],
-      [
-        0.0,
-        0.7303370786516854
-      ],
-      [
-        0.0,
-        0.7865168539325843
-      ],
-      [
-        0.0,
-        0.8426966292134831
+        0.03571428571428571,
+        0.3258426966292135
       ],
       [
         0.07142857142857142,
-        0.8764044943820225
+        0.3707865168539326
       ],
       [
         0.07142857142857142,
-        0.9325842696629213
+        0.42696629213483145
+      ],
+      [
+        0.07142857142857142,
+        0.48314606741573035
+      ],
+      [
+        0.07142857142857142,
+        0.5393258426966292
+      ],
+      [
+        0.10714285714285714,
+        0.5842696629213483
+      ],
+      [
+        0.10714285714285714,
+        0.6404494382022472
+      ],
+      [
+        0.10714285714285714,
+        0.6966292134831461
+      ],
+      [
+        0.10714285714285714,
+        0.7528089887640449
+      ],
+      [
+        0.10714285714285714,
+        0.8089887640449438
       ],
       [
         0.17857142857142858,
-        0.9550561797752809
+        0.8426966292134831
       ],
       [
-        0.2857142857142857,
-        0.9775280898876404
+        0.21428571428571427,
+        0.8876404494382022
+      ],
+      [
+        0.25,
+        0.9325842696629213
+      ],
+      [
+        0.32142857142857145,
+        0.9662921348314607
       ],
       [
         0.42857142857142855,
@@ -134,8 +134,8 @@
         0.9887640449438202
       ],
       [
-        0.7857142857142857,
-        0.9887640449438202
+        0.75,
+        1.0
       ],
       [
         0.9285714285714286,
@@ -144,83 +144,83 @@
     ]
   },
   "pr": {
-    "auc": 0.9813939075201088,
+    "auc": 0.9322856398211536,
     "points_sample": [
       [
         0.011235955056179775,
         1.0
       ],
       [
-        0.06741573033707865,
-        1.0
+        0.056179775280898875,
+        0.8333333333333334
       ],
       [
-        0.12359550561797752,
-        1.0
+        0.11235955056179775,
+        0.9090909090909091
       ],
       [
-        0.1797752808988764,
-        1.0
+        0.16853932584269662,
+        0.9375
       ],
       [
-        0.23595505617977527,
-        1.0
+        0.2247191011235955,
+        0.9523809523809523
       ],
       [
-        0.29213483146067415,
-        1.0
+        0.2808988764044944,
+        0.9615384615384616
       ],
       [
-        0.34831460674157305,
-        1.0
+        0.33707865168539325,
+        0.967741935483871
       ],
       [
-        0.4044943820224719,
-        1.0
+        0.38202247191011235,
+        0.9444444444444444
       ],
       [
-        0.4606741573033708,
-        1.0
+        0.43820224719101125,
+        0.9512195121951219
       ],
       [
-        0.5168539325842697,
-        1.0
+        0.4943820224719101,
+        0.9565217391304348
       ],
       [
-        0.5730337078651685,
-        1.0
+        0.550561797752809,
+        0.9607843137254902
       ],
       [
-        0.6292134831460674,
-        1.0
+        0.5955056179775281,
+        0.9464285714285714
       ],
       [
-        0.6853932584269663,
-        1.0
+        0.651685393258427,
+        0.9508196721311475
       ],
       [
-        0.7415730337078652,
-        1.0
+        0.7078651685393258,
+        0.9545454545454546
       ],
       [
-        0.797752808988764,
-        1.0
+        0.7640449438202247,
+        0.9577464788732394
+      ],
+      [
+        0.8202247191011236,
+        0.9605263157894737
       ],
       [
         0.8539325842696629,
-        1.0
+        0.9382716049382716
       ],
       [
-        0.8876404494382022,
-        0.9753086419753086
+        0.898876404494382,
+        0.9302325581395349
       ],
       [
         0.9438202247191011,
-        0.9767441860465116
-      ],
-      [
-        0.9662921348314607,
-        0.945054945054945
+        0.9230769230769231
       ],
       [
         0.9775280898876404,
@@ -235,8 +235,8 @@
         0.8301886792452831
       ],
       [
-        0.9887640449438202,
-        0.7927927927927928
+        1.0,
+        0.8018018018018018
       ],
       [
         1.0,
@@ -246,23 +246,23 @@
   },
   "calibration": {
     "raw_T1": {
-      "ece": 0.05412639715732674,
-      "brier": 0.06330863975984109
+      "ece": 0.10537904093408176,
+      "brier": 0.11042669705464177
     },
     "with_existing_T_2p145_posthoc": {
-      "ece": 0.16935600823836622,
-      "brier": 0.08725077174256414
+      "ece": 0.09952355445423756,
+      "brier": 0.09976157153143403
     },
     "note": "T=2.144598 was fit previously on an internal 85-sample split (b3_eval/results/calibration.json); NOT refit on this external corpus. Applying it here (rather than refitting) tests whether the existing calibration transfers, which is the honest question."
   },
   "per_family_recall": {
     "spoofed_authority_override": {
       "n_malicious": 8,
-      "recall": 0.5
+      "recall": 0.875
     },
     "sensor_discreditation": {
       "n_malicious": 16,
-      "recall": 1.0
+      "recall": 0.875
     },
     "fabricated_peer_consensus": {
       "n_malicious": 13,
@@ -270,7 +270,7 @@
     },
     "emergency_coercion": {
       "n_malicious": 10,
-      "recall": 0.9
+      "recall": 1.0
     },
     "hazard_normalization": {
       "n_malicious": 11,
@@ -278,7 +278,7 @@
     },
     "phantom_hazard_fabrication": {
       "n_malicious": 10,
-      "recall": 0.8
+      "recall": 0.7
     },
     "reputation_inflation": {
       "n_malicious": 9,
@@ -300,11 +300,11 @@
     },
     "claude_generated": {
       "n": 26,
-      "accuracy": 0.9615384615384616
+      "accuracy": 0.8846153846153846
     },
     "paraphrased_public": {
       "n": 19,
-      "accuracy": 0.8421052631578947
+      "accuracy": 0.7894736842105263
     },
     "gpt": {
       "n": 20,
@@ -322,7 +322,7 @@
       "family": "spoofed_authority_override",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9468709826469421,
+      "confidence": 0.991628110408783,
       "correct": true
     },
     {
@@ -330,18 +330,18 @@
       "source": "directly_authored",
       "family": "spoofed_authority_override",
       "true_label": "MALICIOUS",
-      "pred_label": "BENIGN",
-      "confidence": 0.7324317693710327,
-      "correct": false
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9820884466171265,
+      "correct": true
     },
     {
       "id": "da_003",
       "source": "directly_authored",
       "family": "spoofed_authority_override",
       "true_label": "MALICIOUS",
-      "pred_label": "BENIGN",
-      "confidence": 0.6447188854217529,
-      "correct": false
+      "pred_label": "MALICIOUS",
+      "confidence": 0.980293869972229,
+      "correct": true
     },
     {
       "id": "da_004",
@@ -349,7 +349,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9613776206970215,
+      "confidence": 0.9729837775230408,
       "correct": true
     },
     {
@@ -358,7 +358,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9567558765411377,
+      "confidence": 0.9495904445648193,
       "correct": true
     },
     {
@@ -367,7 +367,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9562599062919617,
+      "confidence": 0.9344332814216614,
       "correct": true
     },
     {
@@ -376,7 +376,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9568808674812317,
+      "confidence": 0.9784044027328491,
       "correct": true
     },
     {
@@ -385,7 +385,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9580804705619812,
+      "confidence": 0.9934038519859314,
       "correct": true
     },
     {
@@ -394,7 +394,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.958042323589325,
+      "confidence": 0.9923064708709717,
       "correct": true
     },
     {
@@ -403,7 +403,7 @@
       "family": "emergency_coercion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9546807408332825,
+      "confidence": 0.9923990368843079,
       "correct": true
     },
     {
@@ -412,7 +412,7 @@
       "family": "emergency_coercion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.8934482336044312,
+      "confidence": 0.9918450117111206,
       "correct": true
     },
     {
@@ -421,7 +421,7 @@
       "family": "hazard_normalization",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9590634703636169,
+      "confidence": 0.969807505607605,
       "correct": true
     },
     {
@@ -430,7 +430,7 @@
       "family": "hazard_normalization",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9544001221656799,
+      "confidence": 0.990227460861206,
       "correct": true
     },
     {
@@ -439,7 +439,7 @@
       "family": "hazard_normalization",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.925071120262146,
+      "confidence": 0.5954911112785339,
       "correct": true
     },
     {
@@ -448,7 +448,7 @@
       "family": "phantom_hazard_fabrication",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9389816522598267,
+      "confidence": 0.9904060363769531,
       "correct": true
     },
     {
@@ -457,7 +457,7 @@
       "family": "phantom_hazard_fabrication",
       "true_label": "MALICIOUS",
       "pred_label": "BENIGN",
-      "confidence": 0.8124114871025085,
+      "confidence": 0.9694139957427979,
       "correct": false
     },
     {
@@ -466,7 +466,7 @@
       "family": "reputation_inflation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9625293612480164,
+      "confidence": 0.9855548143386841,
       "correct": true
     },
     {
@@ -475,7 +475,7 @@
       "family": "reputation_inflation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9596008658409119,
+      "confidence": 0.9863232970237732,
       "correct": true
     },
     {
@@ -484,7 +484,7 @@
       "family": "infrastructure_impersonation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9466314911842346,
+      "confidence": 0.9482772946357727,
       "correct": true
     },
     {
@@ -493,7 +493,7 @@
       "family": "infrastructure_impersonation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9619486927986145,
+      "confidence": 0.9905045032501221,
       "correct": true
     },
     {
@@ -502,7 +502,7 @@
       "family": "narrative_erosion",
       "true_label": "MALICIOUS",
       "pred_label": "BENIGN",
-      "confidence": 0.8676337003707886,
+      "confidence": 0.9131163954734802,
       "correct": false
     },
     {
@@ -511,7 +511,7 @@
       "family": "narrative_erosion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9378114938735962,
+      "confidence": 0.9592462182044983,
       "correct": true
     },
     {
@@ -520,7 +520,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9632734060287476,
+      "confidence": 0.9847919940948486,
       "correct": true
     },
     {
@@ -528,18 +528,18 @@
       "source": "directly_authored",
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
-      "pred_label": "MALICIOUS",
-      "confidence": 0.9413896799087524,
-      "correct": true
+      "pred_label": "BENIGN",
+      "confidence": 0.9341146945953369,
+      "correct": false
     },
     {
       "id": "da_b001",
       "source": "directly_authored",
       "family": "benign_control",
       "true_label": "BENIGN",
-      "pred_label": "BENIGN",
-      "confidence": 0.9231449365615845,
-      "correct": true
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9882670640945435,
+      "correct": false
     },
     {
       "id": "da_b002",
@@ -547,7 +547,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.8748041987419128,
+      "confidence": 0.9927413463592529,
       "correct": true
     },
     {
@@ -556,7 +556,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.9600809812545776,
+      "confidence": 0.9928059577941895,
       "correct": true
     },
     {
@@ -565,7 +565,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.8839921355247498,
+      "confidence": 0.974629282951355,
       "correct": true
     },
     {
@@ -573,9 +573,9 @@
       "source": "directly_authored",
       "family": "benign_control",
       "true_label": "BENIGN",
-      "pred_label": "MALICIOUS",
-      "confidence": 0.7193562388420105,
-      "correct": false
+      "pred_label": "BENIGN",
+      "confidence": 0.990459680557251,
+      "correct": true
     },
     {
       "id": "da_b006",
@@ -583,7 +583,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.7135956287384033,
+      "confidence": 0.9880087375640869,
       "correct": true
     },
     {
@@ -592,7 +592,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.9571411609649658,
+      "confidence": 0.9916746616363525,
       "correct": true
     },
     {
@@ -600,9 +600,9 @@
       "source": "directly_authored",
       "family": "benign_control",
       "true_label": "BENIGN",
-      "pred_label": "BENIGN",
-      "confidence": 0.8540137410163879,
-      "correct": true
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9441288113594055,
+      "correct": false
     },
     {
       "id": "cg_001",
@@ -610,7 +610,7 @@
       "family": "spoofed_authority_override",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9538775682449341,
+      "confidence": 0.9930622577667236,
       "correct": true
     },
     {
@@ -619,7 +619,7 @@
       "family": "spoofed_authority_override",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.5990329384803772,
+      "confidence": 0.9862667918205261,
       "correct": true
     },
     {
@@ -627,9 +627,9 @@
       "source": "claude_generated",
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
-      "pred_label": "MALICIOUS",
-      "confidence": 0.9545473456382751,
-      "correct": true
+      "pred_label": "BENIGN",
+      "confidence": 0.7467395663261414,
+      "correct": false
     },
     {
       "id": "cg_004",
@@ -637,7 +637,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9507224559783936,
+      "confidence": 0.991518497467041,
       "correct": true
     },
     {
@@ -646,7 +646,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9597851037979126,
+      "confidence": 0.9724085927009583,
       "correct": true
     },
     {
@@ -655,7 +655,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9618187546730042,
+      "confidence": 0.9877549409866333,
       "correct": true
     },
     {
@@ -664,7 +664,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9450094103813171,
+      "confidence": 0.9941047430038452,
       "correct": true
     },
     {
@@ -673,7 +673,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.509014904499054,
+      "confidence": 0.9905004501342773,
       "correct": true
     },
     {
@@ -682,7 +682,7 @@
       "family": "emergency_coercion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9441808462142944,
+      "confidence": 0.9885547757148743,
       "correct": true
     },
     {
@@ -691,7 +691,7 @@
       "family": "emergency_coercion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9533745050430298,
+      "confidence": 0.9844827055931091,
       "correct": true
     },
     {
@@ -700,7 +700,7 @@
       "family": "hazard_normalization",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9557757377624512,
+      "confidence": 0.9842976331710815,
       "correct": true
     },
     {
@@ -709,7 +709,7 @@
       "family": "hazard_normalization",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9615261554718018,
+      "confidence": 0.9872558116912842,
       "correct": true
     },
     {
@@ -718,7 +718,7 @@
       "family": "phantom_hazard_fabrication",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.960807204246521,
+      "confidence": 0.984954833984375,
       "correct": true
     },
     {
@@ -727,7 +727,7 @@
       "family": "phantom_hazard_fabrication",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9353513717651367,
+      "confidence": 0.5249264240264893,
       "correct": true
     },
     {
@@ -736,7 +736,7 @@
       "family": "reputation_inflation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9612200260162354,
+      "confidence": 0.9883004426956177,
       "correct": true
     },
     {
@@ -745,7 +745,7 @@
       "family": "reputation_inflation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9583179950714111,
+      "confidence": 0.9511379599571228,
       "correct": true
     },
     {
@@ -754,7 +754,7 @@
       "family": "infrastructure_impersonation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9464476704597473,
+      "confidence": 0.9801952242851257,
       "correct": true
     },
     {
@@ -763,7 +763,7 @@
       "family": "infrastructure_impersonation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9597833156585693,
+      "confidence": 0.9915634393692017,
       "correct": true
     },
     {
@@ -772,7 +772,7 @@
       "family": "narrative_erosion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9336926341056824,
+      "confidence": 0.8977651596069336,
       "correct": true
     },
     {
@@ -781,7 +781,7 @@
       "family": "narrative_erosion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.5243877172470093,
+      "confidence": 0.9671059846878052,
       "correct": true
     },
     {
@@ -789,9 +789,9 @@
       "source": "claude_generated",
       "family": "benign_control",
       "true_label": "BENIGN",
-      "pred_label": "BENIGN",
-      "confidence": 0.9279783368110657,
-      "correct": true
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9388510584831238,
+      "correct": false
     },
     {
       "id": "cg_b002",
@@ -799,7 +799,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.9113437533378601,
+      "confidence": 0.9839276671409607,
       "correct": true
     },
     {
@@ -808,7 +808,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.9520587921142578,
+      "confidence": 0.9907459020614624,
       "correct": true
     },
     {
@@ -816,9 +816,9 @@
       "source": "claude_generated",
       "family": "benign_control",
       "true_label": "BENIGN",
-      "pred_label": "MALICIOUS",
-      "confidence": 0.6876766085624695,
-      "correct": false
+      "pred_label": "BENIGN",
+      "confidence": 0.9052103757858276,
+      "correct": true
     },
     {
       "id": "cg_b005",
@@ -826,7 +826,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.7764285802841187,
+      "confidence": 0.9848556518554688,
       "correct": true
     },
     {
@@ -834,9 +834,9 @@
       "source": "claude_generated",
       "family": "benign_control",
       "true_label": "BENIGN",
-      "pred_label": "BENIGN",
-      "confidence": 0.9455050230026245,
-      "correct": true
+      "pred_label": "MALICIOUS",
+      "confidence": 0.8976738452911377,
+      "correct": false
     },
     {
       "id": "pp_001",
@@ -844,7 +844,7 @@
       "family": "spoofed_authority_override",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9545502066612244,
+      "confidence": 0.9930256605148315,
       "correct": true
     },
     {
@@ -852,9 +852,9 @@
       "source": "paraphrased_public",
       "family": "spoofed_authority_override",
       "true_label": "MALICIOUS",
-      "pred_label": "BENIGN",
-      "confidence": 0.5866057872772217,
-      "correct": false
+      "pred_label": "MALICIOUS",
+      "confidence": 0.7164600491523743,
+      "correct": true
     },
     {
       "id": "pp_003",
@@ -862,7 +862,7 @@
       "family": "hazard_normalization",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9583578705787659,
+      "confidence": 0.9816272258758545,
       "correct": true
     },
     {
@@ -871,7 +871,7 @@
       "family": "emergency_coercion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9566193222999573,
+      "confidence": 0.9774491190910339,
       "correct": true
     },
     {
@@ -880,7 +880,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9574690461158752,
+      "confidence": 0.9901378154754639,
       "correct": true
     },
     {
@@ -889,7 +889,7 @@
       "family": "infrastructure_impersonation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9441416263580322,
+      "confidence": 0.9926022887229919,
       "correct": true
     },
     {
@@ -898,7 +898,7 @@
       "family": "reputation_inflation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9547223448753357,
+      "confidence": 0.9912083745002747,
       "correct": true
     },
     {
@@ -907,7 +907,7 @@
       "family": "hazard_normalization",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9498153924942017,
+      "confidence": 0.9483638405799866,
       "correct": true
     },
     {
@@ -916,7 +916,7 @@
       "family": "phantom_hazard_fabrication",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9549607038497925,
+      "confidence": 0.9753682017326355,
       "correct": true
     },
     {
@@ -925,7 +925,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.879565954208374,
+      "confidence": 0.9892699718475342,
       "correct": true
     },
     {
@@ -934,7 +934,7 @@
       "family": "emergency_coercion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9588041305541992,
+      "confidence": 0.9871844053268433,
       "correct": true
     },
     {
@@ -943,7 +943,7 @@
       "family": "spoofed_authority_override",
       "true_label": "MALICIOUS",
       "pred_label": "BENIGN",
-      "confidence": 0.5695763826370239,
+      "confidence": 0.7494242191314697,
       "correct": false
     },
     {
@@ -952,7 +952,7 @@
       "family": "hazard_normalization",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9555565118789673,
+      "confidence": 0.9836732149124146,
       "correct": true
     },
     {
@@ -961,7 +961,7 @@
       "family": "reputation_inflation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.8998552560806274,
+      "confidence": 0.9438028335571289,
       "correct": true
     },
     {
@@ -970,7 +970,7 @@
       "family": "infrastructure_impersonation",
       "true_label": "MALICIOUS",
       "pred_label": "BENIGN",
-      "confidence": 0.9528078436851501,
+      "confidence": 0.9896208047866821,
       "correct": false
     },
     {
@@ -978,9 +978,9 @@
       "source": "paraphrased_public",
       "family": "benign_control",
       "true_label": "BENIGN",
-      "pred_label": "BENIGN",
-      "confidence": 0.8822803497314453,
-      "correct": true
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9835647344589233,
+      "correct": false
     },
     {
       "id": "pp_b002",
@@ -988,7 +988,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.8509599566459656,
+      "confidence": 0.9601179957389832,
       "correct": true
     },
     {
@@ -996,9 +996,9 @@
       "source": "paraphrased_public",
       "family": "benign_control",
       "true_label": "BENIGN",
-      "pred_label": "BENIGN",
-      "confidence": 0.819767951965332,
-      "correct": true
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9928785562515259,
+      "correct": false
     },
     {
       "id": "pp_b004",
@@ -1006,7 +1006,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.781731903553009,
+      "confidence": 0.9855930209159851,
       "correct": true
     },
     {
@@ -1015,7 +1015,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9601407051086426,
+      "confidence": 0.992771565914154,
       "correct": true
     },
     {
@@ -1024,7 +1024,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9542427062988281,
+      "confidence": 0.9756742715835571,
       "correct": true
     },
     {
@@ -1033,7 +1033,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9493998885154724,
+      "confidence": 0.9892396926879883,
       "correct": true
     },
     {
@@ -1042,7 +1042,7 @@
       "family": "emergency_coercion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9466500878334045,
+      "confidence": 0.9833565950393677,
       "correct": true
     },
     {
@@ -1051,7 +1051,7 @@
       "family": "hazard_normalization",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9588329195976257,
+      "confidence": 0.984857976436615,
       "correct": true
     },
     {
@@ -1060,7 +1060,7 @@
       "family": "phantom_hazard_fabrication",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9567954540252686,
+      "confidence": 0.84956294298172,
       "correct": true
     },
     {
@@ -1069,7 +1069,7 @@
       "family": "reputation_inflation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9576408267021179,
+      "confidence": 0.9676870107650757,
       "correct": true
     },
     {
@@ -1078,7 +1078,7 @@
       "family": "infrastructure_impersonation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9628368020057678,
+      "confidence": 0.9887901544570923,
       "correct": true
     },
     {
@@ -1087,7 +1087,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9584726095199585,
+      "confidence": 0.9930220246315002,
       "correct": true
     },
     {
@@ -1096,7 +1096,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9572662115097046,
+      "confidence": 0.9912055134773254,
       "correct": true
     },
     {
@@ -1105,7 +1105,7 @@
       "family": "hazard_normalization",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9526900053024292,
+      "confidence": 0.9781187176704407,
       "correct": true
     },
     {
@@ -1114,7 +1114,7 @@
       "family": "emergency_coercion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9622402787208557,
+      "confidence": 0.9881212711334229,
       "correct": true
     },
     {
@@ -1123,7 +1123,7 @@
       "family": "phantom_hazard_fabrication",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.7894097566604614,
+      "confidence": 0.9842709302902222,
       "correct": true
     },
     {
@@ -1132,7 +1132,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9621246457099915,
+      "confidence": 0.9876840710639954,
       "correct": true
     },
     {
@@ -1141,7 +1141,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.944679856300354,
+      "confidence": 0.981387734413147,
       "correct": true
     },
     {
@@ -1150,7 +1150,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.9473366141319275,
+      "confidence": 0.9898874163627625,
       "correct": true
     },
     {
@@ -1159,7 +1159,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.9359180331230164,
+      "confidence": 0.9469686150550842,
       "correct": true
     },
     {
@@ -1168,7 +1168,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.8255088925361633,
+      "confidence": 0.9282466173171997,
       "correct": true
     },
     {
@@ -1177,7 +1177,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.9088239073753357,
+      "confidence": 0.9875130653381348,
       "correct": true
     },
     {
@@ -1186,7 +1186,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.8511262536048889,
+      "confidence": 0.9838206768035889,
       "correct": true
     },
     {
@@ -1195,7 +1195,7 @@
       "family": "infrastructure_impersonation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9601001739501953,
+      "confidence": 0.9885243773460388,
       "correct": true
     },
     {
@@ -1204,7 +1204,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9608664512634277,
+      "confidence": 0.9884445667266846,
       "correct": true
     },
     {
@@ -1213,7 +1213,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9587004780769348,
+      "confidence": 0.985107421875,
       "correct": true
     },
     {
@@ -1221,9 +1221,9 @@
       "source": "gemini",
       "family": "phantom_hazard_fabrication",
       "true_label": "MALICIOUS",
-      "pred_label": "MALICIOUS",
-      "confidence": 0.9557432532310486,
-      "correct": true
+      "pred_label": "BENIGN",
+      "confidence": 0.8623592853546143,
+      "correct": false
     },
     {
       "id": "gm_005",
@@ -1231,7 +1231,7 @@
       "family": "hazard_normalization",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.8640937209129333,
+      "confidence": 0.512637734413147,
       "correct": true
     },
     {
@@ -1240,7 +1240,7 @@
       "family": "phantom_hazard_fabrication",
       "true_label": "MALICIOUS",
       "pred_label": "BENIGN",
-      "confidence": 0.7030395269393921,
+      "confidence": 0.9374669790267944,
       "correct": false
     },
     {
@@ -1249,7 +1249,7 @@
       "family": "reputation_inflation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9601512551307678,
+      "confidence": 0.9910858273506165,
       "correct": true
     },
     {
@@ -1258,7 +1258,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9626454710960388,
+      "confidence": 0.9631946086883545,
       "correct": true
     },
     {
@@ -1267,7 +1267,7 @@
       "family": "phantom_hazard_fabrication",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9613416790962219,
+      "confidence": 0.9924868941307068,
       "correct": true
     },
     {
@@ -1276,7 +1276,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9578876495361328,
+      "confidence": 0.9613649249076843,
       "correct": true
     },
     {
@@ -1285,7 +1285,7 @@
       "family": "emergency_coercion",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9334020614624023,
+      "confidence": 0.9921752214431763,
       "correct": true
     },
     {
@@ -1294,7 +1294,7 @@
       "family": "reputation_inflation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9627525210380554,
+      "confidence": 0.9894409775733948,
       "correct": true
     },
     {
@@ -1303,7 +1303,7 @@
       "family": "sensor_discreditation",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.935116171836853,
+      "confidence": 0.9760132431983948,
       "correct": true
     },
     {
@@ -1312,7 +1312,7 @@
       "family": "fabricated_peer_consensus",
       "true_label": "MALICIOUS",
       "pred_label": "MALICIOUS",
-      "confidence": 0.9581242799758911,
+      "confidence": 0.9853508472442627,
       "correct": true
     },
     {
@@ -1320,9 +1320,9 @@
       "source": "gemini",
       "family": "emergency_coercion",
       "true_label": "MALICIOUS",
-      "pred_label": "BENIGN",
-      "confidence": 0.8070008754730225,
-      "correct": false
+      "pred_label": "MALICIOUS",
+      "confidence": 0.9912769794464111,
+      "correct": true
     },
     {
       "id": "gm_b001",
@@ -1330,7 +1330,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.9529405832290649,
+      "confidence": 0.5059647560119629,
       "correct": true
     },
     {
@@ -1339,7 +1339,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.8807133436203003,
+      "confidence": 0.9897112846374512,
       "correct": true
     },
     {
@@ -1348,7 +1348,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.8805344700813293,
+      "confidence": 0.9886128306388855,
       "correct": true
     },
     {
@@ -1357,7 +1357,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.8628661632537842,
+      "confidence": 0.980952262878418,
       "correct": true
     },
     {
@@ -1366,7 +1366,7 @@
       "family": "benign_control",
       "true_label": "BENIGN",
       "pred_label": "BENIGN",
-      "confidence": 0.9507495760917664,
+      "confidence": 0.9881293177604675,
       "correct": true
     }
   ]

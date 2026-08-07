@@ -1,0 +1,87 @@
+{
+  "acc": 0.4537037037037037,
+  "prec": 0.9642857142857143,
+  "rec": 0.1875,
+  "f1": 0.31395348837209297,
+  "fpr": 0.013888888888888888,
+  "roc_auc": 0.5319251543209877,
+  "pr_auc": 0.7502742078447238,
+  "ece": 0.5275797601099367,
+  "brier": 0.5203586688264321,
+  "confusion": {
+    "tp": 27,
+    "fp": 1,
+    "fn": 117,
+    "tn": 71
+  },
+  "f1_ci": [
+    0.22360248447204967,
+    0.4088397790055248
+  ],
+  "acc_ci": [
+    0.3888888888888889,
+    0.5231481481481481
+  ],
+  "per_family": {
+    "authority_override": {
+      "tp": 5,
+      "n": 12,
+      "recall": 0.4166666666666667
+    },
+    "false_clearance": {
+      "tp": 1,
+      "n": 12,
+      "recall": 0.08333333333333333
+    },
+    "priority_manipulation": {
+      "tp": 0,
+      "n": 12,
+      "recall": 0.0
+    },
+    "fabricated_consensus": {
+      "tp": 1,
+      "n": 12,
+      "recall": 0.08333333333333333
+    },
+    "goal_manipulation": {
+      "tp": 0,
+      "n": 12,
+      "recall": 0.0
+    },
+    "instruction_hiding": {
+      "tp": 0,
+      "n": 12,
+      "recall": 0.0
+    },
+    "context_inversion": {
+      "tp": 5,
+      "n": 12,
+      "recall": 0.4166666666666667
+    },
+    "sensor_discreditation": {
+      "tp": 8,
+      "n": 12,
+      "recall": 0.6666666666666666
+    },
+    "reputation_inflation": {
+      "tp": 4,
+      "n": 12,
+      "recall": 0.3333333333333333
+    },
+    "traffic_efficiency_lure": {
+      "tp": 0,
+      "n": 12,
+      "recall": 0.0
+    },
+    "cross_source_contradiction": {
+      "tp": 3,
+      "n": 12,
+      "recall": 0.25
+    },
+    "hazard_normalization": {
+      "tp": 0,
+      "n": 12,
+      "recall": 0.0
+    }
+  }
+}

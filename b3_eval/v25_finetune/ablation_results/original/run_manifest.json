@@ -1,0 +1,7 @@
+{
+  "checkpoint": "original",
+  "model_path": "b3/solution_stb/b3_semantic_gate/model/semantic_gate_v3",
+  "bench": "C:\\semantic-trust-boundary-violation\\semantic-trust-boundary-violation\\data\\stbv_bench\\v1\\stbv_bench.jsonl",
+  "n_samples": 10000,
+  "total_seconds": 3924.5767927999987
+}
