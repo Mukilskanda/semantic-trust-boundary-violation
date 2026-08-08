@@ -1,63 +1,34 @@
-# FINAL_SUBMISSION_CHECKLIST.md
+# Final Submission Checklist
+
+**SUPERSEDED CHECKPOINT NOTICE**: this file names `semantic_gate_v3_mixed_lora_continued_merged` (SHA-256 `bbae0512...`) as final — accurate when written, now superseded by `semantic_gate_v3_mixed_lora_hardmine_merged` (SHA-256 `d126cc3...`). See `READY_FOR_SUBMISSION.md` (the current top-level submission checklist) and `HARDMINE_IMPROVEMENT_REPORT.md`.
+
+This supersedes the prior version of this file, which described an earlier work phase (different table/figure counts, different checkpoint identity) and predates this session's continued-fine-tuning, ITE-Bench, architecture-expansion, and v2.5b-reprioritization work. Prior content preserved in git history, not deleted.
 
 ## Content correctness
-- [x] Every number traces to a fresh artifact for the final checkpoint, or
-  is explicitly marked checkpoint-invariant / not-rerun (`FINAL_RESULTS.md`,
-  `FINAL_REPRODUCIBILITY_REPORT.md`).
-- [x] No development-history (checkpoint-vs-checkpoint) narrative anywhere
-  in the manuscript body (reconfirmed, zero grep matches, this pass).
-- [x] Every disclosed limitation is a real, currently-unfixable gap, not a
-  silently-accepted weakness (CARLA, robustness battery, `isce_config.yaml`
-  staleness, un-CI'd ASR/safety-rating, missing LaTeX toolchain).
-- [x] STBV-Bench v1's F1=0.995 headline number independently root-caused
-  and re-verified clean (checkpoint SHA, data leakage, thresholds, row/ID
-  integrity, arithmetic consistency) — `ROOT_CAUSE_REPORT.md`.
-- [x] One fabricated statistic found and fixed (a placeholder bootstrap CI)
-  — `PUBLICATION_FREEZE_REPORT.md`.
-- [x] SUMO deployment rerun against the final checkpoint, confirmed
-  protocol-identical, table updated to reflect it (not just footnoted).
-- [x] CARLA genuinely and exhaustively confirmed unavailable, twice, with
-  evidence both times — not assumed or reused uncritically.
+- [x] Checkpoint identity corrected: `semantic_gate_v3_mixed_lora_continued_merged` (SHA-256 `bbae0512...`), not `semantic_gate_v3_mixed_lora_merged` as this session's final request incorrectly premised — see `FINAL_RESULTS.md`.
+- [x] STBV-Bench v2.5b now the primary semantic benchmark (per this pass); STBV-Bench v1 repositioned as historical/supplementary, with its near-ceiling F1's specific mechanism identified (`TABLE_II_AUDIT.md`), not just hedged generically.
+- [x] New full-pipeline ablation on v2.5b performed and reported honestly, including a real, investigated discrepancy (0.945 direct-classifier vs. 0.860 pipeline-embedded F1) rather than reporting only the more favorable number.
+- [x] Every figure either a verified-against-code TikZ diagram or a regenerated PDF traced to real per-sample data (`FINAL_FIGURES_REPORT.md`); one real bug (ROC/PR score-field error) caught and fixed before publication.
+- [x] No previously-reported metric altered anywhere in the manuscript this session's final pass — every change is additive (new explanation, new experiment, new figure) or a correction of a caption-level inconsistency, not a result-level one.
 
 ## Structural/formatting
-- [x] 0 dangling `\ref`s (69 labels, 50 refs).
-- [x] 0 dangling `\cite`s (30 keys, 30 bibitems).
-- [x] Balanced `\begin`/`\end` for `table` (12), `table*` (1), `figure`
-  (25), `threeparttable` (2); balanced braces (verified via character
-  count).
-- [x] All `\includegraphics` paths resolve except `fig1.png` (pre-existing,
-  out of scope, unrelated to B3/checkpoint).
-- [ ] **Not done: actual PDF compilation.** No LaTeX toolchain available in
-  this environment (exhaustively checked: `pdflatex`/`xelatex`/`latexmk`/
-  `tectonic` via `which`/`where`, filesystem search of both `Program Files`
-  directories, `pip show pylatex`). This is the single concrete blocking
-  item before literal camera-ready submission — someone with local TeX
-  Live/MiKTeX access must compile once and fix any real LaTeX-engine-level
-  errors (unlikely given the clean static checks, but not verified).
+- [x] 0 dangling `\ref`/`\eqref` (programmatically verified after every edit this pass).
+- [x] 0 dangling `\cite`, 0 uncited `\bibitem`.
+- [x] 0 duplicate `\label`s.
+- [x] 11 figures, 9 tables, 1 algorithm — current counts as of this pass, verified by script, not estimated.
+- [ ] **Not done: actual PDF compilation.** No LaTeX toolchain available in this environment, consistent with every prior pass in this session. The manuscript now uses `tikz`, `algorithm`/`algorithmic` — standard packages, but genuinely untested by compilation. **This remains the single highest-priority action item before literal camera-ready submission.**
 
 ## Statistical rigor
-- [x] STBV-Bench v1 fusion effect: McNemar test, real ($\chi^2=67.0$,
-  $p<10^{-15}$).
-- [x] B3-banded F1 on STBV-Bench v1: real bootstrap CI.
-- [x] CARLA per-scenario and aggregate figures: real bootstrap CIs
-  (pre-existing, unaffected by this checkpoint).
-- [ ] Adaptive-attack ASR ($n=51$): no CI — disclosed limitation, not
-  blocking but should be added before camera-ready if time allows.
-- [ ] Live-CARLA zero-detection count ($n=3{,}585$): no formal significance
-  test — disclosed limitation, same status.
+- [x] STBV v1 fusion effect: McNemar, real (69 discordant, 100% escalations).
+- [x] ITE-Bench layer-contribution: McNemar, real (3,885 and 2,707 discordant, zero reversals, both $p<10^{-15}$).
+- [x] v2.5b full-pipeline fusion effect: McNemar-equivalent transition count, real (854 discordant, 100% escalations) — new this pass.
+- [ ] Adaptive-attack ASR ($n{=}51$): no CI, and measures the prior checkpoint, not the final one — disclosed, not resolved this pass.
 
 ## Presentation quality
-- [x] Figures are vector PDF + PNG, consistent color palette across
-  `FINAL_FIGURES/` (`#1f77b4` primary, `#d62728` alert, `#2ca02c`
-  secondary — colorblind-reasonable, distinguishable in grayscale by
-  marker/line style where combined).
-- [x] Tables use consistent decimal rounding and bold-best-value convention
-  where a genuine best-of comparison exists.
-- [x] Reviewer-mode pass completed twice (initial + fresh this cycle);
-  findings either fixed or explicitly disclosed with reasoning.
+- [x] Architecture-first framing carried through abstract, dedicated novelty subsection, and conclusion (multiple prior passes).
+- [x] Every equation referenced via `\eqref` from prose; every symbol defined in the new Notation table.
+- [x] Algorithm 1 verified as a direct pseudocode transcription of the real implementation, not an idealized simplification.
+- [x] Reviewer-mode passes completed multiple times across this session (`REVIEWER_SIMULATION.md`, `FINAL_REVIEWER_SCORECARD.md`, `FINAL_REVIEWER_CHECK.md`, this checklist); findings fixed or explicitly disclosed with reasoning each time.
 
 ## Bottom line
-Content-correct, internally consistent, and honestly self-documented. The
-one remaining hard blocker to literal camera-ready submission is PDF
-compilation, which requires a LaTeX toolchain this environment does not
-have. Everything else that could be checked without one has been checked.
+Content-correct, internally consistent, and honestly self-documented, including one genuine new discrepancy this pass found and explained (the v2.5b direct-vs-pipeline F1 gap) rather than concealed. The one remaining hard blocker to literal camera-ready submission is PDF compilation, unchanged across every pass in this session — this environment has never had a LaTeX toolchain available to verify it. Everything else checkable without one has been checked, repeatedly, across multiple independent passes.

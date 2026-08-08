@@ -1,8 +1,12 @@
 """
 b3_eval/v25_finetune/calibrate_final_checkpoint.py
 =====================================================
-Fits temperature scaling for the FINAL continued checkpoint
-(semantic_gate_v3_mixed_lora_continued_merged) on
+HISTORICAL, SUPERSEDED (kept for audit trail; see
+calibrate_hardmine_checkpoint.py for the current final checkpoint's
+temperature fit, using this identical methodology). Fits temperature
+scaling for the PRIOR continued checkpoint
+(semantic_gate_v3_mixed_lora_continued_merged, now superseded by
+semantic_gate_v3_mixed_lora_hardmine_merged) on
 b3_eval/data/calibration_split.jsonl -- the same split used by
 b3_eval/run_calibration.py for the original checkpoint. The base
 checkpoint's fitted temperature (2.1446, in isce_config.yaml) is specific

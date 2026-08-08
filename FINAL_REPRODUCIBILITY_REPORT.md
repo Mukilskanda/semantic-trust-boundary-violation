@@ -1,5 +1,33 @@
 # FINAL_REPRODUCIBILITY_REPORT.md
 
+**SUPERSEDED NOTICE (read this first).** Everything below this notice is a much
+earlier draft-phase snapshot: it references `semantic_gate_v3_mixed_lora_merged`
+and a table/section structure (`tab:coverage`, RQ1–RQ6, `tab:baselines`,
+`tab:safety`, etc.) that no longer matches the current `stbv_paper.tex`. It is
+kept, not deleted, per this project's standing "preserve superseded work"
+convention, but it is **not** an accurate description of the current paper.
+
+**Current, accurate reproducibility record**: `HARDMINE_IMPROVEMENT_REPORT.md`
+(latest checkpoint's full provenance and verification chain),
+`FINAL_FREEZE_AUDIT.md` (per-metric traceability for the architecture-centric
+rewrite that superseded the RQ-numbered draft this file describes), and
+`FINAL_CONSISTENCY_AUDIT.md` (cross-reference/checkpoint-consistency audit,
+including this pass's checkpoint-supersession addendum). Current final
+checkpoint: `semantic_gate_v3_mixed_lora_hardmine_merged`, SHA-256
+`d126cc3cb998a4717fa833859c6affcd1320f4d60f38c3c98f9cf175720b3759` — not
+`638ed0fada07808317ddadb3e7d8ab76ff2895a9b344946e263b5c5f925d15b3` as stated
+below, and not `bbae0512...` either (that was the immediately prior one).
+
+**Also now stale**: the "known configuration/deployment gap" note below,
+claiming `isce_config.yaml`'s `model_path` points at a non-fine-tuned
+checkpoint — this has not been true since at least the pass that produced
+`FINAL_FREEZE_AUDIT.md`; `isce_config.yaml` currently points at the real,
+current final checkpoint, verified by direct read of the file this pass.
+
+---
+
+*(Original content below, preserved for audit trail, not current.)*
+
 **Status: finalized.** This is `REPRODUCIBILITY_MAP.md`, carried forward
 unchanged in content (that file remains on disk as the working document
 this was built from) and confirmed current as of the final submission-prep

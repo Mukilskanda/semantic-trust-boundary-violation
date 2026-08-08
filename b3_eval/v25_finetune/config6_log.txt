@@ -1,0 +1,24 @@
+[v25b-ablation] 10098 samples
+[B3] Device: cuda (NVIDIA GeForce RTX 4050 Laptop GPU)
+Loading weights:   0%|          | 0/106 [00:00<?, ?it/s]Loading weights: 100%|##########| 106/106 [00:00<00:00, 7218.06it/s]
+  500/10098 (92s elapsed, ~1775s remaining)
+  1000/10098 (164s elapsed, ~1496s remaining)
+  1500/10098 (235s elapsed, ~1348s remaining)
+  2000/10098 (307s elapsed, ~1245s remaining)
+  2500/10098 (380s elapsed, ~1154s remaining)
+  3000/10098 (452s elapsed, ~1069s remaining)
+  3500/10098 (524s elapsed, ~988s remaining)
+  4000/10098 (597s elapsed, ~910s remaining)
+  4500/10098 (670s elapsed, ~833s remaining)
+  5000/10098 (743s elapsed, ~757s remaining)
+  5500/10098 (816s elapsed, ~682s remaining)
+  6000/10098 (889s elapsed, ~607s remaining)
+  6500/10098 (962s elapsed, ~532s remaining)
+  7000/10098 (1035s elapsed, ~458s remaining)
+  7500/10098 (1106s elapsed, ~383s remaining)
+  8000/10098 (1180s elapsed, ~309s remaining)
+  8500/10098 (1253s elapsed, ~236s remaining)
+  9000/10098 (1325s elapsed, ~162s remaining)
+  9500/10098 (1396s elapsed, ~88s remaining)
+  10000/10098 (1473s elapsed, ~14s remaining)
+[done] 10098 samples in 1488.1s

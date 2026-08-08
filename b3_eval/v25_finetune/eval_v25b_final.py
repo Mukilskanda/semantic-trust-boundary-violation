@@ -1,13 +1,19 @@
 """
 b3_eval/v25_finetune/eval_v25b_final.py
 ==========================================
-Evaluates the FINAL checkpoint (semantic_gate_v3_mixed_lora_continued_merged,
-produced by train_lora_continue.py resuming semantic_gate_v3_mixed_lora on
+HISTORICAL, SUPERSEDED for the "final checkpoint" claim below (kept for
+audit trail; its output remains valid as a description of the checkpoint
+it names, just not of the CURRENT final checkpoint). Evaluates the PRIOR
+final checkpoint (semantic_gate_v3_mixed_lora_continued_merged, produced
+by train_lora_continue.py resuming semantic_gate_v3_mixed_lora on
 mixed-corpus + STBV-Bench v2.5c) against STBV-Bench v2.5b
 (data/stbv_bench/v25b/stbv_bench_v25b.jsonl, n=10,098) -- a held-out,
 template-disjoint benchmark over the SAME semantic taxonomy as v2.5,
 verified disjoint from v2.5, v2.5c, and (by construction, since it was
 never referenced during training/data-building) the training corpus.
+Superseded by semantic_gate_v3_mixed_lora_hardmine_merged; see
+eval_hardmine_v25b.py for the current-checkpoint comparison and
+HARDMINE_IMPROVEMENT_REPORT.md for the promotion record.
 
 Also scores the PRE-continuation mixed checkpoint on the same benchmark
 for a direct before/after comparison, and the original base checkpoint

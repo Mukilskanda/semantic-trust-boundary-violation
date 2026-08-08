@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="1180" viewBox="0 0 620 1180" font-family="Helvetica,Arial,sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#000000"/>
+    </marker>
+  </defs>
+
+  <!-- background -->
+  <rect x="0" y="0" width="620" height="1180" fill="#ffffff"/>
+
+  <!-- Proposed STBV framework shaded/dashed region -->
+  <rect x="60" y="185" width="500" height="655" rx="6" fill="#f2f2f2" stroke="#000000" stroke-width="2" stroke-dasharray="8,5"/>
+  <text x="310" y="172" text-anchor="middle" font-size="15" font-weight="bold" fill="#000000">Proposed STBV Trust Framework</text>
+
+  <!-- Node style helper: existing = light fill, proposed = darker fill -->
+
+  <!-- V2X Messages -->
+  <rect x="160" y="10" width="300" height="46" rx="4" fill="#f7f7f7" stroke="#000000"/>
+  <text x="310" y="38" text-anchor="middle" font-size="13">V2X Messages (CAM / DENM)</text>
+
+  <!-- PKI (existing) -->
+  <rect x="160" y="86" width="300" height="46" rx="4" fill="#eeeeee" stroke="#000000"/>
+  <text x="310" y="114" text-anchor="middle" font-size="13">Public Key Infrastructure (PKI)</text>
+  <text x="470" y="114" font-size="10" font-style="italic">Identity Trust</text>
+
+  <!-- B1 (proposed) -->
+  <rect x="90" y="200" width="440" height="46" rx="4" fill="#cfcfcf" stroke="#000000" stroke-width="1.5"/>
+  <text x="310" y="222" text-anchor="middle" font-size="13" font-weight="bold">B1 -- Secure Cryptographic Validation</text>
+  <text x="310" y="238" text-anchor="middle" font-size="10">Certificate validation &#8226; Signature verification &#8226; Revocation checking</text>
+  <text x="540" y="228" font-size="10" font-style="italic">Cryptographic Trust</text>
+
+  <!-- MBD (existing) -->
+  <rect x="160" y="278" width="300" height="46" rx="4" fill="#eeeeee" stroke="#000000"/>
+  <text x="310" y="306" text-anchor="middle" font-size="13">Misbehavior Detection (MBD)</text>
+  <text x="470" y="306" font-size="10" font-style="italic">Behaviour Observation</text>
+
+  <!-- B2 (proposed) -->
+  <rect x="90" y="356" width="440" height="46" rx="4" fill="#cfcfcf" stroke="#000000" stroke-width="1.5"/>
+  <text x="310" y="378" text-anchor="middle" font-size="13" font-weight="bold">B2 -- Explainability Layer (CSIA)</text>
+  <text x="310" y="394" text-anchor="middle" font-size="10">Behaviour interpretation &#8226; Confidence explanation &#8226; Evidence extraction</text>
+  <text x="540" y="384" font-size="10" font-style="italic">Behaviour Explainability</text>
+
+  <!-- CP (existing) -->
+  <rect x="160" y="434" width="300" height="46" rx="4" fill="#eeeeee" stroke="#000000"/>
+  <text x="310" y="462" text-anchor="middle" font-size="13">Cooperative Perception (CP)</text>
+  <text x="470" y="462" font-size="10" font-style="italic">Cooperative Scene Fusion</text>
+
+  <!-- B3 (proposed) -->
+  <rect x="90" y="512" width="440" height="52" rx="4" fill="#cfcfcf" stroke="#000000" stroke-width="1.5"/>
+  <text x="310" y="534" text-anchor="middle" font-size="13" font-weight="bold">B3 -- Semantic Trust Gate (DeBERTa-v2)</text>
+  <text x="310" y="550" text-anchor="middle" font-size="10">Semantic/prompt-attack detection &#8226; Confidence calibration &#8226; Semantic trust score</text>
+  <text x="540" y="540" font-size="10" font-style="italic">Semantic Trust</text>
+
+  <!-- DS Fusion (proposed) -->
+  <rect x="90" y="596" width="440" height="46" rx="4" fill="#cfcfcf" stroke="#000000" stroke-width="1.5"/>
+  <text x="310" y="618" text-anchor="middle" font-size="13" font-weight="bold">Dempster-Shafer / Yager Evidence Fusion</text>
+  <text x="310" y="634" text-anchor="middle" font-size="10">Combines B1, B2, B3 trust masses</text>
+  <text x="540" y="622" font-size="10" font-style="italic">Evidence Fusion</text>
+
+  <!-- Decision Engine (proposed) -->
+  <rect x="90" y="674" width="440" height="46" rx="4" fill="#cfcfcf" stroke="#000000" stroke-width="1.5"/>
+  <text x="310" y="696" text-anchor="middle" font-size="13" font-weight="bold">Trust Decision Engine</text>
+  <text x="310" y="712" text-anchor="middle" font-size="10">Risk assessment &#8594; Accept / Caution / Reject</text>
+  <text x="540" y="702" font-size="10" font-style="italic">Final Risk Decision</text>
+
+  <!-- Adapters (existing) -->
+  <rect x="160" y="890" width="300" height="52" rx="4" fill="#eeeeee" stroke="#000000"/>
+  <text x="310" y="912" text-anchor="middle" font-size="13">Adapters / Logging / APIs</text>
+  <text x="310" y="928" text-anchor="middle" font-size="11">Dashboard &#8226; Explainability Reports</text>
+
+  <!-- Final decision -->
+  <rect x="140" y="968" width="340" height="52" rx="4" fill="#dddddd" stroke="#000000" stroke-width="1.5"/>
+  <text x="310" y="990" text-anchor="middle" font-size="13" font-weight="bold">Final Trust Decision</text>
+  <text x="310" y="1006" text-anchor="middle" font-size="11">Accept / Caution / Reject</text>
+
+  <!-- Arrows -->
+  <line x1="310" y1="56" x2="310" y2="84" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="310" y1="132" x2="310" y2="198" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="310" y1="246" x2="310" y2="276" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="310" y1="324" x2="310" y2="354" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="310" y1="402" x2="310" y2="432" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="310" y1="480" x2="310" y2="510" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="310" y1="564" x2="310" y2="594" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="310" y1="642" x2="310" y2="672" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="310" y1="720" x2="310" y2="888" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="310" y1="942" x2="310" y2="966" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Legend -->
+  <rect x="60" y="1050" width="18" height="14" fill="#eeeeee" stroke="#000000"/>
+  <text x="84" y="1062" font-size="11">Existing V2X trust stack (PKI, MBD, CP)</text>
+  <rect x="60" y="1075" width="18" height="14" fill="#cfcfcf" stroke="#000000" stroke-width="1.5"/>
+  <text x="84" y="1087" font-size="11">This paper's additions (B1, B2, B3, fusion, decision engine)</text>
+</svg>

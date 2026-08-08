@@ -1,6 +1,22 @@
 # Final Freeze Audit
 
-Scope: every metric reported in the rewritten `stbv_paper.tex`, its source artifact, generating script, checkpoint, dataset, seed, and verification status. Compiled at repository freeze time, after the final continued-fine-tuning checkpoint was produced and evaluated.
+**SUPERSEDED CHECKPOINT NOTICE**: §1 below identifies `semantic_gate_v3_mixed_lora_continued_merged` (SHA-256 `bbae0512...`) as the final checkpoint — accurate when this audit was written, now superseded by `semantic_gate_v3_mixed_lora_hardmine_merged` (SHA-256 `d126cc3...`). The v2.5b row in §2's per-metric traceability table (F1 0.945/0.860) is likewise superseded by the new checkpoint's F1 0.957/0.877. Every other row in §2 (STBV v1, VeReMi, CARLA, SUMO, adaptive attack) remains accurate and current — those benchmarks were not affected by or rerun against the new checkpoint (checkpoint-invariance verified for VeReMi/SUMO by code inspection; CARLA/v1 not rerun, disclosed). See `HARDMINE_IMPROVEMENT_REPORT.md` for the current checkpoint's full record and `FINAL_CONSISTENCY_AUDIT.md` for the consolidated current-state audit.
+
+Scope: every metric reported in the rewritten `stbv_paper.tex`, its source artifact, generating script, checkpoint, dataset, seed, and verification status. Compiled at repository freeze time, after the final continued-fine-tuning checkpoint was produced and evaluated. Updated after the ablation redesign pass (ITE-Bench, Section~\ref{sec:itebench} of the paper) — see §8 below for that pass's additions.
+
+## 8. Ablation redesign (ITE-Bench) — added this pass
+
+| Item | Value |
+|---|---|
+| Benchmark | `ite_bench/data/ite_bench.jsonl`, n=9,900, balanced B1/B2/B3 (3,300 each) |
+| Generator | `ite_bench/build_ite_bench.py`; quality audit `ABLATION_DATASET_AUDIT.md` |
+| Root-cause audit | `ABLATION_AUDIT.md` — identifies both a benchmark-scope cause (known) and a previously-undiscovered evaluation-protocol bug (new finding this pass): the original ablation harness only ever validated `messages[-1]` through B1 and explicitly excluded same-sender messages from MBD history pre-population, structurally preventing either layer's history-dependent checks from firing regardless of benchmark content |
+| Evaluation harness | `ite_bench/run_ite_ablation.py` — sequential per-message `.run()` calls on one persistent pipeline per config per sample, verified (via `smoke_test.py`) to correctly activate B1's replay/cert-rotation cache and MBD's per-sender history before any full run was launched |
+| Runtime | 9,900 samples × 5 configs = 5,430s (~90.5 min), real GPU compute confirmed via `nvidia-smi` monitoring during a stalled first attempt that was killed and diagnosed before relaunch |
+| Analysis | `ite_bench/analyze_ite_ablation.py` → `ite_bench/results/analysis_report.json` |
+| Result | Per-layer recall: B1-focused attacks 1.000/1.000/1.000 (configs 1/3/5); B2-focused 0.143/1.000/1.000; B3-focused 0.000/0.000/1.000. McNemar full-stack-vs-B3-alone: 3,885 discordant, 0 reversed, $p<10^{-15}$; B1+B2+CP-vs-B1-alone: 2,707 discordant, 0 reversed, $p<10^{-15}$ |
+| Manuscript integration | New Section~\ref{sec:itebench}, updated Discussion "Strengths" paragraph, trimmed the now-partially-redundant B1/CP explanation paragraph in the original ablation subsection |
+| Known limitation, disclosed not hidden | ITE-Bench's B2 windows are synthetic kinematic sequences, not real vehicular trajectories (unlike STBV-Bench v1's VeReMi-derived kinematics) — stated in `ABLATION_AUDIT.md` §5 |
 
 ## 1. Final checkpoint identity
 

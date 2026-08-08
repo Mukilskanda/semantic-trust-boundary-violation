@@ -1,11 +1,17 @@
 """
+HISTORICAL, SUPERSEDED (kept for audit trail, not the current pipeline).
 Configs-4/5-only rerun of the STBV-Bench v1 ablation (n=10,000) against the
-FINAL continued checkpoint (semantic_gate_v3_mixed_lora_continued_merged),
+PRIOR continued checkpoint (semantic_gate_v3_mixed_lora_continued_merged),
 closing the freeze-audit gap flagged in FINAL_FREEZE_AUDIT.md/
 READY_FOR_SUBMISSION.md: Table I's B3-alone/full-stack rows had not been
-independently re-run against the final checkpoint. Configs 1-3
+independently re-run against that checkpoint. Configs 1-3
 (enable_b3=False) are checkpoint-invariant by construction and are not
-rerun here.
+rerun here. This checkpoint is now superseded by
+semantic_gate_v3_mixed_lora_hardmine_merged; STBV-Bench v1 is this paper's
+supplementary (not primary) benchmark and was not rerun against the new
+checkpoint (see FINAL_SUBMISSION_REPORT.md, disclosed open item) -- so
+Table I in the manuscript still reflects the checkpoint this script
+produces, explicitly captioned as such.
 """
 from __future__ import annotations
 import csv, json, pathlib, sys, tempfile, time
