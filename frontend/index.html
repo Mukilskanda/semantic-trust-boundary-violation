@@ -1250,7 +1250,7 @@
         setNode(S.code, 'eval'); firePulse();
         /* Use real pipeline latency when available (CARLA/inject mode),
            fall back to hardcoded S.ms for sample/JSON mode. */
-        const latMap = { 'PKI': 'pki_ms', 'B1': 'b1_ms', 'MBD': 'mbd_ms', 'B2': 'b2_ms', 'CP': 'cp_ms', 'B3': 'bridge_ms', 'TE': 'fusion_ms' };
+        const latMap = { PKI: 'PKI', B1: 'B1', MBD: 'MBD', B2: 'B2', CP: 'CP', B3: 'B3', TE: 'TE' };
         const realMs = (cur.latencies && cur.latencies[latMap[S.code]] != null) ? cur.latencies[latMap[S.code]] : null;
         const dms = realMs !== null ? realMs : (S.ms || 0);
         cumLat += dms;
@@ -1425,6 +1425,15 @@
           const s = { id: t.id || ('live_' + Date.now()), title: t.title || 'CARLA message', label: t.expected_label || '—', tag: '', type: t.type || 'CAM', desc: 'live from CARLA', payload: t.payload || '', meta: t.meta || 'live', raw: t.raw || t, checks: t.checks || null, stages: st, decision: t.decision || '—', reason: t.reason || '', latencies: t.latencies || null };
           SCEN = [s, ...SCEN.slice(0, 49)]; renderScenarios();
           selectScenario(s);
+          if (t.latencies) {
+            const latMap = { PKI: 'PKI', B1: 'B1', MBD: 'MBD', B2: 'B2', CP: 'CP', B3: 'B3', TE: 'TE' };
+            for (const code of Object.keys(latMap)) {
+              if (t.latencies[latMap[code]] != null) {
+                const le = $('lat_' + code);
+                if (le) le.textContent = t.latencies[latMap[code]].toFixed(1) + ' ms';
+              }
+            }
+          }
           setTimeout(() => {
             $('playBtn').disabled = false;
             $('playBtn').click();

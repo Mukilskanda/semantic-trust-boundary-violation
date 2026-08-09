@@ -190,7 +190,7 @@ async def _broadcast(payload: str) -> None:
 #
 # Mirror of result_to_frame() in carla_bridge.py — kept in sync intentionally.
 # ---------------------------------------------------------------------------
-def _result_to_frame(rec: Dict[str, Any], r: Dict[str, Any]) -> Dict[str, Any]:
+def _result_to_frame(rec: Dict[str, Any], r: Dict[str, Any], cam: Dict[str, Any] = None) -> Dict[str, Any]:
     """Map an inject record + pipeline result dict to the WebSocket frame shape.
 
     All frame fields are derived directly from the pipeline's output.
@@ -243,9 +243,8 @@ def _result_to_frame(rec: Dict[str, Any], r: Dict[str, Any]) -> Dict[str, Any]:
         decision_str = "CAUTION"
 
     sender = rec.get("sender", "unknown")
-    x = rec.get("x", 0.0)
-    y = rec.get("y", 0.0)
-    speed = rec.get("speed", 0.0)
+    if cam is None:
+        cam = {}
 
     # ── B1 ────────────────────────────────────────────────────────────────
     # valid=False iff fatal OR any reasons present (ValidationAssessment.valid
@@ -317,7 +316,7 @@ def _result_to_frame(rec: Dict[str, Any], r: Dict[str, Any]) -> Dict[str, Any]:
         "id": str(rec.get("id", sender)),
         "title": f"Injected: {sender}",
         "payload": rec.get("payload", ""),
-        "meta": rec.get("meta_str", ""),
+        "meta": f"lat={cam.get('latitude', 0):.4f} lon={cam.get('longitude', 0):.4f} spd={cam.get('speed', 0)}",
         "layers": {
             "B1":  b1_state,
             "MBD": mbd_state,
@@ -602,7 +601,7 @@ async def inject(req: InjectRequest) -> JSONResponse:
             content={"error": "pipeline run failed", "detail": str(exc)},
         )
 
-    frame = _result_to_frame(rec, result)
+    frame = _result_to_frame(rec, result, cam_msg)
 
     # ── Raw pipeline layer output log ─────────────────────────────────────
     # Printed immediately after every inject so you can compare what the
