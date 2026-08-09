@@ -431,16 +431,17 @@ def _inject_record_to_cam(rec: Dict[str, Any]) -> Dict[str, Any]:
     sender_str = str(rec.get("sender", "inject"))
     numeric_sender = _sender_to_station_id(sender_str)
 
-    # Coordinate convention: CARLA and the UI send x as longitude and y as latitude.
-    # safe_parse_cam's flat-dict shortcut expects raw["y"] = latitude and raw["x"] = longitude.
-    x_in = float(rec.get("x", 0.0))   # contains ETSI longitude
-    y_in = float(rec.get("y", 0.0))   # contains ETSI latitude
-    lat_deg = x_in * 1e-7 if abs(x_in) > 1000 else x_in   # decode latitude from y
-    lon_deg = y_in * 1e-7 if abs(y_in) > 1000 else y_in   # decode longitude from x
+    # Coordinate convention: UI/CARLA sends x as latitude and y as longitude.
+    # safe_parse_cam expects raw["y"] = latitude and raw["x"] = longitude.
+    x_in = float(rec.get("x", 0.0))   # longitude
+    y_in = float(rec.get("y", 0.0))   # latitude
 
-    # If coordinates are outside valid ranges, leave as raw ETSI so B1 detects fatal errors
-    lat_out = x_in if not (-90.0  <= lat_deg <=  90.0) else lat_deg
-    lon_out = y_in if not (-180.0 <= lon_deg <= 180.0) else lon_deg
+    lat_deg = y_in * 1e-7 if abs(y_in) > 1000 else y_in
+    lon_deg = x_in * 1e-7 if abs(x_in) > 1000 else x_in
+
+    # If coordinates are outside valid ranges, leave them raw so B1 detects fatal errors.
+    lat_out = y_in if not (-90.0 <= lat_deg <= 90.0) else lat_deg
+    lon_out = x_in if not (-180.0 <= lon_deg <= 180.0) else lon_deg
 
     rec["meta_str"] = f"lat={lat_out:.4f} lon={lon_out:.4f} spd={rec.get('speed', 0)}"
 
