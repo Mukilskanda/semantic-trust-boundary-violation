@@ -1037,15 +1037,15 @@
        checks[] = {c:label, v:value, r:'ok'|'no'|'na'}. Expanding a node shows fn +
        its checks with pass/fail. First flagging stage sets the decision. */
     const STAGES = [
-      { code: 'PKI', nm: 'PKI Authentication', support: true, ms: 0.4, fn: 'Verifies the IEEE 1609.2 SecuredMessage: certificate chain to a trusted root, ECDSA signature over the payload, certificate validity window, and revocation status.' },
-      { code: 'B1', nm: 'B1 · Structural Validation', support: false, ms: 0.6, fn: 'Validates the ETSI CAM/DENM against the ASN.1 schema: mandatory containers present, field ranges legal, generationDeltaTime fresh, and no replayed sequence.' },
-      { code: 'MBD', nm: 'Misbehavior Detection', support: true, ms: 0.9, fn: 'Checks kinematic plausibility against physical limits and sender history: speed/acceleration bounds, position continuity, and Sybil/replay scoring.' },
-      { code: 'B2', nm: 'B2 · Behavioral Analysis', support: false, ms: 1.1, fn: 'Propagates trust across messages and neighbours: cross-message consistency, cluster coherence, and an explainable behavioral trust score.' },
-      { code: 'CP', nm: 'Cooperative Perception', support: true, ms: 1.3, fn: 'Cross-checks the claim against corroborating peers. A corroboration deficit maps to ignorance (Θ), not disbelief; only genuine contradiction lowers trust.' },
-      { code: 'B3', nm: 'B3 · Semantic Trust Gate', support: false, ms: 33.0, fn: 'Classifies the message\u2019s semantic content with a fine-tuned DeBERTa-v2 model and maps the posterior to a risk band (low / medium / high). Dominant cost: transformer inference (measured p95 33 ms on RTX 4050).' },
-      { code: 'TE', nm: 'Trust Engine · DS Fusion', support: false, ms: 0.2, fn: 'Fuses per-layer evidence as Dempster\u2013Shafer masses under Yager\u2019s rule (conflict\u2192Θ), then maps the result to ACCEPT / CAUTION / REJECT via the risk-band policy.' },
+      { code: 'PKI', nm: 'PKI Authentication', support: true, fn: 'Verifies the IEEE 1609.2 SecuredMessage: certificate chain to a trusted root, ECDSA signature over the payload, certificate validity window, and revocation status.' },
+      { code: 'B1', nm: 'B1 · Structural Validation', support: false, fn: 'Validates the ETSI CAM/DENM against the ASN.1 schema: mandatory containers present, field ranges legal, generationDeltaTime fresh, and no replayed sequence.' },
+      { code: 'MBD', nm: 'Misbehavior Detection', support: true, fn: 'Checks kinematic plausibility against physical limits and sender history: speed/acceleration bounds, position continuity, and Sybil/replay scoring.' },
+      { code: 'B2', nm: 'B2 · Behavioral Analysis', support: false, fn: 'Propagates trust across messages and neighbours: cross-message consistency, cluster coherence, and an explainable behavioral trust score.' },
+      { code: 'CP', nm: 'Cooperative Perception', support: true, fn: 'Cross-checks the claim against corroborating peers. A corroboration deficit maps to ignorance (Θ), not disbelief; only genuine contradiction lowers trust.' },
+      { code: 'B3', nm: 'B3 · Semantic Trust Gate', support: false, fn: 'Classifies the message\u2019s semantic content with a fine-tuned DeBERTa-v2 model and maps the posterior to a risk band (low / medium / high). Dominant cost: transformer inference (measured p95 33 ms on RTX 4050).' },
+      { code: 'TE', nm: 'Trust Engine · DS Fusion', support: false, fn: 'Fuses per-layer evidence as Dempster\u2013Shafer masses under Yager\u2019s rule (conflict\u2192Θ), then maps the result to ACCEPT / CAUTION / REJECT via the risk-band policy.' },
     ];
-    const LAYER_BARS = ['B1', 'MBD', 'B2', 'CP', 'B3'];
+    const LAYER_BARS = ['PKI', 'B1', 'MBD', 'B2', 'CP', 'B3'];
     const OK = { r: 'ok' }, NO = { r: 'no' }, NA = { r: 'na' };
     function ck(c, v, r) { return { c, v, r } }
 
@@ -1187,7 +1187,7 @@
 
     let SCEN = SAMPLE, cur = null, speed = 1.0, timer = null, stepIdx = -1, source = 'sample', cumLat = 0, injectTimer = null;
     let scenarioGeneration = 0;
-    const counts = { proc: 0, rej: 0, acc: 0, layer: { B1: 0, MBD: 0, B2: 0, CP: 0, B3: 0 } };
+    const counts = { proc: 0, rej: 0, acc: 0, layer: { PKI: 0, B1: 0, MBD: 0, B2: 0, CP: 0, B3: 0 } };
     const $ = id => document.getElementById(id); const spine = $('spine');
 
     function fmtRaw(o) {
@@ -1241,6 +1241,35 @@
       $('msgPayload').textContent = s.payload || ''; $('msgMeta').textContent = s.meta || '';
       $('msgRawPre').innerHTML = s.raw ? fmtRaw(s.raw) : '(no raw message)';
       buildNodes(); setPlay(true);
+
+      // Fetch actual backend latency for Sample mode
+      if (source === 'sample' && !cur.id.startsWith('inject_') && cur.raw) {
+          const stID = cur.raw.itsPduHeader?.stationID || '0x00';
+          const isCam = !!cur.raw.cam;
+          const pos = isCam ? (cur.raw.cam.camParameters?.basicContainer?.referencePosition || {}) : (cur.raw.denm?.management?.eventPosition || {});
+          const hfc = isCam ? (cur.raw.cam.camParameters?.highFrequencyContainer || {}) : {};
+          
+          const body = JSON.stringify({
+             sender: stID.replace('0x', ''),
+             x: (pos.longitude || 0) * 1e-7,
+             y: (pos.latitude || 0) * 1e-7,
+             speed: (hfc.speed?.value || 0) / 100,
+             heading: (hfc.heading?.value || 0) / 10,
+             timestamp: Date.now() / 1000,
+             payload: cur.payload,
+             scene_context: {}
+          });
+          
+          fetch('http://localhost:8200/inject', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body
+          }).then(r => r.json()).then(data => {
+             if (cur === s) {
+                 cur.latencies = data.latencies;
+             }
+          }).catch(err => console.log('Backend unavailable for sample latencies:', err));
+      }
     }
     function setNode(code, state) {
       const n = $('node_' + code); if (!n) return; const sup = n.classList.contains('support'); const exp = n.classList.contains('expanded');
@@ -1258,16 +1287,27 @@
         const S = STAGES[stepIdx]; const out = cur.stages[S.code];
         if (out === null) { setNode(S.code, 'skip'); const le = $('lat_' + S.code); if (le) le.textContent = ''; return true; }
         setNode(S.code, 'eval'); firePulse();
-        /* Use real pipeline latency when available (CARLA/inject mode),
-           fall back to hardcoded S.ms for sample/JSON mode. */
         const latMap = { PKI: 'PKI', B1: 'B1', MBD: 'MBD', B2: 'B2', CP: 'CP', B3: 'B3', TE: 'TE' };
         const realMs = (cur.latencies && cur.latencies[latMap[S.code]] != null) ? cur.latencies[latMap[S.code]] : null;
-        const dms = realMs !== null ? realMs : (S.ms || 0);
-        cumLat += dms;
-        const le = $('lat_' + S.code); if (le) le.textContent = dms.toFixed(2) + ' ms';
-        $('msgLat').textContent = cumLat.toFixed(2) + ' ms';
+        
+        if (realMs !== null) {
+            cumLat += realMs;
+            const le = $('lat_' + S.code); if (le) le.textContent = realMs.toFixed(2) + ' ms';
+        } else {
+            const le = $('lat_' + S.code); if (le) le.textContent = '—';
+        }
+        
+        const dispLat = (cur.latencies && cur.latencies.total_ms != null) ? cur.latencies.total_ms : cumLat;
+        $('msgLat').textContent = dispLat > 0 ? dispLat.toFixed(2) + ' ms' : '—';
+        
         setTimeout(() => {
-          if (out === 'flag') { setNode(S.code, 'flag'); if (counts.layer[S.code] !== undefined) counts.layer[S.code]++; }
+          if (out === 'flag') { 
+              setNode(S.code, 'flag'); 
+              if (counts.layer[S.code] !== undefined) {
+                  counts.layer[S.code]++;
+                  renderBars();
+              }
+          }
           else if (out === 'eval' || out === 'caution') { setNode(S.code, 'eval'); } else setNode(S.code, 'pass');
         }, 600 / speed);
         return true;
@@ -1276,23 +1316,32 @@
     }
     function showVerdict() {
       const v = $('verdict'); const dec = cur.decision.toLowerCase(); v.className = 'verdict show ' + dec;
-      /* Use real total end-to-end latency from pipeline when available */
       const totalLat = (cur.latencies && cur.latencies.total_ms != null) ? cur.latencies.total_ms : cumLat;
-      v.querySelector('.v').textContent = cur.decision; v.querySelector('.r').innerHTML = cur.reason + '<br><span style="color:var(--dim)">end-to-end latency: ' + totalLat.toFixed(1) + ' ms</span>';
+      const latStr = totalLat > 0 ? totalLat.toFixed(1) + ' ms' : '—';
+      v.querySelector('.v').textContent = cur.decision; v.querySelector('.r').innerHTML = cur.reason + '<br><span style="color:var(--dim)">end-to-end latency: ' + latStr + '</span>';
     }
     function commitStats() {
       counts.proc++; if (cur.decision === 'REJECT') counts.rej++; else if (cur.decision === 'ACCEPT') counts.acc++;
-      $('stLat').textContent = cumLat.toFixed(1) + ' ms';
+      const totalLat = (cur.latencies && cur.latencies.total_ms != null) ? cur.latencies.total_ms : cumLat;
+      $('stLat').textContent = totalLat > 0 ? totalLat.toFixed(1) + ' ms' : '—';
       $('stProc').textContent = counts.proc; $('stRej').textContent = counts.rej; $('stAcc').textContent = counts.acc; renderBars();
       const t = $('ticker'); const row = document.createElement('div'); row.className = 'tk'; const cls = cur.decision === 'REJECT' ? 'rj' : cur.decision === 'ACCEPT' ? 'ac' : 'ct';
       row.innerHTML = `<b>${cur.title}</b> → <span class="${cls}">${cur.decision}</span>`; t.prepend(row); while (t.children.length > 12) t.removeChild(t.lastChild);
     }
     function renderBars() {
-      const el = $('bars'); const max = Math.max(1, ...Object.values(counts.layer)); el.innerHTML = '';
+      const el = $('bars'); const max = Math.max(1, ...Object.values(counts.layer));
+      if (!el.children.length) {
+        LAYER_BARS.forEach(code => {
+          const col = code === 'B3' ? 'var(--breach)' : (['PKI', 'MBD', 'CP'].includes(code) ? 'var(--support)' : 'var(--signal)');
+          el.insertAdjacentHTML('beforeend', `<div class="brow" id="bar_${code}"><span class="bn">${code}</span><div class="bt"><div class="bf" id="bf_${code}" style="width:0%;background:${col}"></div></div><span class="bv" id="bv_${code}">0</span></div>`);
+        });
+      }
       LAYER_BARS.forEach(code => {
-        const val = counts.layer[code]; const pct = val / max * 100;
-        const col = code === 'B3' ? 'var(--breach)' : (['MBD', 'CP'].includes(code) ? 'var(--support)' : 'var(--signal)');
-        el.insertAdjacentHTML('beforeend', `<div class="brow"><span class="bn">${code}</span><span class="bt"><span class="bf" style="width:${pct}%;background:${col}"></span></span><span class="bv">${val}</span></div>`);
+        const val = counts.layer[code]; 
+        let pct = (val / max) * 100;
+        if (val > 0 && pct < 2) pct = 2; // minimum scale so that 1 is visibly filled
+        const bf = $('bf_' + code); if (bf) bf.style.width = pct + '%';
+        const bv = $('bv_' + code); if (bv) bv.textContent = val;
       });
     }
     function playLoop() { stopTimer(); const cont = runStep(); if (cont) { timer = setTimeout(playLoop, 1250 / speed); } else { setPlay(true); } }
