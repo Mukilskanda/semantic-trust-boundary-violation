@@ -82,7 +82,7 @@ for fi, fam in enumerate(families):
 
 fig, ax = plt.subplots(figsize=(4.2, 0.24 * len(families) + 1.2))
 masked = np.ma.masked_invalid(mat)
-cmap = plt.cm.Greys.copy()
+cmap = plt.cm.Blues.copy()
 cmap.set_bad(color="#e8e0d0")  # distinct, non-alarming grey-tan for "not measurable"
 im = ax.imshow(masked, cmap=cmap, vmin=0, vmax=1, aspect="auto")
 ax.set_xticks(range(len(HEATMAP_CONFIGS))); ax.set_xticklabels([CONFIG_LABELS[c] for c in HEATMAP_CONFIGS], fontsize=7)

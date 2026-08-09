@@ -1,0 +1,3 @@
+# Final Figure Redesign
+
+This pass's two overlapping instruction sets requested this report under two names (`FINAL_FIGURE_REDESIGN.md` and `FINAL_FIGURE_REPORT.md`). To avoid two files silently drifting out of sync, the full content lives in **`FINAL_FIGURE_REPORT.md`** -- see that file for the one new figure generated (`fig_attack_family_v25b`), and an explicit, honest accounting of every other requested figure: which already existed and needed no regeneration, and which could not be produced from data currently in the repository (the CARLA per-message latency timeline and trust-evolution figures), with the reason stated rather than fabricated.

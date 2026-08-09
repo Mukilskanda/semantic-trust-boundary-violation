@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="255.313391pt" height="181.705828pt" viewBox="0 0 255.313391 181.705828" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-08-08T23:20:58.428617</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 181.705828 
+L 255.313391 181.705828 
+L 255.313391 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 70.668359 163.640594 
+L 204.064359 163.640594 
+L 204.064359 30.244594 
+L 70.668359 30.244594 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g clip-path="url(#p2b1093f23a)">
+    <image xlink:href="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAABFgAAARYCAYAAAA1A2elAAAcgUlEQVR4nO3aoQ0CUQAFQY4gsDRCMPRAL6BpGI09BOJTxIqfCzMVPL15y+c7xg4AAJjmdH3MngBAtJ89AAAAAGDrBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgEhgAQAAAIgEFgAAAIBIYAEAAACIBBYAAACASGABAAAAiAQWAAAAgOjweq+zNwAQnG/P2RMAAODvebAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEC0HC/3MXsEAAAAwJZ5sAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARAILAAAAQCSwAAAAAEQCCwAAAEAksAAAAABEAgsAAABAJLAAAAAARD9jJRKn+213hAAAAABJRU5ErkJggg==" id="image7d4a14fe3b" transform="scale(1 -1) translate(0 -133.44)" x="70.668359" y="-30.200594" width="133.44" height="133.44"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 92.901026 163.640594 
+L 92.901026 30.244594 
+" clip-path="url(#p2b1093f23a)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.25; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2"/>
+     <g id="text_1">
+      <text style="font-size: 7.5px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="92.901026" y="172.839422" transform="rotate(-0 92.901026 172.839422)">B1 only</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 137.366359 163.640594 
+L 137.366359 30.244594 
+" clip-path="url(#p2b1093f23a)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.25; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4"/>
+     <g id="text_2">
+      <text style="font-size: 7.5px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="137.366359" y="172.839422" transform="rotate(-0 137.366359 172.839422)">B1+B2(+CP)</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 181.831693 163.640594 
+L 181.831693 30.244594 
+" clip-path="url(#p2b1093f23a)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.25; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6"/>
+     <g id="text_3">
+      <text style="font-size: 7.5px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="181.831693" y="172.839422" transform="rotate(-0 181.831693 172.839422)">Full stack</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_7">
+      <path d="M 70.668359 52.47726 
+L 204.064359 52.47726 
+" clip-path="url(#p2b1093f23a)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.25; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8"/>
+     <g id="text_4">
+      <text style="font-size: 7.5px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(7.2 51.697378)">Communication</text>
+      <text style="font-size: 7.5px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(19.0875 60.095737)">(B1-focused)</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_9">
+      <path d="M 70.668359 96.942594 
+L 204.064359 96.942594 
+" clip-path="url(#p2b1093f23a)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.25; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10"/>
+     <g id="text_5">
+      <text style="font-size: 7.5px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(26.308594 96.162711)">Behavioral</text>
+      <text style="font-size: 7.5px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(19.0875 104.56107)">(B2-focused)</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_11">
+      <path d="M 70.668359 141.407927 
+L 204.064359 141.407927 
+" clip-path="url(#p2b1093f23a)" style="fill: none; stroke: #b0b0b0; stroke-opacity: 0.25; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12"/>
+     <g id="text_6">
+      <text style="font-size: 7.5px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(31.564453 140.628044)">Semantic</text>
+      <text style="font-size: 7.5px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(19.0875 149.026404)">(B3-focused)</text>
+     </g>
+    </g>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 9px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle; fill: #ffffff" x="92.901026" y="54.960698" transform="rotate(-0 92.901026 54.960698)">1.000</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 9px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle; fill: #ffffff" x="137.366359" y="54.960698" transform="rotate(-0 137.366359 54.960698)">1.000</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 9px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle; fill: #ffffff" x="181.831693" y="54.960698" transform="rotate(-0 181.831693 54.960698)">1.000</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 9px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="92.901026" y="99.426031" transform="rotate(-0 92.901026 99.426031)">0.143</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 9px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle; fill: #ffffff" x="137.366359" y="99.426031" transform="rotate(-0 137.366359 99.426031)">1.000</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 9px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle; fill: #ffffff" x="181.831693" y="99.426031" transform="rotate(-0 181.831693 99.426031)">1.000</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 9px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="92.901026" y="143.891365" transform="rotate(-0 92.901026 143.891365)">0.000</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 9px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="137.366359" y="143.891365" transform="rotate(-0 137.366359 143.891365)">0.000</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 9px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle; fill: #ffffff" x="181.831693" y="143.891365" transform="rotate(-0 181.831693 143.891365)">1.000</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 9px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(49.595969 14.038594)">Recall by Attack Class x Configuration</text>
+    <text style="font-size: 9px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif" transform="translate(55.409406 24.244594)">ITE-Bench, current final checkpoint</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_3">
+    <path d="M 211.568903 163.640594 
+L 218.238703 163.640594 
+L 218.238703 30.244594 
+L 211.568903 30.244594 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <image xlink:href="data:image/png;base64,
+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" id="image2a66b27caa" transform="scale(1 -1) translate(0 -133.32)" x="211.56" y="-30.24" width="6.72" height="133.32"/>
+   <g id="matplotlib.axis_3"/>
+   <g id="matplotlib.axis_4">
+    <g id="ytick_4">
+     <g id="line2d_13">
+      <defs>
+       <path id="made28116fe" d="M 0 0 
+L 3.5 0 
+" style="stroke: #000000"/>
+      </defs>
+      <g>
+       <use xlink:href="#made28116fe" x="218.238703" y="163.640594" style="stroke: #000000"/>
+      </g>
+     </g>
+     <g id="text_17">
+      <text style="font-size: 7px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: start" x="225.238703" y="166.300047" transform="rotate(-0 225.238703 166.300047)">0.0</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#made28116fe" x="218.238703" y="136.961394" style="stroke: #000000"/>
+      </g>
+     </g>
+     <g id="text_18">
+      <text style="font-size: 7px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: start" x="225.238703" y="139.620847" transform="rotate(-0 225.238703 139.620847)">0.2</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_15">
+      <g>
+       <use xlink:href="#made28116fe" x="218.238703" y="110.282194" style="stroke: #000000"/>
+      </g>
+     </g>
+     <g id="text_19">
+      <text style="font-size: 7px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: start" x="225.238703" y="112.941647" transform="rotate(-0 225.238703 112.941647)">0.4</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#made28116fe" x="218.238703" y="83.602994" style="stroke: #000000"/>
+      </g>
+     </g>
+     <g id="text_20">
+      <text style="font-size: 7px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: start" x="225.238703" y="86.262447" transform="rotate(-0 225.238703 86.262447)">0.6</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_17">
+      <g>
+       <use xlink:href="#made28116fe" x="218.238703" y="56.923794" style="stroke: #000000"/>
+      </g>
+     </g>
+     <g id="text_21">
+      <text style="font-size: 7px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: start" x="225.238703" y="59.583247" transform="rotate(-0 225.238703 59.583247)">0.8</text>
+     </g>
+    </g>
+    <g id="ytick_9">
+     <g id="line2d_18">
+      <g>
+       <use xlink:href="#made28116fe" x="218.238703" y="30.244594" style="stroke: #000000"/>
+      </g>
+     </g>
+     <g id="text_22">
+      <text style="font-size: 7px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: start" x="225.238703" y="32.904047" transform="rotate(-0 225.238703 32.904047)">1.0</text>
+     </g>
+    </g>
+    <g id="text_23">
+     <text style="font-size: 8px; font-family: 'DejaVu Serif', 'Bitstream Vera Serif', 'Computer Modern Roman', 'New Century Schoolbook', 'Century Schoolbook L', 'Utopia', 'ITC Bookman', 'Bookman', 'Nimbus Roman No9 L', 'Times New Roman', 'Times', 'Palatino', 'Charter', serif; text-anchor: middle" x="246.449641" y="96.942594" transform="rotate(-90 246.449641 96.942594)">Recall</text>
+    </g>
+   </g>
+   <g id="LineCollection_1"/>
+   <g id="patch_4">
+    <path d="M 211.568903 163.640594 
+L 214.903803 163.640594 
+L 218.238703 163.640594 
+L 218.238703 30.244594 
+L 214.903803 30.244594 
+L 211.568903 30.244594 
+L 211.568903 163.640594 
+z
+" style="fill: none; stroke: #000000; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p2b1093f23a">
+   <rect x="70.668359" y="30.244594" width="133.396" height="133.396"/>
+  </clipPath>
+ </defs>
+</svg>

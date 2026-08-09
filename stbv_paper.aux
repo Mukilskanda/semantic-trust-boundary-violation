@@ -1,0 +1,118 @@
+\relax 
+\citation{b1,b2,b3}
+\citation{b4,b5,b6}
+\citation{b7}
+\citation{r_cp_fabrication}
+\citation{b10,b11}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\citation{r_pki_survey,r_pki_compare}
+\citation{r_cp_fabrication}
+\citation{r_mbd_survey1,r_mbd_survey2}
+\citation{r_context_aware,r_cares}
+\citation{r_semcom_backdoor}
+\citation{r_llm4drive,r_llm_survey}
+\citation{r_prompt_robot,r_prompt_vla}
+\citation{r_ds_improved1,r_ds_improved2}
+\citation{r_pki_survey,r_pki_compare}
+\citation{r_mbd_survey1,r_mbd_survey2}
+\citation{r_cp_fabrication}
+\citation{r_context_aware,r_cares}
+\citation{r_semcom_backdoor}
+\citation{r_llm4drive,r_llm_survey,r_prompt_robot,r_prompt_vla}
+\citation{r_ds_improved1,r_ds_improved2}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{}\protected@file@percent }
+\newlabel{sec:related}{{II}{2}{}{section.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {III}Threat Model}{2}{}\protected@file@percent }
+\newlabel{sec:problem}{{III}{2}{}{section.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Architecture}{2}{}\protected@file@percent }
+\newlabel{sec:architecture}{{IV}{2}{}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Trust Boundary Analysis}{2}{}\protected@file@percent }
+\newlabel{sec:trustboundary}{{\mbox  {IV-A}}{2}{}{subsection.4.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Positioning of This Work Relative to Related Literature}}{3}{}\protected@file@percent }
+\newlabel{tab:relatedwork}{{I}{3}{}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Proposed STBV Architecture}{3}{}\protected@file@percent }
+\newlabel{sec:whyworks}{{\mbox  {IV-B}}{3}{}{subsection.4.2}{}}
+\newlabel{sec:whyfail}{{\mbox  {IV-B}}{3}{}{subsection.4.2}{}}
+\citation{r_ds_improved1,r_ds_improved2}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {Four trust layers, added without removing or bypassing any existing V2X mechanism.} Architecture, drawn to distinguish the existing V2X trust stack (light, solid boxes: PKI, MBD, CP -- each individually correct, none reading message content) from this paper's additions (shaded, dashed-bordered: B1/B2/B3, evidence fusion, and the Trust Decision Engine). Small italic labels give each stage's answered question. Native vector diagram (\texttt  {tikz}); renders identically at any print size and in grayscale.}}{4}{}\protected@file@percent }
+\newlabel{fig_architecture}{{1}{4}{}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Trust Decision Engine}{4}{}\protected@file@percent }
+\newlabel{sec:dstheory}{{\mbox  {IV-C}}{4}{}{subsection.4.3}{}}
+\newlabel{eq:bba}{{1}{4}{}{equation.1}{}}
+\newlabel{eq:conflict}{{2}{4}{}{equation.2}{}}
+\newlabel{eq:yager}{{3}{4}{}{equation.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \textbf  {Each layer's real, measured contribution to overall detection is a different size -- and CP's is exactly zero, visibly.} Defense-in-depth staircase, ITE-Bench ($n{=}9{,}900$, Table~\ref {tab:ite_ablation}): overall recall as layers are added in order, on the one benchmark spanning communication, behavioral, and semantic attacks together. B1 alone closes the communication class (recall $0.381$); adding B2 closes the behavioral class (+$0.286$); adding CP contributes exactly $+0.000$, the disclosed data-generation gap (Section~\ref {sec:limitations}), shown as a flat step rather than a symbol; the full stack (adding B3 and the Trust Decision Engine) closes the remaining semantic class (+$0.333$, recall $1.000$). Right: the same final checkpoint's Trust Decision Engine, live CARLA (Table~\ref {tab:carla}, this pass's freshly-rerun final-checkpoint results) -- every real attack scenario is flagged, two by B3 directly and two more by MBD's backstop where B3 remains invisible to raw event tags (Section~\ref {sec:limitations}). Every value is copied directly from Table~\ref {tab:ite_ablation} and Table~\ref {tab:carla}; no new metric was computed for this figure (\texttt  {LAYER\_FIGURE\_REDESIGN.md}).}}{5}{}\protected@file@percent }
+\newlabel{fig_layer_responsibility}{{2}{5}{}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}Motivation for Multi-Layer Semantic Trust}{5}{}\protected@file@percent }
+\newlabel{sec:novelty}{{\mbox  {IV-D}}{5}{}{subsection.4.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Per-Stage Time Complexity, Latency, and Memory}}{6}{}\protected@file@percent }
+\newlabel{tab:complexity}{{II}{6}{}{table.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Methodology}{6}{}\protected@file@percent }
+\newlabel{sec:methodology}{{V}{6}{}{section.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Results}{6}{}\protected@file@percent }
+\newlabel{sec:results}{{VI}{6}{}{section.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Architectural Validation on ITE-Bench ($n{=}9{,}900$), Current Final Checkpoint -- Can the Architecture Detect Communication and Behavioral Attacks?}}{6}{}\protected@file@percent }
+\newlabel{tab:ite_ablation}{{III}{6}{}{table.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}A. Layer Validation (ITE-Bench, RQ1)}{6}{}\protected@file@percent }
+\newlabel{sec:itebench}{{\mbox  {VI-A}}{6}{}{subsection.6.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}B. Semantic Validation (STBV-Bench v2.5b, RQ2)}{6}{}\protected@file@percent }
+\newlabel{sec:v25b}{{\mbox  {VI-B}}{6}{}{subsection.6.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Semantic Validation on STBV-Bench v2.5b ($n{=}10{,}098$), Current Final Checkpoint -- Does Semantic Validation Improve the Trust Stack?}}{7}{}\protected@file@percent }
+\newlabel{tab:v25b_pipeline}{{IV}{7}{}{table.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Checkpoint Progression, STBV-Bench v2.5b, Direct Classifier ($n{=}10{,}098$)}}{7}{}\protected@file@percent }
+\newlabel{tab:v25b}{{V}{7}{}{table.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {Every category's median confidence is nearly identical -- the real difference is how many individual messages are genuinely ambiguous.} Per-message B3 confidence distribution, Full STBV Framework, STBV-Bench v2.5b, current final checkpoint, grouped into the four semantic-attack categories Section~\ref {sec:problem} already defines (no new category invented, \texttt  {ATTACK\_VISUALIZATION\_REDESIGN.md}); recall (0.997-1.000 per category) and mean confidence alone were both rejected as visualization metrics for being near-constant. Boxes show real quartiles; points are real individual messages, plotted whenever more than 1.5$\times $ IQR from the box (standard convention) -- not a display artifact. Multi-Source Manipulation has 0 of 817 messages below $\tau _H{=}0.70$ (a single, tight cluster); Authority Claims 22/1,706 (1.3\%); Narrative Manipulation 47/1,596 (2.9\%); Indirection 35/1,245 (2.8\%). The two categories with the most low-confidence outliers -- Narrative Manipulation and Indirection -- attack by reframing or displacing intent across a sentence rather than asserting one concentrated, checkable false claim (an authority claim, a fabricated cross-source agreement), a harder discrimination problem for a semantic classifier and exactly the case the Trust Decision Engine's floor rules route to Caution rather than a forced binary call.}}{8}{}\protected@file@percent }
+\newlabel{fig_attack_family_v25b}{{3}{8}{}{figure.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \textbf  {The architecture almost never misses an attack, and its entire remaining cost is precision.} \emph  {Left:} confusion matrix, Full STBV Framework, STBV-Bench v2.5b, current final checkpoint ($n{=}10{,}098$): FN=6 (0.1\% of 5,364 real attacks slip through) against FP=1,491 (31.5\% of 4,734 benign messages over-flagged) -- the asymmetry is the paper's central deployment trade-off, not an incidental number: 99.6\% of all errors are this over-cautious false-positive type, not an attack getting through, so a deployment reading this correctly should tune for recall headroom, not worry about attacks silently passing. Chosen as the single confusion matrix retained in this manuscript (Table~\ref {tab:v25b} carries all configurations' exact metrics; per-family recall is uniform at 0.99--1.00, so a family-level breakdown would repeat this same picture 13 times). \emph  {Right:} the same real decisions as a distribution (63\% Reject, 32\% Accept, 4\% Caution) -- Reject-heavy is expected, not a miscalibration: v2.5b is 53\% attack-labeled by construction and the architecture's floor rules are conservative by design (Proposition~1), so genuine attacks and over-cautious benign flags both land in Reject.}}{8}{}\protected@file@percent }
+\newlabel{fig_v25b_confusion_grid}{{4}{8}{}{figure.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces External Baseline Comparison, STBV-Bench v2.5b Test Split ($n{=}2{,}020$)}}{8}{}\protected@file@percent }
+\newlabel{tab:baseline}{{VI}{8}{}{table.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces VeReMi Kinematic Companion, MBD (5 seeds, mean)}}{8}{}\protected@file@percent }
+\newlabel{tab:veremi}{{VII}{8}{}{table.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}C. Deployment Validation (VeReMi, CARLA, SUMO, RQ3--RQ4)}{8}{}\protected@file@percent }
+\newlabel{sec:carla}{{\mbox  {VI-C}}{8}{}{table.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VIII}{\ignorespaces Live CARLA, Current Final Checkpoint ($n{=}400$; one run)}}{9}{}\protected@file@percent }
+\newlabel{tab:carla}{{VIII}{9}{}{table.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Per-message latency, both real deployment surfaces, side by side for direct visual comparison. \emph  {Left:} live CARLA, current final checkpoint ($n{=}400$, this pass's fresh rerun) -- the three visible plateaus correspond to different scenario groups, not measurement noise. \emph  {Right:} SUMO replay, prior (continued) checkpoint ($n{=}2{,}000$); per-stage breakdown is Table~\ref {tab:complexity}, throughput is reported in text below. Both real, per-message data, no smoothing beyond the plotted rolling mean.}}{9}{}\protected@file@percent }
+\newlabel{fig_carla_latency_simple}{{5}{9}{}{figure.5}{}}
+\newlabel{fig_sumo_stage}{{5}{9}{}{figure.5}{}}
+\newlabel{sec:sumo}{{\mbox  {VI-C}}{9}{}{figure.6}{}}
+\newlabel{sec:adaptive}{{\mbox  {VI-C}}{9}{}{figure.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \textbf  {Live-simulator latency is bounded by simulator synchronization, not by the classifier -- the opposite bottleneck from trace replay.} Per-stage mean latency, SUMO replay (Table~\ref {tab:complexity}) vs.\ live CARLA (this pass's fresh final-checkpoint rerun), both real. SUMO's dominant cost is B3's forward pass; CARLA's is \texttt  {bridge\_ms} (world-tick/actor-state synchronization) -- not B3, since no such synchronization cost exists in a replayed trace.}}{10}{}\protected@file@percent }
+\newlabel{fig_stage_latency_compare}{{6}{10}{}{figure.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Discussion}{10}{}\protected@file@percent }
+\newlabel{sec:discussion}{{VII}{10}{}{section.7}{}}
+\newlabel{sec:limitations}{{VII}{10}{}{section.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion}{10}{}\protected@file@percent }
+\newlabel{sec:conclusion}{{VIII}{10}{}{section.8}{}}
+\bibcite{b1}{1}
+\bibcite{b2}{2}
+\bibcite{b3}{3}
+\bibcite{b4}{4}
+\bibcite{b5}{5}
+\bibcite{b6}{6}
+\bibcite{b7}{7}
+\bibcite{b10}{8}
+\@writefile{toc}{\contentsline {section}{Appendix\nobreakspace  A: Reproducibility Summary}{11}{}\protected@file@percent }
+\newlabel{app:params}{{A}{11}{}{section.Appendix.A}{}}
+\@writefile{toc}{\contentsline {section}{Appendix\nobreakspace  B: Worked Fusion Example}{11}{}\protected@file@percent }
+\newlabel{app:worked}{{B}{11}{}{section.Appendix.B}{}}
+\@writefile{toc}{\contentsline {section}{Appendix\nobreakspace  C: Proof Sketches for P1 and P3}{11}{}\protected@file@percent }
+\newlabel{app:proofs}{{C}{11}{}{section.Appendix.C}{}}
+\@writefile{toc}{\contentsline {section}{References}{11}{}\protected@file@percent }
+\bibcite{b11}{9}
+\bibcite{r_pki_survey}{10}
+\bibcite{r_pki_compare}{11}
+\bibcite{r_mbd_survey1}{12}
+\bibcite{r_mbd_survey2}{13}
+\bibcite{r_cp_fabrication}{14}
+\bibcite{r_context_aware}{15}
+\bibcite{r_cares}{16}
+\bibcite{r_semcom_backdoor}{17}
+\bibcite{r_llm4drive}{18}
+\bibcite{r_llm_survey}{19}
+\bibcite{r_prompt_robot}{20}
+\bibcite{r_prompt_vla}{21}
+\bibcite{r_ds_improved1}{22}
+\bibcite{r_ds_improved2}{23}
+\gdef \@abspage@last{12}

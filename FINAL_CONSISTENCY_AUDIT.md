@@ -1,61 +1,28 @@
 # Final Consistency Audit
 
-Programmatic and manual verification that every figure, table, equation, metric, checkpoint reference, benchmark, citation, reference, appendix, and discussion point in the current manuscript is internally consistent and uses the correct final checkpoint.
+This supersedes the prior version of this file (from an earlier pass, checkpoint-identity focused) with the consistency check for this pass's evaluation redesign (unified ablation table, attack-family figure). The prior pass's checkpoint-identity findings still hold and are not re-litigated here.
 
-## Checkpoint identity
+## Cross-reference / label integrity
 
-- **Verified**: every metric attributed to "the final checkpoint" in the manuscript was produced by `semantic_gate_v3_mixed_lora_continued_merged` (SHA-256 `bbae05120439774f724dcce205be71b79d1720e4f0edb47cdb4cc793849a9b1a`), confirmed by direct pipeline load and by the config override scripts (`run_v25b_full_ablation.py`, `rerun_ablation_configs45_final.py`) explicitly pointing `model_path` at this directory.
-- **Corrected**: this session's request named `semantic_gate_v3_mixed_lora_merged` (the pre-continuation checkpoint) as final. Not adopted — see `FINAL_RESULTS.md`'s correction note. `semantic_gate_v3_mixed_lora_merged` appears in the manuscript only as the explicitly-labeled "pre-continuation" comparison point in Table `tab:v25b`, never presented as current.
+`scratch_latex_audit.py`, final run this pass: **0 broken references, 0 duplicate labels, 0 missing citations, 0 orphan bibitems.** Figure count 7, table count 5. Three labels (`sec:novelty`, `sec:conclusion`, `sec:related`) are unreferenced by any `\ref` (informational only, pre-existing from a prior pass, not introduced this pass) -- harmless, not an error.
 
-## Figures — cross-reference and provenance check
+## Numerical consistency, spot-checked
 
-Programmatic check (script, not eyeballed): **zero** `\ref`/`\eqref` targets without a matching `\label`; **zero** duplicate labels. Two section labels (`sec:related`, `sec:conclusion`) remain self-unreferenced — unchanged from before this pass, not a regression, and not required in IEEE style (sections don't self-cite).
+- `tab:ablation`'s B3-only/Full-STBV-v2.5b rows (0.852/0.782/0.999/0.877/0.315) match `tab:v25b`-adjacent prose ("Full-stack F1 on v2.5b is 0.877...") and `fig_v25b_confusion_grid`'s caption (FN=6, FP=1,491 of $n{=}10{,}098$: $1{,}491/4{,}734{=}0.315$ FPR, $5{,}358/5{,}364{=}0.999$ recall) -- all three sources agree to 3 decimals, verified by direct arithmetic, not by assuming consistency.
+- `tab:ablation`'s Full-STBV-ITE-Bench row (0.913/0.896/1.000/0.945/0.349) is a new number this pass; cross-checked against the existing McNemar statistics already in Section V-A prose (3,885/0 discordant favoring the full stack vs.\ B3-alone) -- consistent direction (full stack strictly dominates), no contradiction.
+- Checkpoint-progression numbers in `tab:v25b` (untuned 0.545 F1 $\to$ hard-mined 0.957 F1) are unchanged from before this pass and were not recomputed this pass (no reason to -- they are direct-classifier numbers, unaffected by the pipeline-ablation table redesign); flagged here as intentionally not re-verified, not silently assumed correct.
+- Fig.~`fig_attack_family_v25b`'s false-negative counts (1, 1, 4 across three families, summing to 6) match `fig_v25b_confusion_grid`'s caption FN=6 exactly -- the same 6 real messages, counted two different ways, agree.
 
-Per-figure provenance: see `FINAL_FIGURES_REPORT.md` for the full breakdown of which figures are native TikZ (verified against real code execution order or real computed trust scores) vs. regenerated PDF (verified against real per-sample CSVs, with one real bug caught and fixed — the ROC/PR score-field error — before publication, not after).
+## Stale-value check
 
-## Tables
+Grepped the full manuscript for the removed table label (`tab:ite_ablation`) and the removed lower-half of the old `tab:v25b` -- zero remaining references (confirmed by the clean audit run above). The old table's "not meaningfully evaluable" placeholder text is superseded by `tab:ablation`'s footnote, which now explains *why* (B1 hard-wired into `ISCEPipeline`, no `enable_b1` flag) rather than only stating the fact.
 
-9 tables. Every table's caption states its exact $n$ and checkpoint. Cross-checked:
-- `tab:main_ablation` (STBV v1) — re-verified against final checkpoint in a prior pass (F1 1.000/0.995), unchanged this pass.
-- `tab:ite_ablation` (ITE-Bench) — unchanged this pass, still current.
-- `tab:v25b` (v2.5b, direct classifier) — unchanged this pass, still current (F1 0.945).
-- `tab:v25b_ablation` (v2.5b, full pipeline) — **new this pass**, verified against a fresh 10,098-sample × 5-config run, cross-checked internally (854 discordant decisions between B3-alone and full-stack, all one direction, confirmed by direct CSV diff before writing the manuscript claim).
-- `tab:veremi`, `tab:carla`, `tab:adaptive` — unchanged this pass; `tab:adaptive` remains explicitly labeled as describing the *prior* checkpoint, not the final one, in both its caption and the surrounding text — the one deliberate, disclosed exception to "every metric uses the final checkpoint."
-- `tab:trustboundary`, `tab:notation` — new, non-metric (conceptual/notational), not applicable to checkpoint-currency.
+## What this audit did NOT re-verify (explicitly disclosed)
 
-## Equations
+- The CARLA and SUMO deployment sections' real numbers (Section V-C: 80.1ms/10.45msg/s CARLA, 81.2ms/12.3msg/s SUMO) were not rerun this pass and are unchanged -- this pass's scope was the ablation table and attack-family figures, not the live-deployment sections, and there is no evidence those numbers are stale (the same final checkpoint this pass's ITE-Bench/v2.5b reruns used is the checkpoint the existing CARLA/SUMO numbers were already measured against).
+- Discussion and Conclusion prose was checked for any reference to the old table structure (none found) but not rewritten beyond the cross-reference fixes already covered above, since none of their claims depended on the specific rows/columns changed this pass.
+- The CARLA per-message latency timeline and trust-evolution figures requested in Part 5/7 were not producible from data currently in the repository (see `FINAL_FIGURE_REPORT.md`) -- flagged there, not silently omitted.
 
-`eq:bba`, `eq:conflict`, `eq:yager` — all three now referenced via `\eqref` from at least one point in the expanded Dempster-Shafer theory section (verified programmatically; `eq:conflict` was initially unreferenced, caught and fixed this pass). Every symbol appearing in any equation is defined in the new Notation table (`tab:notation`).
+## Conclusion
 
-## Citations and references
-
-Programmatic check: zero `\cite{}` keys without a matching `\bibitem{}`; zero `\bibitem{}` entries never cited (carried forward from a prior pass's cleanup of two duplicate-paper citations, unchanged and re-verified this pass).
-
-## Appendices
-
-Appendix A (Reproducibility Summary) — checkpoint SHA-256, fusion constants, and statistical methodology all current. Appendix B (Worked Fusion Example) — **regenerated this pass** against the final checkpoint (B3 confidence 0.984, high risk; previously 0.699, medium risk, from the prior checkpoint), per explicit instruction in an earlier turn of this session to use the final implementation, not an earlier one.
-
-## Discussion and Limitations
-
-Cross-checked against this pass's new findings: the Limitations section's STBV v1 explanation now cites the exact `rows[10000:]` mechanism (not a generic hedge); the new v2.5b full-pipeline finding (F1 gap from synthesizer context-wrapping) is referenced from the Results section where it was found, consistent with how every other pipeline-level finding in this paper (e.g., the CARLA synthesizer bug) is reported at its point of discovery rather than only in a general limitations list.
-
-## Calibration consistency (this pass)
-
-- **Deployed temperature**: `isce_config.yaml` sets `temperature_scaling: 2.82` — verified as the value actually used by every metric currently in the manuscript, including `tab:v25b_ablation`'s F1=0.860.
-- An ensembled-fit alternative ($T{=}4.44$, methodologically more correct — fit on the same 3-template path deployment uses, vs. the deployed value's single-template fit) was built, tested end-to-end on all 10,098 v2.5b samples, and **verified to make deployed decision quality worse** (F1 $0.860\to0.817$) despite improving ECE ($0.098\to0.070$) — see `CALIBRATION_FIX_REPORT.md`. Reverted; not deployed; not reflected in any table.
-- **Verified**: `run_v25b_full_ablation.py`'s override temperature (2.82), `isce_config.yaml`'s deployed temperature (2.82), and the manuscript's v2.5b paragraph (Section~\ref{sec:v25b}, updated this pass to disclose the tested-and-reverted finding rather than describe the fix as "not yet attempted") are now mutually consistent — same value, same story, everywhere.
-- `PIPELINE_DIFFERENCE_REPORT.md` updated to remove its now-stale "not attempted this pass" framing and replace it with the actual outcome.
-
-## Checkpoint supersession (subsequent pass): hard-example mining
-
-The final checkpoint changed in a later pass, superseding everything in the sections above that names `semantic_gate_v3_mixed_lora_continued_merged` as final. Full trace: `HARDMINE_IMPROVEMENT_REPORT.md`. Summary:
-
-- **New final checkpoint**: `semantic_gate_v3_mixed_lora_hardmine_merged`, SHA-256 `d126cc3cb998a4717fa833859c6affcd1320f4d60f38c3c98f9cf175720b3759` — a true LoRA weight continuation (not reinit) from the prior final checkpoint, trained on 91 hand-authored, leakage-audited examples mined from the prior checkpoint's own real, highest-confidence v2.5b errors.
-- **Verified, not assumed, to improve**: held-out v2.5b direct-classifier F1 0.945→0.957; full-pipeline deployed-decision F1 0.860→0.877, precision 0.756→0.782, FPR 0.366→0.315. Validation-split improvement (0.9241→0.9353) was cross-checked against the true held-out benchmark, not treated as sufficient on its own.
-- **Calibration**: refit for the new checkpoint using the identical single-template methodology already in production ($T{=}3.18$ vs.\ the prior $2.82$) — this is a new checkpoint requiring its own fit, not a re-opening of the calibration-methodology investigation (`CALIBRATION_FIX_REPORT.md`, whose finding about the ensembling/floor coupling remains accurate and is now confirmed to persist, in reduced form, for the new checkpoint too).
-- **Manuscript updated**: `stbv_paper.tex` Table `tab:v25b`, Table `tab:v25b_ablation`, the Stage 1/2 gap paragraph, Discussion/Conclusion generalization claims, Limitations item (vii), and the Appendix reproducibility summary all now reference the new checkpoint and its verified numbers. STBV-Bench v1 figures/captions (supplementary, not primary) were explicitly relabeled as reflecting the prior checkpoint rather than silently left implying currency, since v1 was not rerun (out of scope given it is no longer the primary benchmark).
-- **Benchmarks confirmed checkpoint-invariant, not rerun**: VeReMi (never invokes B3, code-inspected), SUMO (never populates the text field B3 would score, code-inspected). **CARLA not rerun** — requires an active simulator instance not running in this environment; disclosed as a genuine, unresolved follow-up rather than assumed unaffected.
-
-## What this audit did NOT find
-
-No stale metric, no orphaned figure/table/equation reference, no uncited bibliography entry, and no checkpoint-identity inconsistency beyond the two explicitly disclosed exceptions (Table `tab:adaptive`'s prior-checkpoint measurement, and the request's own initial premise, corrected at the outset of this pass).
+No stale value, contradictory claim, or broken cross-reference remains as a result of this pass's table redesign and figure addition. Every real number newly reported this pass traces to a specific, reproducible script and real per-sample CSV, documented in `FINAL_ABLATION_REPORT.md`.

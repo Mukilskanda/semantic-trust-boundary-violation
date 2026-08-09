@@ -27,6 +27,15 @@ ACCEPT_C = GREEN
 CAUTION_C = ORANGE
 REJECT_C = RED
 
+# Semantic role mapping (Task 9): every figure in this pass follows this,
+# not ad hoc per-figure color choices.
+ARCH_C = BLUE          # architecture / pipeline stages
+SUCCESS_C = GREEN      # successful detections
+CAUTION_ROLE_C = ORANGE  # caution / moderate performance
+FAIL_C = RED           # failures / bottlenecks / threshold lines
+SEMANTIC_C = PURPLE    # semantic validation (B3, v2.5b)
+HIST_C = GREY          # historical / supplementary results
+
 
 def apply():
     plt.rcParams.update({
