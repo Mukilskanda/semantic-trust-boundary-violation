@@ -1295,7 +1295,7 @@
         el.insertAdjacentHTML('beforeend', `<div class="brow"><span class="bn">${code}</span><span class="bt"><span class="bf" style="width:${pct}%;background:${col}"></span></span><span class="bv">${val}</span></div>`);
       });
     }
-    function playLoop() { stopTimer(); const cont = runStep(); if (cont || stepIdx <= STAGES.length) { timer = setTimeout(playLoop, 1250 / speed); } else { setPlay(true); } }
+    function playLoop() { stopTimer(); const cont = runStep(); if (cont) { timer = setTimeout(playLoop, 1250 / speed); } else { setPlay(true); } }
     function stopTimer() { if (timer) { clearTimeout(timer); timer = null; } }
     function setPlay(reset) { $('playBtn').disabled = false; $('pauseBtn').disabled = true; if (reset) $('playBtn').textContent = '▶ Run'; }
     $('playBtn').onclick = () => {
