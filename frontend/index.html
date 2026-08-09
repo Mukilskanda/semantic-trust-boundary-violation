@@ -967,7 +967,7 @@
           <option value="CP">Flag at CP</option>
           <option value="B3">Detect at B3</option>
         </select>
-        <button class="go" id="injectBtn">▶ Inject Message</button>
+        <button type="button" class="go" id="injectBtn">▶ Inject Message</button>
       </div>
     </div>
     <div class="col center">
@@ -993,10 +993,10 @@
         </div>
       </div>
       <div class="transport">
-        <button class="tbtn primary" id="playBtn">▶ Run</button>
-        <button class="tbtn" id="stepBtn">Step ▸</button>
-        <button class="tbtn" id="pauseBtn" disabled>❚❚ Pause</button>
-        <button class="tbtn" id="resetBtn">↺ Reset</button>
+        <button type="button" class="tbtn primary" id="playBtn">▶ Run</button>
+        <button type="button" class="tbtn" id="stepBtn">Step ▸</button>
+        <button type="button" class="tbtn" id="pauseBtn" disabled>❚❚ Pause</button>
+        <button type="button" class="tbtn" id="resetBtn">↺ Reset</button>
         <div class="speed">SPEED <b id="spdLbl">1.0×</b><button class="tbtn" id="slowBtn"
             style="padding:5px 9px">–</button><button class="tbtn" id="fastBtn" style="padding:5px 9px">+</button></div>
       </div>
@@ -1020,7 +1020,8 @@
       <div class="stat">
         <div class="k">End-to-End Latency (last msg)</div>
         <div class="v sig" id="stLat">— ms</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px" id="gpuDesc">B3 p95 33 ms · full-pipeline
+        <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:5px" id="gpuDesc">B3 p95 33 ms ·
+          full-pipeline
           p95 114 ms (measured, RTX 4050)</div>
       </div>
       <div class="hd">Catches By Layer</div>
@@ -1029,7 +1030,8 @@
       <div class="ticker" id="ticker"></div>
     </div>
   </div>
-  <div class="banner" id="banner">● Inject hits live pipeline when serve.py is running · falls back to sample logic offline</div>
+  <div class="banner" id="banner">● Inject hits live pipeline when serve.py is running · falls back to sample logic
+    offline</div>
   <script>
     /* Each stage has: code, name, support?, fn (what it does), and per-scenario
        checks[] = {c:label, v:value, r:'ok'|'no'|'na'}. Expanding a node shows fn +
@@ -1183,7 +1185,8 @@
       },
     ];
 
-    let SCEN = SAMPLE, cur = null, speed = 1.0, timer = null, stepIdx = -1, source = 'sample', cumLat = 0;
+    let SCEN = SAMPLE, cur = null, speed = 1.0, timer = null, stepIdx = -1, source = 'sample', cumLat = 0, injectTimer = null;
+    let scenarioGeneration = 0;
     const counts = { proc: 0, rej: 0, acc: 0, layer: { B1: 0, MBD: 0, B2: 0, CP: 0, B3: 0 } };
     const $ = id => document.getElementById(id); const spine = $('spine');
 
@@ -1223,12 +1226,19 @@
         const dt = s.type === 'DENM' ? '<span class="tag denm">DENM</span>' : '';
         d.innerHTML = `<div class="t">${s.title}</div><div class="d">${s.desc}</div>
       <span class="tag ${s.label === 'MALICIOUS' ? 'mal' : 'ben'}">${s.label}</span>${lt}${dt}`;
-        d.onclick = () => selectScenario(s); el.appendChild(d);
+        d.onclick = () => {
+          selectScenario(s);
+        };
+        el.appendChild(d);
       });
     }
     function selectScenario(s) {
-      cur = s; stepIdx = -1; cumLat = 0; $('msgLat').textContent = '— ms'; stopTimer(); renderScenarios();
-      $('msgPayload').textContent = s.payload; $('msgMeta').textContent = s.meta;
+      scenarioGeneration++;
+      if (!s) return;
+      if (injectTimer !== null) { clearTimeout(injectTimer); injectTimer = null; }
+      cur = s;
+      stepIdx = -1; cumLat = 0; $('msgLat').textContent = '— ms'; stopTimer(); renderScenarios();
+      $('msgPayload').textContent = s.payload || ''; $('msgMeta').textContent = s.meta || '';
       $('msgRawPre').innerHTML = s.raw ? fmtRaw(s.raw) : '(no raw message)';
       buildNodes(); setPlay(true);
     }
@@ -1288,16 +1298,30 @@
     function playLoop() { stopTimer(); const cont = runStep(); if (cont || stepIdx <= STAGES.length) { timer = setTimeout(playLoop, 1250 / speed); } else { setPlay(true); } }
     function stopTimer() { if (timer) { clearTimeout(timer); timer = null; } }
     function setPlay(reset) { $('playBtn').disabled = false; $('pauseBtn').disabled = true; if (reset) $('playBtn').textContent = '▶ Run'; }
-    $('playBtn').onclick = () => { if (!cur) selectScenario(SCEN[0]); $('playBtn').disabled = true; $('pauseBtn').disabled = false; $('playBtn').textContent = '▶ Running'; if (stepIdx >= STAGES.length) selectScenario(cur); playLoop(); };
+    $('playBtn').onclick = () => {
+      if (!cur) return;
+
+      $('playBtn').disabled = true;
+      $('pauseBtn').disabled = false;
+      $('playBtn').textContent = '▶ Running';
+
+      if (stepIdx >= STAGES.length) {
+        stepIdx = -1;
+        cumLat = 0;
+        buildNodes();
+      }
+
+      playLoop();
+    };
     $('pauseBtn').onclick = () => { stopTimer(); setPlay(false); $('playBtn').textContent = '▶ Resume'; $('playBtn').disabled = false; };
-    $('stepBtn').onclick = () => { if (!cur) selectScenario(SCEN[0]); stopTimer(); runStep(); };
-    $('resetBtn').onclick = () => { if (cur) selectScenario(cur); };
+    $('stepBtn').onclick = () => { if (!cur) return; stopTimer(); runStep(); };
+    $('resetBtn').onclick = () => { if (cur) { console.trace('[STBV CALLER]', 'selectScenario', cur?.id, cur?.title); selectScenario(cur); } };
     $('slowBtn').onclick = () => { speed = Math.max(.25, speed - .25); $('spdLbl').textContent = speed.toFixed(2) + '×'; };
     $('fastBtn').onclick = () => { speed = Math.min(4, speed + .25); $('spdLbl').textContent = speed.toFixed(2) + '×'; };
     $('fsBtn').onclick = () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); };
     $('msgTop').onclick = () => $('msgbar').classList.toggle('open');
     setInterval(() => { $('clock').textContent = new Date().toTimeString().slice(0, 8); }, 1000);
-    
+
     // Dynamically update hardcoded GPU names
     try {
       const gl = document.createElement('canvas').getContext('webgl');
@@ -1314,15 +1338,16 @@
           if (b3Stage) b3Stage.fn = b3Stage.fn.replace('RTX 4050', renderer);
         }
       }
-    } catch (e) {}
-    
-    $('injectBtn').onclick = () => {
+    } catch (e) { }
+
+    $('injectBtn').onclick = (e) => {
       const sender = $('inSender').value || '0x????????'; const kin = $('inKin').value; const pay = $('inPayload').value || '(empty)'; const mtype = $('inType').value; const force = $('inForce').value;
 
       /* ── In sample / JSON mode, run the JS-only path immediately.
            The live fetch path is only useful when source === 'carla'
            because only then is there a WebSocket listener to receive
            the result that serve.py broadcasts back. ── */
+
       if (source !== 'carla') {
         _injectFallback(sender, kin, pay, mtype, force);
         return;
@@ -1330,22 +1355,22 @@
 
       /* Parse the kinematic field: lat, lon, speed(cm/s), heading(0.1°) */
       const parts = kin.split(',').map(s => parseFloat(s.trim()));
-      const x   = isNaN(parts[1]) ? 0.0 : parts[1];   /* lon (decimal deg) */
-      const y   = isNaN(parts[0]) ? 0.0 : parts[0];   /* lat (decimal deg) */
+      const x = isNaN(parts[1]) ? 0.0 : parts[1];   /* lon (decimal deg) */
+      const y = isNaN(parts[0]) ? 0.0 : parts[0];   /* lat (decimal deg) */
       const spd = isNaN(parts[2]) ? 0.0 : parts[2] / 100;  /* cm/s → m/s   */
       const hdg = isNaN(parts[3]) ? 0.0 : parts[3] / 10;   /* 0.1° → deg    */
       const body = JSON.stringify({
-        sender:        sender,
-        x:             x,
-        y:             y,
-        speed:         spd,
-        heading:       hdg,
-        timestamp:     Date.now() / 1000,
-        payload:       pay,
+        sender: sender,
+        x: x,
+        y: y,
+        speed: spd,
+        heading: hdg,
+        timestamp: Date.now() / 1000,
+        payload: pay,
         scene_context: {}
       });
       fetch('http://localhost:8200/inject', {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body
       }).then(r => {
@@ -1373,8 +1398,17 @@
       }
       const raw = { itsPduHeader: { protocolVersion: 2, messageID: mtype === 'DENM' ? '1 (DENM)' : '2 (CAM)', stationID: sender }, payload: pay, kinematics: kin, security: { signerInfo: force === 'PKI' ? 'INVALID' : 'CERT_' + sender.slice(-3), signature: force === 'PKI' ? 'mismatch' : 'valid' } };
       const s = { id: 'inject_' + Date.now(), title: 'Injected · ' + sender, label, tag, type: mtype, desc: 'manual injection', payload: pay, meta: mtype + ' · ' + sender + ' · [' + kin + ']', raw, checks: chk, stages: chain, decision, reason };
-      SCEN = [s, ...SCEN.filter(x => !x.id.startsWith('inject_'))]; renderScenarios(); selectScenario(s); 
-      setTimeout(() => { $('playBtn').disabled = false; $('playBtn').click(); }, 50);
+      SCEN = [s, ...SCEN.filter(x => !x.id.startsWith('inject_'))]; renderScenarios(); 
+      selectScenario(s);
+      const myGeneration = scenarioGeneration;
+      injectTimer = setTimeout(() => {
+        injectTimer = null;
+        if (myGeneration !== scenarioGeneration) return;
+        if (cur === s) {
+          $('playBtn').disabled = false;
+          $('playBtn').click();
+        }
+      }, 50);
     };
     $('srcPick').querySelectorAll('button').forEach(b => {
       b.onclick = () => {
@@ -1393,11 +1427,21 @@
     function loadTraces(arr) {
       SCEN = arr.map(t => {
         const g = code => { const l = (t.layers || []).find(x => (x.layer || '').toUpperCase().startsWith(code)); return l ? (l.passed === false ? 'flag' : 'pass') : 'pass'; };
+        const getLat = code => { const l = (t.layers || []).find(x => (x.layer || '').toUpperCase().startsWith(code)); return l ? l.latency_ms : null; };
+        const lats = {
+          PKI: getLat('PKI'), B1: getLat('B1'), MBD: getLat('MBD'),
+          B2: getLat('B2'), CP: getLat('CP'), B3: getLat('B3'),
+          TE: t.fusion ? t.fusion.fuse_ms : null,
+          total_ms: t.total_ms
+        };
+        const teState = (t.final_decision === 'ACCEPT') ? 'pass' : (t.final_decision === 'CAUTION') ? 'eval' : (t.final_decision === 'REJECT') ? 'flag' : 'pass';
         return {
           id: t.attack_id || ('t' + Math.random()), title: t.family || t.attack_id || 'trace', label: t.expected_label || '—', tag: '', type: 'CAM', desc: t.subcategory || 'loaded trace', payload: t.injected_payload || t.synthesized_text_b3_saw || '', meta: t.attack_id || '', raw: t, checks: null,
-          stages: { PKI: 'pass', B1: g('B1'), MBD: 'pass', B2: g('B2'), CP: 'pass', B3: g('B3'), TE: 'flag' }, decision: t.final_decision || '—', reason: t.reason || ''
+          stages: { PKI: 'pass', B1: g('B1'), MBD: 'pass', B2: g('B2'), CP: 'pass', B3: g('B3'), TE: teState }, decision: t.final_decision || '—', reason: t.reason || '',
+          latencies: lats
         };
-      }); cur = null; renderScenarios();
+      });
+      cur = null; renderScenarios();
     }
     function connectLive(url) {
       try {
@@ -1414,17 +1458,19 @@
           function mapLayer(v) { return v === 'flag' ? 'flag' : v === 'skip' ? null : 'pass'; }
           const L = t.layers || {};
           const st = t.stages || {
-            PKI:  'pass',
-            B1:   mapLayer(L.B1),
-            MBD:  mapLayer(L.MBD),
-            B2:   mapLayer(L.B2),
-            CP:   mapLayer(L.CP),
-            B3:   mapLayer(L.B3),
-            TE:   (t.decision === 'REJECT' || t.decision === 'CAUTION') ? 'flag' : 'pass',
+            PKI: 'pass',
+            B1: mapLayer(L.B1),
+            MBD: mapLayer(L.MBD),
+            B2: mapLayer(L.B2),
+            CP: mapLayer(L.CP),
+            B3: mapLayer(L.B3),
+            TE: (t.decision === 'REJECT' || t.decision === 'CAUTION') ? 'flag' : 'pass',
           };
           const s = { id: t.id || ('live_' + Date.now()), title: t.title || 'CARLA message', label: t.expected_label || '—', tag: '', type: t.type || 'CAM', desc: 'live from CARLA', payload: t.payload || '', meta: t.meta || 'live', raw: t.raw || t, checks: t.checks || null, stages: st, decision: t.decision || '—', reason: t.reason || '', latencies: t.latencies || null };
           SCEN = [s, ...SCEN.slice(0, 49)]; renderScenarios();
-          selectScenario(s);
+          if (source === 'carla') {
+            selectScenario(s);
+          }
           if (t.latencies) {
             const latMap = { PKI: 'PKI', B1: 'B1', MBD: 'MBD', B2: 'B2', CP: 'CP', B3: 'B3', TE: 'TE' };
             for (const code of Object.keys(latMap)) {
@@ -1434,9 +1480,14 @@
               }
             }
           }
-          setTimeout(() => {
-            $('playBtn').disabled = false;
-            $('playBtn').click();
+          const myGeneration = scenarioGeneration;
+          injectTimer = setTimeout(() => {
+            injectTimer = null;
+            if (myGeneration !== scenarioGeneration) return;
+            if (cur === s) {
+              $('playBtn').disabled = false;
+              $('playBtn').click();
+            }
           }, 50);
         };
         ws.onclose = () => { $('srcBadge').classList.remove('live'); if (source === 'carla') $('srcTxt').textContent = 'SOURCE · CARLA (offline)'; };
