@@ -348,7 +348,8 @@ class ISCEPipeline:
             # Determine the scenario time from the window of messages
             max_ts = 0
             for m in messages:
-                ts = m.get("timestamp") or m.get("cam", {}).get("generation_delta_time")
+                raw_ts = m.get("timestamp")
+                ts = raw_ts if raw_ts is not None else m.get("cam", {}).get("generation_delta_time")
                 if ts is not None:
                     try:
                         max_ts = max(max_ts, int(ts))

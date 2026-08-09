@@ -91,10 +91,14 @@ class TrustDecisionEngine:
             raw_confidence = {"high": 0.90, "medium": 0.65,
                               "low": 0.40, "none": 0.50}[semantic_risk.value]
         semantic_confidence = min(float(raw_confidence), MAX_SOURCE_CONFIDENCE)
-        # NONE -> supports "trustworthy"; LOW/MEDIUM/HIGH -> supports
-        # "suspicious", with the actual model confidence (not a fixed
-        # per-band score) driving how much mass is committed.
-        semantic_score_for_mass = 1.0 if semantic_risk == SemanticRisk.NONE else 0.0
+        
+        # Use p_malicious if available to determine if the model actually predicted
+        # malicious, because risk_level might be LOW/MEDIUM for low-confidence BENIGN.
+        if p_mal is not None:
+            semantic_score_for_mass = 0.0 if float(p_mal) >= 0.5 else 1.0
+        else:
+            semantic_score_for_mass = 1.0 if semantic_risk == SemanticRisk.NONE else 0.0
+            
         return MassFunction.from_score_confidence(score=semantic_score_for_mass,
                                                    confidence=semantic_confidence)
 
@@ -157,6 +161,12 @@ class TrustDecisionEngine:
             cryptographic_risk = "elevated"
         else:
             cryptographic_risk = "low"
+
+        # When PKI is not enabled or no certificate material is present, default to none
+        # instead of punishing it with elevated risk due to a slightly lower validation score.
+        has_pki = "pki_signature" in validation_assessment.get("checks", {})
+        if not has_pki and cryptographic_risk == "elevated":
+            cryptographic_risk = "none"
 
         # === Dempster-Shafer fusion (roadmap A3/B1) ===
         # Map each source to a mass function over {trustworthy, suspicious},

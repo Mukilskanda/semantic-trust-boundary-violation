@@ -198,10 +198,14 @@ def _extract_cam_telemetry(msg: Dict[str, Any]) -> Dict[str, Any]:
     lat = (
         _nested_get(msg, "cam.cam_parameters.basic_container.reference_position.latitude")
         or msg.get("latitude")
+        or msg.get("lat")
+        or (msg.get("y") * 1e-7 if isinstance(msg.get("y"), (int, float)) and abs(msg.get("y", 0)) > 1000 else msg.get("y"))
     )
     lon = (
         _nested_get(msg, "cam.cam_parameters.basic_container.reference_position.longitude")
         or msg.get("longitude")
+        or msg.get("lon")
+        or (msg.get("x") * 1e-7 if isinstance(msg.get("x"), (int, float)) and abs(msg.get("x", 0)) > 1000 else msg.get("x"))
     )
     hfc = _nested_get(
         msg,
@@ -216,8 +220,8 @@ def _extract_cam_telemetry(msg: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "station_id":   station_id,
         "station_type": station_type,
-        "lat":          lat,
-        "lon":          lon,
+        "lat":          round(lat, 2) if isinstance(lat, float) else lat,
+        "lon":          round(lon, 2) if isinstance(lon, float) else lon,
         "speed":        speed,
         "heading":      heading,
         "yaw_rate":     yaw_rate,
@@ -1336,7 +1340,13 @@ def synthesize_message(
             "sources": [],
         }
 
-    ctx_name = context or "unknown"
+    target_msg = cluster[-1]
+    ctx_name = (
+        _nested_get(target_msg, "scene_context.context")
+        or target_msg.get("context")
+        or context
+        or "unknown"
+    )
     evidence = _extract_evidence(cluster, ctx_name)
     text     = _RENDERERS[chosen](evidence)
 

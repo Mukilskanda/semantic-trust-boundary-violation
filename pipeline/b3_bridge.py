@@ -219,7 +219,7 @@ class SemanticGateClassifier:
         _load_start = _time.perf_counter()
 
         self.config = _load_b3_config(config_path)
-        self.model_path = self.config.get("model_path", "b3/solution_stb/b3_semantic_gate/model/semantic_gate_v3")
+        self.model_path = self.config.get("model_path", "b3/solution_stb/b3_semantic_gate/model/semantic_gate_v3_mixed_lora_merged")
         self.max_length = self.config.get("max_length", 256)
         self.device = self.config.get("device", None)
         self.risk_policy = B3RiskPolicy.from_config(self.config)

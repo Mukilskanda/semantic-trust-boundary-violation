@@ -53,8 +53,14 @@ Orchestrator B1→B2 flow:
 Frame field mapping (transparent read of pipeline output):
     layers.B1   <- b1.get("valid") — from _normalize_b1_result which maps
                    ValidationAssessment.valid correctly
-    layers.B2   <- b2.get("validation_valid") — present in both normal and
-                   B1-fatal paths (False in the fatal stub)
+    layers.MBD  <- mbd.get("passed") — MBDResult.passed (plausibility_pass
+                   AND kinematics_ok AND replay_score < 0.9); False = flag
+    layers.B2   <- b2.get("validation_valid") — B1's valid passthrough,
+                   then lowered by CP fold when contradiction fires;
+                   present in both normal and B1-fatal paths
+    layers.CP   <- cp.get("cp_pass") when observations_available=True;
+                   False = genuine contradiction flag (not corroboration
+                   deficit, which is routed through confidence/uncertainty)
     layers.B3   <- b3.get("available") and b3.get("label") != "BENIGN"
     decision    <- r["decision"] (already the trust_level string from to_dict())
     reason      <- r["reason"]
@@ -144,10 +150,35 @@ async def _broadcast(payload: str) -> None:
 #                  not self.fatal and len(self.reasons) == 0)
 #                "flag" when valid is False, "pass" otherwise.
 #
+#   layers.MBD ← mbd["passed"]  (MBDResult.__init__ sets both ["passed"]
+#                and ["mbd_pass"] to the same value)
+#                mbd_layer.py line 378:
+#                  passed = plausibility_pass and kinematics_ok and (replay_score < 0.9)
+#                "skip" when r["mbd"] is None (B1-fatal path or enable_mbd=False)
+#                "flag" when mbd["passed"] is False (kinematic/plausibility/replay anomaly)
+#                "pass" otherwise
+#
 #   layers.B2  ← b2["validation_valid"]
+#                B2's ExplainabilityReport carries B1's valid as a passthrough
+#                (models.py line 36 + explainability.py lines 115/148).
+#                After the CP fold in orchestrator.py (lines 638-670), it
+#                reflects the combined B1+MBD+CP verdict.
 #                Always present: normal path sets it from B2 output;
 #                B1-fatal path sets it to False in the skip stub.
 #                "flag" when validation_valid is False, "pass" otherwise.
+#
+#   layers.CP  ← cp["cp_pass"] gated by cp["observations_available"]
+#                cp_layer.py line 165:
+#                  cp_pass = bool(confidence > 0.7) if observations_available else True
+#                Two distinct CP conditions per orchestrator.py docstring (lines 568-594):
+#                  - CONTRADICTION (observations_available=True, cp_pass=False):
+#                    genuine negative evidence → "flag"
+#                  - CORROBORATION DEFICIT (observations_available=False or
+#                    few/low-diversity reports): absence of evidence, not an
+#                    attack → surfaces as uncertainty via confidence axis, NOT "flag"
+#                "skip" when r["cp"] is None (B1-fatal path or enable_cp=False)
+#                "flag" when cp["observations_available"] and not cp["cp_pass"]
+#                "pass" otherwise (corroboration deficit stays at "pass")
 #
 #   layers.B3  ← b3["available"] and b3["label"] != "BENIGN"
 #                "flag" when B3 ran and flagged non-BENIGN;
@@ -184,16 +215,17 @@ def _result_to_frame(rec: Dict[str, Any], r: Dict[str, Any]) -> Dict[str, Any]:
 
     Layer state derivation rules:
         B1:  "flag" if b1["valid"] is False, else "pass"
-        MBD: "skip" if r["mbd"] is None, else "pass"
-             (MBD flags surface through B2's behavioral trust score;
-              we don't independently flag MBD in the frame for now)
+        MBD: "skip" if r["mbd"] is None (B1-fatal or enable_mbd=False)
+             "flag" if mbd["passed"] is False (kinematic/plausibility/replay anomaly detected)
+             "pass" otherwise
         B2:  "skip" if b2.get("status") startswith "Skipped"
              "flag" if b2.get("validation_valid") is False (and not skipped)
              "pass" otherwise
-        CP:  "skip" if r["cp"] is None
-             "pass" otherwise (CP contradiction surfaces through B2)
-        B3:  "skip" if b3.get("status", "").lower().startswith("skipped")
-                    OR b3.get("available") is False and "skipped" in b3.get("status","")
+        CP:  "skip" if r["cp"] is None (B1-fatal or enable_cp=False)
+             "flag" if cp["observations_available"] is True AND cp["cp_pass"] is False
+                     (genuine contradiction — reports actively disagree)
+             "pass" otherwise (corroboration deficit → uncertainty, not a flag)
+        B3:  "skip" if b3.get("status", "").lower() contains "skipped" or "disabled"
              "flag" if b3.get("available") and b3.get("label") != "BENIGN"
              "pass" otherwise
     """
@@ -222,13 +254,24 @@ def _result_to_frame(rec: Dict[str, Any], r: Dict[str, Any]) -> Dict[str, Any]:
     b1_state = "flag" if b1_valid is False else "pass"
 
     # ── MBD ───────────────────────────────────────────────────────────────
-    # Orchestrator sets mbd_dict = None on B1-fatal path (line 385).
-    # Also None when enable_mbd=False.
-    mbd_state = "skip" if r.get("mbd") is None else "pass"
+    # Orchestrator sets mbd_dict = None on B1-fatal path (line 385) and
+    # also when enable_mbd=False.
+    # MBDResult.passed (mbd_layer.py line 378):
+    #   passed = plausibility_pass and kinematics_ok and (replay_score < 0.9)
+    # Both "passed" and "mbd_pass" are set to the same value in MBDResult.__init__.
+    mbd_raw = r.get("mbd")
+    if mbd_raw is None:
+        mbd_state = "skip"
+    elif mbd_raw.get("passed") is False:
+        mbd_state = "flag"
+    else:
+        mbd_state = "pass"
 
     # ── B2 ────────────────────────────────────────────────────────────────
     # B1-fatal stub has status="Skipped (B1 fatal)" (orchestrator line 396).
     # Normal path sets status via ExplainabilityReport.to_dict().
+    # validation_valid is B1's valid passthrough, then further modified by
+    # the CP fold in orchestrator.py (lines 638-670).
     b2_status = str(b2.get("status", ""))
     if b2_status.startswith("Skipped"):
         b2_state = "skip"
@@ -238,9 +281,23 @@ def _result_to_frame(rec: Dict[str, Any], r: Dict[str, Any]) -> Dict[str, Any]:
         b2_state = "pass"
 
     # ── CP ────────────────────────────────────────────────────────────────
-    # Orchestrator sets cp_dict = None on B1-fatal path (line 400).
-    # Also None when enable_cp=False.
-    cp_state = "skip" if r.get("cp") is None else "pass"
+    # Orchestrator sets cp_dict = None on B1-fatal path (line 400) and
+    # when enable_cp=False.
+    # Two distinct CP conditions (orchestrator.py lines 568-594):
+    #   - CONTRADICTION: observations_available=True AND cp_pass=False
+    #     → reports actively disagree on the shared claimed event → "flag"
+    #   - CORROBORATION DEFICIT: observations_available=False or few/diverse
+    #     → absence of evidence, not an attack → uncertainty via confidence,
+    #     not a frame "flag" (stays "pass")
+    # cp_pass is set by cp_layer.py line 165:
+    #   cp_pass = bool(confidence > 0.7) if observations_available else True
+    cp_raw = r.get("cp")
+    if cp_raw is None:
+        cp_state = "skip"
+    elif cp_raw.get("observations_available") and not cp_raw.get("cp_pass"):
+        cp_state = "flag"
+    else:
+        cp_state = "pass"
 
     # ── B3 ────────────────────────────────────────────────────────────────
     # B1-fatal stub: available=False, status="skipped (B1 fatal)" (line 407).
@@ -254,17 +311,13 @@ def _result_to_frame(rec: Dict[str, Any], r: Dict[str, Any]) -> Dict[str, Any]:
     else:
         b3_state = "pass"
 
-    # Synthesized text for the payload field (shown in dashboard scenario card).
-    synth_text = str((r.get("synthesized_message") or {}).get("text", ""))
-    display_payload = (synth_text or rec.get("payload", ""))[:200]
-
     lats = r.get("latencies") or {}
 
     return {
         "id": str(rec.get("id", sender)),
         "title": f"Injected: {sender}",
-        "payload": display_payload,
-        "meta": f"x={x:.1f} y={y:.1f} spd={speed:.1f}",
+        "payload": rec.get("payload", ""),
+        "meta": rec.get("meta_str", ""),
         "layers": {
             "B1":  b1_state,
             "MBD": mbd_state,
@@ -353,29 +406,17 @@ def _inject_record_to_cam(rec: Dict[str, Any]) -> Dict[str, Any]:
 
     Unit conversions (all derived from reading models.py):
         x_deg, y_deg  → kept as decimal degrees; the flat-dict shortcut stores
-                         them as latitude/longitude directly.  B1's range check
-                         (lat in [-900_000_000, 900_000_000] ETSI units) would
-                         only fail for values >90° when treated as ETSI, but
-                         since the shortcut stores float(raw["y"]) directly the
-                         plausibility check compares, e.g., 51.5 against ±9e8,
-                         which always passes.  This accurately reflects that a
-                         decimal-degree position is physically plausible.
+                         them as latitude/longitude directly.
+        speed in/out in m/s (B1 shortcut path reads float(raw["speed"])).
+        heading in/out in degrees.
+        timestamp → Unix seconds × 1000 → millis.
 
-        speed m/s → multiply × 100 → ETSI 0.01 m/s units.
-                    B1's max_speed check is 8330 ETSI units = 83.3 m/s.
-                    A realistic road speed of 13.4 m/s → 1340 ETSI → passes.
-
-        heading deg → multiply × 10 → ETSI 0.1° units.
-                    B1's heading check: 0 ≤ heading ≤ 3600 ETSI units.
-                    0–360° × 10 = 0–3600 → always in range.
-
-        timestamp → Unix seconds (float) × 1000 → millis; kept as-is.
-                    The orchestrator sets scenario_time_ms = max timestamp in
-                    the window, so age = scenario_time_ms - cam.timestamp ≈ 0.
-                    freshness check passes.
-                    Exception: timestamp=0 from the inject body → cam.timestamp=0,
-                    scenario_time_ms = current real time in ms → age ≈ huge →
-                    stale penalty applied.  This is correct: timestamp=0 IS stale.
+    Synthesizer field paths (pipeline/synthesizer.py::_extract_cam_telemetry):
+        station_type  ← cam.cam_parameters.basic_container.station_type
+                        OR msg["station_type"]  (root fallback)
+        yaw_rate      ← hfc["yaw_rate"]   — NO root fallback; must be in hfc
+        long_accel    ← hfc["longitudinal_acceleration"]  — NO root fallback
+        gen_dt        ← cam.generation_delta_time  → rendered as "timestamp="
 
     The free-text payload is surfaced to B3 via two channels:
         "event"      → synthesizer reads target_msg.get("event") as ego_event,
@@ -391,16 +432,19 @@ def _inject_record_to_cam(rec: Dict[str, Any]) -> Dict[str, Any]:
     sender_str = str(rec.get("sender", "inject"))
     numeric_sender = _sender_to_station_id(sender_str)
 
-    # The user requested swapping lat/lon: y is latitude, x is longitude
-    x_in = float(rec.get("x", 0.0))
-    y_in = float(rec.get("y", 0.0))
-    lat_deg = y_in * 1e-7 if abs(y_in) > 1000 else y_in
-    lon_deg = x_in * 1e-7 if abs(x_in) > 1000 else x_in
+    # Coordinate convention: CARLA and the UI send x as longitude and y as latitude.
+    # safe_parse_cam's flat-dict shortcut expects raw["y"] = latitude and raw["x"] = longitude.
+    x_in = float(rec.get("x", 0.0))   # contains ETSI longitude
+    y_in = float(rec.get("y", 0.0))   # contains ETSI latitude
+    lat_deg = x_in * 1e-7 if abs(x_in) > 1000 else x_in   # decode latitude from y
+    lon_deg = y_in * 1e-7 if abs(y_in) > 1000 else y_in   # decode longitude from x
 
-    # If coordinates are outside valid ranges, leave them as raw ETSI values so B1 detects them as fatal errors
-    y_out = y_in if not (-90.0 <= lat_deg <= 90.0) else lat_deg
-    x_out = x_in if not (-180.0 <= lon_deg <= 180.0) else lon_deg
-    
+    # If coordinates are outside valid ranges, leave as raw ETSI so B1 detects fatal errors
+    lat_out = x_in if not (-90.0  <= lat_deg <=  90.0) else lat_deg
+    lon_out = y_in if not (-180.0 <= lon_deg <= 180.0) else lon_deg
+
+    rec["meta_str"] = f"lat={lat_out:.4f} lon={lon_out:.4f} spd={rec.get('speed', 0)}"
+
     # Convert speed from ETSI cm/s to m/s before putting it in the dict
     speed_etsi = float(rec.get("speed", 0.0))
     speed_ms = speed_etsi / 100.0 if speed_etsi > 100 else speed_etsi
@@ -411,6 +455,8 @@ def _inject_record_to_cam(rec: Dict[str, Any]) -> Dict[str, Any]:
 
     timestamp_s = float(rec.get("timestamp", time.time()))
     timestamp_ms = int(timestamp_s * 1000) if timestamp_s != 0 else int(time.time() * 1000)
+    # ETSI generation_delta_time is millis mod 65536 (0..65535)
+    gen_delta = timestamp_ms % 65536
 
     # Build the scene_context for RSU advisory channel
     scene_ctx: Dict[str, Any] = dict(rec.get("scene_context") or {})
@@ -420,39 +466,74 @@ def _inject_record_to_cam(rec: Dict[str, Any]) -> Dict[str, Any]:
         rsu_msgs.append({"advisory": payload_text, "text": payload_text})
         scene_ctx["rsu_messages"] = rsu_msgs
 
+    # High-frequency container sub-dict.
+    # The synthesizer reads yaw_rate and longitudinal_acceleration from:
+    #   cam.cam_parameters.high_frequency_container
+    #       .basic_vehicle_container_high_frequency
+    # These two fields have NO root-level fallback in _extract_cam_telemetry,
+    # so they MUST appear under the basic_vehicle_container_high_frequency key.
+    hfc_dict: Dict[str, Any] = {
+        "speed":                     speed_ms,
+        "heading":                   heading_deg,
+        "yaw_rate":                  0.0,   # deg/s; 0.0 = straight ahead
+        "longitudinal_acceleration": 0.0,   # m/s²; 0.0 = no acceleration
+        "lateral_acceleration":      0.0,   # m/s²
+        "vertical_acceleration":     0.0,   # m/s²
+    }
+
     # The flat dict: uses safe_parse_cam's shortcut (x+y+sender present).
     # All keys beyond the shortcut's required set are passed through to the
     # synthesizer which reads them from the raw dict.
+    #
+    # safe_parse_cam shortcut maps:  raw["y"] → latitude,  raw["x"] → longitude
+    # So we assign:  "y" = lat_out,  "x" = lon_out
     return {
         # --- Keys consumed by safe_parse_cam flat-dict shortcut ---
-        "sender": numeric_sender,
-        "x": x_out,      # Output human units for synthesizer, or raw ETSI if invalid
-        "y": y_out,      # Output human units for synthesizer, or raw ETSI if invalid
-        "latitude": y_out, 
-        "longitude": x_out,
-        "speed": speed_ms,
-        "heading": heading_deg,
+        "sender":    numeric_sender,
+        "x":         lon_out,      # safe_parse_cam reads x → longitude
+        "y":         lat_out,      # safe_parse_cam reads y → latitude
+        "latitude":  lat_out,      # root fallback used by synthesizer
+        "longitude": lon_out,      # root fallback used by synthesizer
+        "speed":     speed_ms,
+        "heading":   heading_deg,
         "timestamp": timestamp_ms,
+        # --- Root-level synthesizer fallbacks ---
+        # station_type has a root fallback in _extract_cam_telemetry;
+        # yaw_rate/accel do NOT, but present at root for transparency.
+        "station_type":              5,    # ETSI passengerCar → _station_type_name(5) = "passengerCar"
+        "yaw_rate":                  0.0,
+        "longitudinal_acceleration": 0.0,
+        "lateral_acceleration":      0.0,
+        "vertical_acceleration":     0.0,
         # --- Keys consumed by synthesizer / orchestrator ---
-        "header": {"station_id": numeric_sender},
-        "event": payload_text or None,        # ego_event → "Ego vehicle reports: …"
-        "scene_context": scene_ctx,           # rsu_messages advisory channel
-        "context": "urban",
+        "header":        {"station_id": numeric_sender},
+        "event":         payload_text or None,   # ego_event → "Ego vehicle reports: …"
+        "scene_context": scene_ctx,              # rsu_messages advisory channel
+        "context":       "urban",
         "cam": {
+            "generation_delta_time": gen_delta,  # → synthesizer gen_dt / "timestamp=" field
             "cam_parameters": {
                 "basic_container": {
                     "reference_position": {
-                        "latitude": x_out,
-                        "longitude": y_out
+                        "latitude":  lat_out,    # e.g. 48.62 ← from y_in
+                        "longitude": lon_out,    # e.g. 11.37 ← from x_in
                     },
-                    "station_type": 5
+                    "station_type": 5,           # ETSI passengerCar
                 },
                 "high_frequency_container": {
-                    "speed": speed_ms,
-                    "heading": heading_deg
-                }
-            }
-        }
+                    # Primary path the synthesizer reads for yaw_rate / long_accel:
+                    #   hfc = _nested_get(msg, "cam.cam_parameters
+                    #          .high_frequency_container
+                    #          .basic_vehicle_container_high_frequency")
+                    "basic_vehicle_container_high_frequency": hfc_dict,
+                    # Also keep flat copies so any consumer reading
+                    # cam.cam_parameters.high_frequency_container.{speed,heading}
+                    # directly still gets values.
+                    "speed":   speed_ms,
+                    "heading": heading_deg,
+                },
+            },
+        },
     }
 
 
@@ -523,20 +604,53 @@ async def inject(req: InjectRequest) -> JSONResponse:
 
     frame = _result_to_frame(rec, result)
 
-    # Log the actual pipeline layer outputs for diagnostics
-    b1 = result.get("b1") or {}
-    b2 = result.get("b2") or {}
-    b3 = result.get("b3") or {}
+    # ── Raw pipeline layer output log ─────────────────────────────────────
+    # Printed immediately after every inject so you can compare what the
+    # pipeline actually returned for each layer against what the frame says.
+    b1_raw  = result.get("b1") or {}
+    mbd_raw = result.get("mbd")  # None when skipped
+    b2_raw  = result.get("b2") or {}
+    cp_raw  = result.get("cp")   # None when skipped
+    b3_raw  = result.get("b3") or {}
     log.info(
-        "inject sender=%s → B1(valid=%s fatal=%s reasons=%s) "
-        "B2(valid=%s) B3(avail=%s label=%s) decision=%s",
+        "[RAW] sender=%s "
+        "| B1: valid=%s fatal=%s score=%s reasons=%s "
+        "| MBD: %s "
+        "| B2: validation_valid=%s validation_score=%s confidence_calibration=%s "
+        "| CP: %s "
+        "| B3: available=%s label=%s confidence=%s risk_level=%s status=%s "
+        "| FRAME: B1=%s MBD=%s B2=%s CP=%s B3=%s decision=%s",
         req.sender,
-        b1.get("valid"),
-        b1.get("fatal"),
-        b1.get("reasons"),
-        b2.get("validation_valid"),
-        b3.get("available"),
-        b3.get("label"),
+        b1_raw.get("valid"),
+        b1_raw.get("fatal"),
+        b1_raw.get("score"),
+        b1_raw.get("reasons"),
+        (
+            f"passed={mbd_raw.get('passed')} anomaly_score={mbd_raw.get('anomaly_score')} "
+            f"kinematic_score={mbd_raw.get('kinematic_score')} replay_score={mbd_raw.get('replay_score')} "
+            f"sybil_score={mbd_raw.get('sybil_score')} evidence={mbd_raw.get('evidence')}"
+            if mbd_raw is not None else "SKIPPED"
+        ),
+        b2_raw.get("validation_valid"),
+        b2_raw.get("validation_score"),
+        b2_raw.get("confidence_calibration"),
+        (
+            f"cp_pass={cp_raw.get('cp_pass')} observations_available={cp_raw.get('observations_available')} "
+            f"cp_confidence={cp_raw.get('cp_confidence')} spatial={cp_raw.get('spatial_score')} "
+            f"speed={cp_raw.get('speed_score')} heading={cp_raw.get('heading_score')} "
+            f"diversity={cp_raw.get('diversity_score')} num_reports={cp_raw.get('num_reports')}"
+            if cp_raw is not None else "SKIPPED"
+        ),
+        b3_raw.get("available"),
+        b3_raw.get("label"),
+        b3_raw.get("confidence"),
+        b3_raw.get("risk_level"),
+        b3_raw.get("status"),
+        frame["layers"]["B1"],
+        frame["layers"]["MBD"],
+        frame["layers"]["B2"],
+        frame["layers"]["CP"],
+        frame["layers"]["B3"],
         frame["decision"],
     )
 

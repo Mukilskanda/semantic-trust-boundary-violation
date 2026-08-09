@@ -522,7 +522,7 @@ validation:
 # B3 Semantic Gate Model Configuration
 # ---------------------------------------------------------------------------
 b3_semantic_gate:
-  model_path: "b3/solution_stb/b3_semantic_gate/model/semantic_gate_v3_mixed_lora_hardmine_merged"
+  model_path: "b3/solution_stb/b3_semantic_gate/model/semantic_gate_v3_mixed_lora_merged"
   # FINAL checkpoint (superseded this pass): further continued via true weight
   # resume (train_lora_hardmine.py, NOT a fresh LoRA re-init) from
   # semantic_gate_v3_mixed_lora_continued_merged, on a small (91-row),
@@ -553,7 +553,7 @@ b3_semantic_gate:
     medium: 0.60  # confidence >= this (below high) -> risk_level="medium"
                   # confidence below "medium" on a malicious label -> risk_level="low"
   enable_ensembling: true
-  confidence_aware_benign: true
+  confidence_aware_benign: false
   enable_text_ensembling: true
   temperature_scaling: 3.18   # Freshly fit for the NEW hardmine checkpoint above
                                # (calibrate_hardmine_checkpoint.py), using the SAME
