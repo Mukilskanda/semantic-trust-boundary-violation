@@ -312,6 +312,18 @@ def _result_to_frame(rec: Dict[str, Any], r: Dict[str, Any], cam: Dict[str, Any]
 
     lats = r.get("latencies") or {}
 
+    device_name = "cpu"
+    try:
+        from pipeline.b3_bridge import _CLASSIFIER_INSTANCE
+        if _CLASSIFIER_INSTANCE is not None and getattr(_CLASSIFIER_INSTANCE, "predictor", None) is not None:
+            dev = _CLASSIFIER_INSTANCE.predictor.device
+            if dev.type == "cuda":
+                import torch
+                device_name = torch.cuda.get_device_name(dev)
+            else:
+                device_name = "cpu"
+    except Exception:
+        pass
     return {
         "id": str(rec.get("id", sender)),
         "title": f"Injected: {sender}",
@@ -336,6 +348,7 @@ def _result_to_frame(rec: Dict[str, Any], r: Dict[str, Any], cam: Dict[str, Any]
             "B3":  round((lats.get("synthesizer_ms") or 0.0) + (lats.get("bridge_ms") or 0.0), 2) if lats.get("bridge_ms") is not None else None,
             "TE":  round(lats.get("fusion_ms") or 0.0, 2),
             "total_ms": round(lats.get("total_ms") or 0.0, 2),
+            "device": device_name,
         },
     }
 

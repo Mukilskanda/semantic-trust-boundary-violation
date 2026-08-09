@@ -1318,6 +1318,20 @@
       const v = $('verdict'); const dec = cur.decision.toLowerCase(); v.className = 'verdict show ' + dec;
       const totalLat = (cur.latencies && cur.latencies.total_ms != null) ? cur.latencies.total_ms : cumLat;
       const latStr = totalLat > 0 ? totalLat.toFixed(1) + ' ms' : '—';
+      
+      const dev = (cur.latencies && cur.latencies.device) ? cur.latencies.device : null;
+      if (dev) {
+          const gd = $('gpuDesc');
+          if (gd) gd.textContent = `B3 p95 33 ms · full-pipeline p95 114 ms (executed on ${dev})`;
+          const b3fn = document.querySelector('#node_B3 .fn');
+          if (b3fn) b3fn.textContent = STAGES.find(s=>s.code==='B3').fn.replace('measured p95 33 ms on RTX 4050', `executed on ${dev}`);
+      } else {
+          const gd = $('gpuDesc');
+          if (gd) gd.textContent = 'B3 p95 33 ms · full-pipeline p95 114 ms (measured, RTX 4050)';
+          const b3fn = document.querySelector('#node_B3 .fn');
+          if (b3fn) b3fn.textContent = STAGES.find(s=>s.code==='B3').fn;
+      }
+
       v.querySelector('.v').textContent = cur.decision; v.querySelector('.r').innerHTML = cur.reason + '<br><span style="color:var(--dim)">end-to-end latency: ' + latStr + '</span>';
     }
     function commitStats() {
